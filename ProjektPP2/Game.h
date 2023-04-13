@@ -1,40 +1,64 @@
 #pragma once
+#include "Player.h"
+#include "Bullet.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
+#include <map>
+#include <vector>
+
+
+using namespace std;
 
 
 class Game
 {
 private:
-	//Zmienne
 	//Okno gry
 	sf::RenderWindow* window;
 	sf::Event ev;
-	sf::VideoMode videoMode;
+
+	//Zasoby gry
+	map<string, sf::Texture*> textures;
+	vector <Bullet*> bullets;
+
+	//Logika gry
+	int points;
+	float enemySpawnTimer;
+	float enemySpawnTimerMax;
+	int maxEnemies;
+
+	//Obiekt gracza
+	Player* player;
 	
-	
+	//Obiekt przeciwnika kwadrat
+	vector<sf::RectangleShape> enemies;
+	sf::RectangleShape enemy;
 	
 	
 	//Prywatne funkcje
-
 	void stworzZmienne();
 	void stworzOkno();
+	void stworzTekstury();
+
+	void stworzObiektGracz();
+	void stworzObiektPrzeciwnik();
 
 public:
 	//Konstruktory / Destruktory
 	Game();
 	virtual ~Game();
 
-	const bool running() const;
-
 
 	//Funkcje
+	void run();
+	void spawnEnemy();
+	void updatePlayer();
+	void updateBullets();
 	void pollEvents();
+	void updateEnemies();
+	
 	void update();
+
+	void renderEnemies();
 	void render();
 
 };

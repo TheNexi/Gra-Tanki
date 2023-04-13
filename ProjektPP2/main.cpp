@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 #include "Game.h"
-
+#include "Player.h"
 
 int main()
 {
@@ -10,15 +10,7 @@ int main()
 
     //Petla gry
 
-    while (game.running())
-    {
-        //Update
-        game.update();
-        
-        //Render
-        game.render();
-
-     }
+    game.run();
           
     //Petla gry koniec
   
