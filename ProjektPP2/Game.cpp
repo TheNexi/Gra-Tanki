@@ -6,14 +6,6 @@ using namespace std;
 void Game::stworzZmienne()
 {
 	this->window = nullptr;
-
-    //Logika gry
-    this->points = 0;
-    this->enemySpawnTimerMax = 1000.f;
-    //this->enemySpawnTimer = 0;
-    this->enemySpawnTimer = this->enemySpawnTimerMax;
-    this->maxEnemies = 5;
-	
 }
 
 void Game::stworzOkno()
@@ -38,19 +30,6 @@ void Game::stworzObiektGracz()
 }
 void Game::stworzObiektPrzeciwnik()
 {
-    //Obiekt jako kwadrat
-    this->enemy.setPosition(10.f, 10.f);
-    
-    //enemy.setFillColor - zmiana koloru po trafieniu pociskiem
-    //setScale -1 - to flip object
-    this->enemy.setSize(sf::Vector2f(100.f, 100.f)); // 100x100 float
-    this->enemy.setScale(sf::Vector2f(0.5f, 0.5f)); // objekt w skali x0.5
-    this->enemy.setFillColor(sf::Color::Red);
-    this->enemy.setOutlineColor(sf::Color::Green);
-    this->enemy.setOutlineThickness(1.f);
-
-
-
 
 }
 // Konstuktor 
@@ -96,21 +75,35 @@ void Game::run()
 //Funkcje
 void Game::spawnEnemy()
 {
-    //random position, random color, add enemy to vector
-
-    this->enemy.setPosition(
-        static_cast<float>(rand() % static_cast<int>(this->window->getSize().x - this->enemy.getSize().x)),
-        0.f
-        /*static_cast<float>(rand() % static_cast<int>(this->window->getSize().y - this->enemy.getSize().y))*/
-    );
-
-    this->enemy.setFillColor(sf::Color::Green);
-
-    //spawn enemy
-    this->enemies.push_back(this->enemy);
-
-    //usuwanie gdy sa na koncu ekranu
     
+    
+}
+
+void Game::updateCollision()
+{
+    //KOLIZJE z plansza
+    //lewa strona ekranu gry
+    if (this->player->getBounds().left < 0.f)
+    {
+        this->player->setPosition(0.f, this->player->getBounds().top);
+    }
+    //prawa strona ekranu gry (nie moga byc jednoczesnie lewa i prawa)
+    else if (this->player->getBounds().left + this->player->getBounds().width >= this->window->getSize().x)
+    {
+        this->player->setPosition(this->window->getSize().x - this->player->getBounds().width, this->player->getBounds().top);
+    }
+
+    //gora ekranu gry
+    if (this->player->getBounds().top < 0.f)
+    {
+        this->player->setPosition(this->player->getBounds().left, 0.f);
+    }
+
+    //dolna granica ekranu gry
+    else if (this->player->getBounds().top + this->player->getBounds().height >= this->window->getSize().y)
+    {
+        this->player->setPosition(this->player->getBounds().left, this->window->getSize().y - this->player->getBounds().height);
+    }
 }
 
 void Game::pollEvents()
@@ -139,29 +132,7 @@ void Game::pollEvents()
 
 void Game::updateEnemies()
 {
-    //Updates the enemy spawn timer and spawns enemies when the total amount of enemies is smaller than the maximum
-    //moves enemies downwards
-    //removes the enemies at the edge of the screen
-    if(this->enemies.size() < this->maxEnemies)
-    { 
-    if (this->enemySpawnTimer >= this->enemySpawnTimerMax)
-    { 
-        //Spawn enemy and reset timer
-        this->spawnEnemy();
-        this->enemySpawnTimer = 0.f; // reset
-    }
-    else
-        this->enemySpawnTimer += 1.f; // zwiekszanie
-    }
-
-    //Move the enemies
-
-    for (auto& e : this->enemies)
-    {
-        e.move(0.f, 5.f);
-    }
-
-
+    
 }
 
 void Game::updatePlayer()
@@ -170,6 +141,7 @@ void Game::updatePlayer()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
         this->player->move(-1.f, 0.f);
+        
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
@@ -186,19 +158,34 @@ void Game::updatePlayer()
     }
     //Poruszanie obiektu gracza koniec
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->player->canAttack() )
     {
-        this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y, 1.f, -1.f, 0.5f));
+        this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x + 25, this->player->getPos().y, 0.f, -1.f, 2.f));
     }
 
-
+    
 }
 
 void Game::updateBullets()
 {
+    unsigned int licznik = 0;
     for (auto* bullet : this->bullets)
     {
         bullet->update();
+
+        //pozycja pocisku do okna gry
+        
+        //góra ekranu
+        if (bullet->getBounds().top + bullet->getBounds().height < 0.f)
+        {
+            delete this->bullets.at(licznik);
+            this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku
+            licznik--;
+
+            cout << "Pociski: " << this->bullets.size() << endl;
+        }
+
+        licznik++;
     }
 
 }
@@ -211,7 +198,11 @@ void Game::update()
     
 
     this->updatePlayer();
+
+    this->updateCollision();
+
     this->updateBullets();
+    this->player->update();
 
     this->updateEnemies();
 
@@ -219,12 +210,6 @@ void Game::update()
 
 void Game::renderEnemies()
 {
-    //render all the enemies
-    for (auto& e : this->enemies)
-    {
-        this->window->draw(e);
-    }
-
 
 }
 

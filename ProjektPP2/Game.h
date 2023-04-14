@@ -26,6 +26,9 @@ private:
 	float enemySpawnTimerMax;
 	int maxEnemies;
 
+
+	
+
 	//Obiekt gracza
 	Player* player;
 	
@@ -51,6 +54,7 @@ public:
 	//Funkcje
 	void run();
 	void spawnEnemy();
+	void updateCollision();
 	void updatePlayer();
 	void updateBullets();
 	void pollEvents();
