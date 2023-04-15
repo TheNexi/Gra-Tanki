@@ -126,20 +126,20 @@ void Game::updatePlayer()
         this->player->rotate_ob(270); //Obrót obiektu
 
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))//analogicznie jak wy¿ej tylko w prawo
     {
         this->player->move(1.f, 0.f);
         this->player->rotate_ob(90);
 
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))//analogicznie jak wy¿ej tylko do góry
     {
         this->player->move(0.f, -1.f);
         this->player->rotate_ob(0);
 
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))//analogicznie jak wy¿ej tylko w dó³
     {
         this->player->move(0.f, 1.f);
         this->player->rotate_ob(180);
@@ -156,7 +156,7 @@ void Game::updatePlayer()
         if (time.asSeconds() > 0.5)
         {
             int angle = (int)this->player->ob_rotation();
-            switch (angle)
+            switch (angle)//ustawianie kierunku strza³u
             {
             case(0):
             {
@@ -192,7 +192,7 @@ void Game::updatePlayer()
 
 
 
-void Game::updateBullets()
+void Game::updateBullets()//zmiana 
 {
     unsigned int licznik = 0;
     for (auto* bullet : this->bullets)
