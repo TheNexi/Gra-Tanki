@@ -120,10 +120,10 @@ void Game::updateEnemies()
 void Game::updatePlayer()
 {
     //Poruszanie obiektu gracza
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) //Lewa strza³ka
     {
-        this->player->move(-1.f, 0.f);
-        this->player->rotate_ob(270);
+        this->player->move(-1.f, 0.f); //Kierunek poruszania
+        this->player->rotate_ob(270); //Obrót obiektu
 
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
