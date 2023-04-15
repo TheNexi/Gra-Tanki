@@ -195,37 +195,38 @@ void Game::updatePlayer()
 void Game::updateBullets()//zmiana 
 {
     unsigned int licznik = 0;
-    for (auto* bullet : this->bullets)
+
+    for (auto* bullet : this->bullets) //W kazdej iteracji wskaŸnik bullet wskazuje na kolejny element wektora "bullets"
     {
-        bullet->update();
+        bullet->update(); //wywolanie metody update() dla kazdego pocisku
 
         //pozycja pocisku do okna gry
 
         //góra ekranu
         if (bullet->getBounds().top + bullet->getBounds().height < 0.f)
         {
-            delete this->bullets.at(licznik);
-            this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku
-            licznik--;
+            delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowan¹ pamiêæ pocisku o indeksie licznik w wektorze bullets
+            this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
+            licznik--; //dekrementacja licznika po usunieciu pocisku
 
-            cout << "Pocisk gora: " << this->bullets.size() << endl;
+            cout << "Pocisk gora: " << this->bullets.size() << endl; //Wyswietlenie na standardowym wyjœciu informacji o liczbie obecnych pociskow
         }
 
         //lewa strona ekranu
-        else if (bullet->getBounds().left + bullet->getBounds().width < 0.f)
+        else if (bullet->getBounds().left + bullet->getBounds().width < 0.f) //Sprawdza czy lewa krawêdŸ pocisku jest poza granica okna gry
         {
             delete this->bullets.at(licznik);
             this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku
-            licznik--;
+            licznik--; 
 
-            cout << "Pocisk lewa: " << this->bullets.size() << endl;
+            cout << "Pocisk lewa: " << this->bullets.size() << endl; //Wyswietlenie na standardowym wyjœciu informacji o liczbie obecnych pociskow
         }
 
         //prawa strona ekranu
         else if (bullet->getBounds().left > this->window->getSize().x)
         {
-            delete this->bullets.at(licznik);
-            this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku
+            delete this->bullets.at(licznik); //dealokacja pamieci
+            this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku z wektora
             licznik--;
 
             cout << "Pocisk prawa: " << this->bullets.size() << endl;
@@ -234,14 +235,14 @@ void Game::updateBullets()//zmiana
         //dol ekranu
         else if (bullet->getBounds().top > this->window->getSize().y)
         {
-            delete this->bullets.at(licznik);
-            this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku
+            delete this->bullets.at(licznik);//dealokacja pamieci
+            this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku z wektora
             licznik--;
 
             cout << "Pocisk dol: " << this->bullets.size() << endl;
         }
 
-        licznik++;
+        licznik++; //inkrementacja aby przejsc do kolejnego elementu wektora "bullets"
     }
 
 }
@@ -263,23 +264,23 @@ void Game::update()
 
 void Game::renderEnemies()
 {
-    this->enemy->render(*this->window);
-    enemy->color_change();
+    this->enemy->render(*this->window); //Wyswietlenie obiektu przeciwnika
+    enemy->color_change(); //Zmiana koloru obiektu przeciwnika
 }
 
 void Game::render()
 {
-    this->window->clear();
+    this->window->clear(); //czysci okno gry
 
 
     this->renderEnemies();
-    this->player->render(*this->window);
+    this->player->render(*this->window); //Rysuje obiekt gracza na ekranie
 
-    for (auto* bullet : this->bullets)
+    for (auto* bullet : this->bullets) //Dla ka¿dego obiektu w wektorze
     {
-        bullet->render(this->window);
+        bullet->render(this->window); //Wyswietla ka¿dy obiekt na ekranie
     }
 
-    this->window->display();
+    this->window->display(); //Wyswietla na ekranie obecnie narysowane obiekty
 
 }
