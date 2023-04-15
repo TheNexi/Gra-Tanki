@@ -23,16 +23,16 @@ private:
 	sf::Time time;
 	sf::Clock clock;
 
-	
+
 
 	//Obiekt gracza
 	Player* player;
-	
+	Player* enemy;
+
 	//Obiekt przeciwnika kwadrat
-	vector<sf::RectangleShape> enemies;
-	sf::RectangleShape enemy;
-	
-	
+
+
+
 	//Prywatne funkcje
 	void stworzZmienne();
 	void stworzOkno();
@@ -51,12 +51,12 @@ public:
 	void run();
 	void spawnEnemy();
 
-	
+
 	void updatePlayer();
 	void updateBullets();
 	void pollEvents();
 	void updateEnemies();
-	
+
 	void update();
 
 	void renderEnemies();
