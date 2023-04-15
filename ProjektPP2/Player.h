@@ -40,6 +40,7 @@ public:
 	void rotate_ob(float angle);
 	void update();
 	void render(sf::RenderTarget& target);
+	void color_change();
 
 	float ob_rotation();
 

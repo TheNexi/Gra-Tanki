@@ -26,11 +26,15 @@ void Game::stworzTekstury()
 void Game::stworzObiektGracz()
 {
     this->player = new Player();
+    
     this->player->setPosition(300.f, 450.f);
+    
+   
 }
 void Game::stworzObiektPrzeciwnik()
 {
-
+    this->enemy = new Player();
+    this->enemy->setPosition(500, 550);
 }
 // Konstuktor 
 Game::Game()
@@ -255,7 +259,8 @@ void Game::update()
 
 void Game::renderEnemies()
 {
-
+    this->enemy->render(*this->window);
+    enemy->color_change();
 }
 
 void Game::render()

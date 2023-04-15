@@ -27,10 +27,10 @@ private:
 
 	//Obiekt gracza
 	Player* player;
+	Player* enemy;
 	
 	//Obiekt przeciwnika kwadrat
-	vector<sf::RectangleShape> enemies;
-	sf::RectangleShape enemy;
+
 	
 	
 	//Prywatne funkcje
