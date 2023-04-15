@@ -5,42 +5,53 @@ using namespace std;
 // Funkcje prywatne
 void Game::stworzZmienne()
 {
-	this->window = nullptr;
+    this->window = nullptr;
 }
 
 void Game::stworzOkno()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode(800,600), "Gra Tanki", sf::Style::Close ); 
+    this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "Gra Tanki", sf::Style::Close);
     // TitleBar
-	
+
     this->window->setFramerateLimit(144); //hatch screen
     this->window->setVerticalSyncEnabled(false); //wy³¹czenie synchorizacji pionowej
-     
+
 }
 void Game::stworzTekstury()
 {
     this->textures["BULLET"] = new sf::Texture();
-    this->textures["BULLET"]->loadFromFile("Textures/bullet.png");
+    this->textures["BULLET"]->loadFromFile("Textures/bullet2.png");
 
 }
 void Game::stworzObiektGracz()
 {
     this->player = new Player();
+<<<<<<< HEAD
     
     this->player->setPosition(300.f, 450.f);
     
    
+=======
+
+    this->player->setPosition(300.f, 450.f);
+
+
+>>>>>>> cc9a0d988c8c71f83749bd6bb7a5b71d2bd5b614
 }
 void Game::stworzObiektPrzeciwnik()
 {
     this->enemy = new Player();
+<<<<<<< HEAD
     this->enemy->setPosition(500, 550);
+=======
+    this->enemy->setPosition(500.f, 550.f);
+>>>>>>> cc9a0d988c8c71f83749bd6bb7a5b71d2bd5b614
 }
 // Konstuktor 
 Game::Game()
 {
-	this->stworzZmienne();
-	this->stworzOkno();
+    this->stworzZmienne();
+    this->stworzOkno();
     this->stworzTekstury();
     this->stworzObiektGracz();
     this->stworzObiektPrzeciwnik();
@@ -49,7 +60,7 @@ Game::Game()
 // Destruktor
 Game::~Game()
 {
-	delete this->window;
+    delete this->window;
     delete this->player;
 
     //usuwanie tekstur (mapa)
@@ -68,8 +79,8 @@ Game::~Game()
 
 void Game::run()
 {
-    while(this->window->isOpen())
-    { 
+    while (this->window->isOpen())
+    {
         this->update();
         this->render();
     }
@@ -79,8 +90,8 @@ void Game::run()
 //Funkcje
 void Game::spawnEnemy()
 {
-    
-    
+
+
 }
 
 
@@ -103,14 +114,14 @@ void Game::pollEvents()
             break;
             //zamykanie gry koniec
 
-   
+
         }
     }
 }
 
 void Game::updateEnemies()
 {
-    
+
 }
 
 void Game::updatePlayer()
@@ -120,26 +131,26 @@ void Game::updatePlayer()
     {
         this->player->move(-1.f, 0.f);
         this->player->rotate_ob(270);
-        
+
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         this->player->move(1.f, 0.f);
         this->player->rotate_ob(90);
-        
+
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
         this->player->move(0.f, -1.f);
         this->player->rotate_ob(0);
-        
+
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
         this->player->move(0.f, 1.f);
         this->player->rotate_ob(180);
-        
+
     }
     //Poruszanie obiektu gracza koniec
 
@@ -156,25 +167,25 @@ void Game::updatePlayer()
             {
             case(0):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y - 25, 0.f, -1.f, 0.5f));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y - 25, 0.f, -1.f, 2.f));
                 clock.restart();
                 break;
             }
             case(90):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x + 25, this->player->getPos().y, 1.f, 0.f, 0.5f));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x + 25, this->player->getPos().y, 1.f, 0.f, 2.f));
                 clock.restart();
                 break;
             }
             case(180):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y + 25, 0.f, 1.f, 0.5f));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y + 25, 0.f, 1.f, 2.f));
                 clock.restart();
                 break;
             }
             case(270):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x - 25, this->player->getPos().y, -1.f, 0.f, 0.5f));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x - 25, this->player->getPos().y, -1.f, 0.f, 2.f));
                 clock.restart();
                 break;
             }
@@ -196,7 +207,7 @@ void Game::updateBullets()
         bullet->update();
 
         //pozycja pocisku do okna gry
-        
+
         //góra ekranu
         if (bullet->getBounds().top + bullet->getBounds().height < 0.f)
         {
@@ -206,7 +217,7 @@ void Game::updateBullets()
 
             cout << "Pocisk gora: " << this->bullets.size() << endl;
         }
-        
+
         //lewa strona ekranu
         else if (bullet->getBounds().left + bullet->getBounds().width < 0.f)
         {
@@ -236,7 +247,7 @@ void Game::updateBullets()
 
             cout << "Pocisk dol: " << this->bullets.size() << endl;
         }
-        
+
         licznik++;
     }
 
@@ -267,10 +278,10 @@ void Game::render()
 {
     this->window->clear();
 
- 
+
     this->renderEnemies();
     this->player->render(*this->window);
-    
+
     for (auto* bullet : this->bullets)
     {
         bullet->render(this->window);

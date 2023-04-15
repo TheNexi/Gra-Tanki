@@ -4,7 +4,7 @@ using namespace std;
 
 void Player::stworzZmienne()
 {
-	this->movementSpeed = 1.85f;
+	this->movementSpeed = 1.0f;
 
 }
 
@@ -13,7 +13,7 @@ void Player::initTexture()
 	//Tekstury z pliku
 	if (!this->texture.loadFromFile("Textures/Tank v2.png"))
 	{
-		cout << "ERROR::PLAYER::Blad przy wczytywaniu grafiki obiektu gracza"<<endl;
+		cout << "ERROR::PLAYER::Blad przy wczytywaniu grafiki obiektu gracza" << endl;
 	}
 
 
@@ -24,9 +24,6 @@ void Player::initSprite()
 {
 	//Texture to sprite
 	this->sprite.setTexture(this->texture);
-
-	//Zmiana rozmiaru sprite
-	//this->sprite.scale(0.5f, 0.5f);
 
 }
 
@@ -99,7 +96,11 @@ void Player::move(const float dirX, const float dirY)
 	}
 	else if (coord.x <= 25)
 	{
+<<<<<<< HEAD
 		this->sprite.move( dirX + 1, dirY);
+=======
+		this->sprite.move(dirX + 1, dirY);
+>>>>>>> cc9a0d988c8c71f83749bd6bb7a5b71d2bd5b614
 
 
 	}
@@ -122,7 +123,7 @@ float Player::ob_rotation()
 
 void Player::update()
 {
-	
+
 
 }
 
