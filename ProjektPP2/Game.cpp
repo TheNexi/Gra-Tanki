@@ -2,48 +2,47 @@
 
 using namespace std;
 
-// Funkcje prywatne
+//Metody prywatne
 void Game::stworzZmienne()
 {
-    this->window = nullptr;
+    this->window = nullptr; //Inicjalizacja pola window na pusty wskaŸnik
 }
 
-void Game::stworzOkno()
+void Game::stworzOkno() //Metoda do tworzenia okna gry
 {
-    this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "Gra Tanki", sf::Style::Close);
-    // TitleBar
+    this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "Gra Tanki", sf::Style::Close); //Utworzenie nowego obiektu klasy RenderWindow
+    
 
-    this->window->setFramerateLimit(144); //hatch screen
+    this->window->setFramerateLimit(144); //Limit klatek na sekunde
     this->window->setVerticalSyncEnabled(false); //wy³¹czenie synchorizacji pionowej
 
 }
-void Game::stworzTekstury()
+void Game::stworzTekstury() //Metoda do za³adowania tekstur z pliku
 {
-    this->textures["BULLET"] = new sf::Texture();
-    this->textures["BULLET"]->loadFromFile("Textures/bullet2.png");
+    this->textures["BULLET"] = new sf::Texture(); //Utowrzenie nowego obiektu klasy Texture
+    this->textures["BULLET"]->loadFromFile("Textures/bullet2.png"); //£adowanie tekstury pocisku z pliku
 
 }
-void Game::stworzObiektGracz()
+void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
 {
-    this->player = new Player();
+    this->player = new Player(); //Utworzenie obiektu gracza
 
     
-    this->player->setPosition(300.f, 450.f);
-    
-   
+    this->player->setPosition(300.f, 450.f); //Ustawienie pozycji poczatkowej gracza
 
 }
-void Game::stworzObiektPrzeciwnik()
+void Game::stworzObiektPrzeciwnik() //Metoda do tworzenia obiektu przeciwnika
 {
-    this->enemy = new Player();
+    this->enemy = new Player(); //Utworzenie obiektu nowego obiektu (przeciwnik)
 
-    this->enemy->setPosition(500, 550);
+    this->enemy->setPosition(500, 550); //Ustawienie pozycji pocz¹tkowej drugiego gracza (przeciwnik)
 
 
 }
 // Konstuktor 
 Game::Game()
 {
+    //Inicjacja wszystkich metod (podstawowe elementy do gry)
     this->stworzZmienne();
     this->stworzOkno();
     this->stworzTekstury();
@@ -54,25 +53,25 @@ Game::Game()
 // Destruktor
 Game::~Game()
 {
-    delete this->window;
-    delete this->player;
+    delete this->window; //Usuwa okno gry
+    delete this->player; //Usuwa obiekt gracza
 
     //usuwanie tekstur (mapa)
-
-    for (auto& i : this->textures)
+    for (auto& i : this->textures) //Iteracja po wszystkich teksturach z mapy "textures"
     {
-        delete i.second;
+        delete i.second; //Usuwa wszystkie textury
     }
 
     for (auto* i : this->bullets)
     {
-        delete i; // usuwa dynamiczna pamiec w wektorze
+        delete i; // usuwa wszystkie obiekty pocisków z wektora "bullets"
     }
 }
 
 
-void Game::run()
+void Game::run() //G³ówna petla gry
 {
+    //W ka¿dej iteracji petli podczas uruchomionego okna wywo³uje metody update() i render()
     while (this->window->isOpen())
     {
         this->update();
@@ -97,11 +96,11 @@ void Game::pollEvents()
         //Zmiana dzialania
         switch (this->ev.type)
         {
-            //zamykanie gry
+            //zamykanie gry przyciskiem
         case sf::Event::Closed:
             this->window->close();
             break;
-
+            //zamykanie gry klawiszem escape
         case sf::Event::KeyPressed:
             if (this->ev.key.code == sf::Keyboard::Escape)
                 this->window->close();
