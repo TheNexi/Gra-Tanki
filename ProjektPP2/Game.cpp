@@ -26,6 +26,7 @@ void Game::stworzTekstury()
 void Game::stworzObiektGracz()
 {
     this->player = new Player();
+    this->player->setPosition(300.f, 450.f);
 
 }
 void Game::stworzObiektPrzeciwnik()
@@ -90,19 +91,19 @@ void Game::updateCollision()
     //prawa strona ekranu gry (nie moga byc jednoczesnie lewa i prawa)
     else if (this->player->getBounds().left + this->player->getBounds().width >= this->window->getSize().x)
     {
-        this->player->setPosition(this->window->getSize().x - this->player->getBounds().width, this->player->getBounds().top);
+        this->player->setPosition(this->window->getSize().x - this->player->getBounds().width +25.f , this->player->getBounds().top + 25.f);
     }
 
     //gora ekranu gry
     if (this->player->getBounds().top < 0.f)
     {
-        this->player->setPosition(this->player->getBounds().left, 0.f);
+        this->player->setPosition(this->player->getBounds().left , 0.f);
     }
 
     //dolna granica ekranu gry
     else if (this->player->getBounds().top + this->player->getBounds().height >= this->window->getSize().y)
     {
-        this->player->setPosition(this->player->getBounds().left, this->window->getSize().y - this->player->getBounds().height);
+        this->player->setPosition(this->player->getBounds().left + 25.f, this->window->getSize().y + 25.f - this->player->getBounds().height);
     }
 }
 
@@ -141,30 +142,75 @@ void Game::updatePlayer()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
         this->player->move(-1.f, 0.f);
+        this->player->rotate_ob(270);
+        
         
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         this->player->move(1.f, 0.f);
+        this->player->rotate_ob(90);
+        
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
         this->player->move(0.f, -1.f);
+        this->player->rotate_ob(0);
+        
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
         this->player->move(0.f, 1.f);
+        this->player->rotate_ob(180);
+        
     }
     //Poruszanie obiektu gracza koniec
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->player->canAttack() )
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
     {
-        this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x + 25, this->player->getPos().y, 0.f, -1.f, 2.f));
+
+
+        time = clock.getElapsedTime();
+        //opoznienie miedzy strzalami
+        if (time.asSeconds() > 0.5)
+        {
+            int angle = (int)this->player->ob_rotation();
+            switch (angle)
+            {
+            case(0):
+            {
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y - 25, 0.f, -1.f, 0.5f));
+                clock.restart();
+                break;
+            }
+            case(90):
+            {
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x + 25, this->player->getPos().y, 1.f, 0.f, 0.5f));
+                clock.restart();
+                break;
+            }
+            case(180):
+            {
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y + 25, 0.f, 1.f, 0.5f));
+                clock.restart();
+                break;
+            }
+            case(270):
+            {
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x - 25, this->player->getPos().y, -1.f, 0.f, 0.5f));
+                clock.restart();
+                break;
+            }
+
+            }
+        }
     }
 
-    
 }
+
+
+
 
 void Game::updateBullets()
 {
@@ -182,9 +228,39 @@ void Game::updateBullets()
             this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku
             licznik--;
 
-            cout << "Pociski: " << this->bullets.size() << endl;
+            cout << "Pocisk gora: " << this->bullets.size() << endl;
+        }
+        
+        //lewa strona ekranu
+        else if (bullet->getBounds().left + bullet->getBounds().width < 0.f)
+        {
+            delete this->bullets.at(licznik);
+            this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku
+            licznik--;
+
+            cout << "Pocisk lewa: " << this->bullets.size() << endl;
         }
 
+        //prawa strona ekranu
+        else if (bullet->getBounds().left > this->window->getSize().x)
+        {
+            delete this->bullets.at(licznik);
+            this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku
+            licznik--;
+
+            cout << "Pocisk prawa: " << this->bullets.size() << endl;
+        }
+
+        //dol ekranu
+        else if (bullet->getBounds().top > this->window->getSize().y)
+        {
+            delete this->bullets.at(licznik);
+            this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku
+            licznik--;
+
+            cout << "Pocisk dol: " << this->bullets.size() << endl;
+        }
+        
         licznik++;
     }
 

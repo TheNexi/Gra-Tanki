@@ -26,6 +26,8 @@ private:
 	float enemySpawnTimerMax;
 	int maxEnemies;
 
+	sf::Time time;
+	sf::Clock clock;
 
 	
 

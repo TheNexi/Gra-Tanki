@@ -15,8 +15,7 @@ private:
 	
 	float movementSpeed;
 
-	float attackCooldown;
-	float attackCooldownMax;
+
 
 	//Funkcje prywatne
 	void stworzZmienne();
@@ -37,12 +36,13 @@ public:
 
 	//Funkcje
 	void move(const float dirX, const float dirY);
-	const bool canAttack();
 
-	void updateAttack();
+	
+	void rotate_ob(float angle);
 	void update();
 	void render(sf::RenderTarget& target);
 
+	float ob_rotation();
 
 };
 

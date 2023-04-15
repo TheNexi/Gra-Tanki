@@ -5,8 +5,6 @@ using namespace std;
 void Player::stworzZmienne()
 {
 	this->movementSpeed = 1.85f;
-	this->attackCooldownMax = 40.f;
-	this->attackCooldown = this->attackCooldownMax;
 
 }
 
@@ -72,7 +70,6 @@ void Player::setPosition(const float x, const float y)
 }
 
 
-
 //Funkcje
 void Player::move(const float dirX, const float dirY)
 {
@@ -82,27 +79,34 @@ void Player::move(const float dirX, const float dirY)
 
 
 }
-const bool Player::canAttack()
+
+void Player::rotate_ob(float angle)
 {
-	if (this->attackCooldown >= this->attackCooldownMax)
+	if (angle != this->sprite.getRotation())
 	{
-		this->attackCooldown = 0.f;
-		return true;
+		this->sprite.setOrigin(25, 25);
+		this->sprite.setRotation(angle);
+
+
 	}
-	return false;
 }
-void Player::updateAttack()
+
+float Player::ob_rotation()
 {
-	if(this->attackCooldown < this->attackCooldownMax)
-		this->attackCooldown += 0.5f;
-
+	return this->sprite.getRotation();
 
 }
+
+
+
+
+
 void Player::update()
 {
-	this->updateAttack();
+	
 
 }
+
 
 void Player::render(sf::RenderTarget& target)
 {
