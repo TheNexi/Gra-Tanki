@@ -84,9 +84,9 @@ void Game::updateCollision()
 {
     //KOLIZJE z plansza
     //lewa strona ekranu gry
-    if (this->player->getBounds().left < 0.f)
+    if (this->player->getBounds().left  < 0.f)
     {
-        this->player->setPosition(0.f, this->player->getBounds().top);
+        this->player->setPosition(25.f, this->player->getBounds().top + 25.f);
     }
     //prawa strona ekranu gry (nie moga byc jednoczesnie lewa i prawa)
     else if (this->player->getBounds().left + this->player->getBounds().width >= this->window->getSize().x)
@@ -94,11 +94,12 @@ void Game::updateCollision()
         this->player->setPosition(this->window->getSize().x - this->player->getBounds().width +25.f , this->player->getBounds().top + 25.f);
     }
 
-    //gora ekranu gry
+    //gorna granica ekranu gry
     if (this->player->getBounds().top < 0.f)
     {
-        this->player->setPosition(this->player->getBounds().left , 0.f);
+        this->player->setPosition(this->player->getBounds().left, 25.f);
     }
+
 
     //dolna granica ekranu gry
     else if (this->player->getBounds().top + this->player->getBounds().height >= this->window->getSize().y)

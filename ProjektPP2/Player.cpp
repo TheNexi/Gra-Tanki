@@ -38,7 +38,7 @@ Player::Player()
 	this->stworzZmienne();
 	this->initTexture();
 	this->initSprite();
-	
+	this->sprite.setOrigin(25, 25);
 
 }
 
@@ -84,7 +84,7 @@ void Player::rotate_ob(float angle)
 {
 	if (angle != this->sprite.getRotation())
 	{
-		this->sprite.setOrigin(25, 25);
+		
 		this->sprite.setRotation(angle);
 
 
