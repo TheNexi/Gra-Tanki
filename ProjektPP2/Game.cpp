@@ -223,7 +223,7 @@ void Game::updateBullets()//zmiana
         }
 
         //prawa strona ekranu
-        else if (bullet->getBounds().left > this->window->getSize().x)
+        else if (bullet->getBounds().left > this->window->getSize().x) //Analogicznie jak wy¿ej tylko warunek dla prawej strony ekranu
         {
             delete this->bullets.at(licznik); //dealokacja pamieci
             this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku z wektora
@@ -233,7 +233,7 @@ void Game::updateBullets()//zmiana
         }
 
         //dol ekranu
-        else if (bullet->getBounds().top > this->window->getSize().y)
+        else if (bullet->getBounds().top > this->window->getSize().y) //Analogicznie jak wy¿ej tylko warunek dla dolnej granicy ekranu
         {
             delete this->bullets.at(licznik);//dealokacja pamieci
             this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku z wektora
