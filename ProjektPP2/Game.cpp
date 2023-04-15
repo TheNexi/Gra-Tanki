@@ -97,7 +97,7 @@ void Game::updateCollision()
     //gorna granica ekranu gry
     if (this->player->getBounds().top < 0.f)
     {
-        this->player->setPosition(this->player->getBounds().left, 25.f);
+        this->player->setPosition(this->player->getBounds().left + 25.f, 25.f);
     }
 
 
