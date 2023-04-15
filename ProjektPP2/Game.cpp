@@ -192,7 +192,7 @@ void Game::updatePlayer()
 
 
 
-void Game::updateBullets()//zmiana 
+void Game::updateBullets() //Metoda do usuwania pociskow
 {
     unsigned int licznik = 0;
 
