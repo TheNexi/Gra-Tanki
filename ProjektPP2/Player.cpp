@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void Player::stworzZmienne()
+void Player::stworzZmienne()// m.in przypisanie predkosci poruszania sie 
 {
 	this->movementSpeed = 1.0f;
 
@@ -10,7 +10,7 @@ void Player::stworzZmienne()
 
 void Player::initTexture()
 {
-	//Tekstury z pliku
+	//Wczytanie tekstury z pliku
 	if (!this->texture.loadFromFile("Textures/Tank v2.png"))
 	{
 		cout << "ERROR::PLAYER::Blad przy wczytywaniu grafiki obiektu gracza" << endl;
@@ -22,7 +22,7 @@ void Player::initTexture()
 
 void Player::initSprite()
 {
-	//Texture to sprite
+	//inicjacja tekstury do obiektu typu sprite
 	this->sprite.setTexture(this->texture);
 
 }
@@ -31,7 +31,7 @@ void Player::initSprite()
 
 
 Player::Player()
-{
+{//konstruktor wywolujacy funkcje inicjujace
 	this->stworzZmienne();
 	this->initTexture();
 	this->initSprite();
@@ -45,22 +45,22 @@ Player::~Player()
 
 }
 
-const sf::Vector2f& Player::getPos() const
+const sf::Vector2f& Player::getPos() const//funkcja zwracajaca pozycje obiektu
 {
 	return this->sprite.getPosition();
 }
 
-const sf::FloatRect Player::getBounds() const
+const sf::FloatRect Player::getBounds() const //funkcja zwracajaca krawedzie obiektu
 {
 	return this->sprite.getGlobalBounds();
 }
 
-void Player::setPosition(const sf::Vector2f pos)
+void Player::setPosition(const sf::Vector2f pos)//ustawia pozycje poprzez wektor
 {
 	this->sprite.setPosition(pos);
 }
 
-void Player::setPosition(const float x, const float y)
+void Player::setPosition(const float x, const float y)//ustawia pozycje poprzed dwie zmienne
 {
 	this->sprite.setPosition(x, y);
 
@@ -68,7 +68,7 @@ void Player::setPosition(const float x, const float y)
 
 
 //Funkcje
-void Player::move(const float dirX, const float dirY)
+void Player::move(const float dirX, const float dirY)//funkcja przemieszczaj¹ca obiekt z uwzglêdnieniem granic mapy
 {
 	//poruszanie sie obiektu
 
@@ -96,12 +96,8 @@ void Player::move(const float dirX, const float dirY)
 	}
 	else if (coord.x <= 25)
 	{
-<<<<<<< HEAD
-		this->sprite.move( dirX + 1, dirY);
-=======
-		this->sprite.move(dirX + 1, dirY);
->>>>>>> cc9a0d988c8c71f83749bd6bb7a5b71d2bd5b614
 
+		this->sprite.move(dirX + 1, dirY);
 
 	}
 

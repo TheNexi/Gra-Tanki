@@ -12,7 +12,7 @@ class Player
 private:
 	sf::Texture texture;
 	sf::Sprite sprite;
-	
+
 	float movementSpeed;
 	sf::Vector2f coord;
 
@@ -36,7 +36,7 @@ public:
 	//Funkcje
 	void move(const float dirX, const float dirY);
 
-	
+
 	void rotate_ob(float angle);
 	void update();
 	void render(sf::RenderTarget& target);

@@ -26,26 +26,20 @@ void Game::stworzTekstury()
 void Game::stworzObiektGracz()
 {
     this->player = new Player();
-<<<<<<< HEAD
+
     
     this->player->setPosition(300.f, 450.f);
     
    
-=======
 
-    this->player->setPosition(300.f, 450.f);
-
-
->>>>>>> cc9a0d988c8c71f83749bd6bb7a5b71d2bd5b614
 }
 void Game::stworzObiektPrzeciwnik()
 {
     this->enemy = new Player();
-<<<<<<< HEAD
+
     this->enemy->setPosition(500, 550);
-=======
-    this->enemy->setPosition(500.f, 550.f);
->>>>>>> cc9a0d988c8c71f83749bd6bb7a5b71d2bd5b614
+
+
 }
 // Konstuktor 
 Game::Game()
