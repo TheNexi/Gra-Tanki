@@ -28,19 +28,8 @@ private:
 	//Obiekt gracza
 	Player* player;
 	Player* enemy;
-<<<<<<< HEAD
-	
-	//Obiekt przeciwnika kwadrat
-
-	
-	
-=======
-
-	//Obiekt przeciwnika kwadrat
 
 
-
->>>>>>> cc9a0d988c8c71f83749bd6bb7a5b71d2bd5b614
 	//Prywatne funkcje
 	void stworzZmienne();
 	void stworzOkno();
