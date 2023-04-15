@@ -12,20 +12,20 @@ using namespace std;
 class Game
 {
 private:
-	//Okno gry
+	//obiekt obslugujacy okno gry i zdarzenia
 	sf::RenderWindow* window;
 	sf::Event ev;
 
 	//Zasoby gry
-	map<string, sf::Texture*> textures;
-	vector <Bullet*> bullets;
+	map<string, sf::Texture*> textures;// mapa przechowuj¹ca tekstury 
+	vector <Bullet*> bullets;//wektor przechowujacy pociski
 
 	sf::Time time;
 	sf::Clock clock;
 
 
 
-	//Obiekt gracza
+	//Obiekt gracza i przeciwnika
 	Player* player;
 	Player* enemy;
 

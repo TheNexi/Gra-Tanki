@@ -10,11 +10,11 @@
 class Player
 {
 private:
-	sf::Texture texture;
-	sf::Sprite sprite;
+	sf::Texture texture;//obiekt klasy texture z biblioteki sfml
+	sf::Sprite sprite;//obiekt klasy sprite z biblioteki sfml
 
 	float movementSpeed;
-	sf::Vector2f coord;
+	sf::Vector2f coord;//obiekt klasy Vector2f z biblioteki sfml
 
 	//Funkcje prywatne
 	void stworzZmienne();
