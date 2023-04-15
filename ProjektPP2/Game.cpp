@@ -161,7 +161,7 @@ void Game::updatePlayer()
             case(0):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y - 25, 0.f, -1.f, 2.f));
-                clock.restart();
+                clock.restart(); //Resetowanie zegara po wystrzeleniu pocisku
                 break;
             }
             case(90):
