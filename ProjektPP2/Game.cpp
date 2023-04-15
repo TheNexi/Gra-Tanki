@@ -27,7 +27,6 @@ void Game::stworzObiektGracz()
 {
     this->player = new Player();
     this->player->setPosition(300.f, 450.f);
-
 }
 void Game::stworzObiektPrzeciwnik()
 {
@@ -80,33 +79,6 @@ void Game::spawnEnemy()
     
 }
 
-void Game::updateCollision()
-{
-    //KOLIZJE z plansza
-    //lewa strona ekranu gry
-    if (this->player->getBounds().left  < 0.f)
-    {
-        this->player->setPosition(25.f, this->player->getBounds().top + 25.f);
-    }
-    //prawa strona ekranu gry (nie moga byc jednoczesnie lewa i prawa)
-    else if (this->player->getBounds().left + this->player->getBounds().width >= this->window->getSize().x)
-    {
-        this->player->setPosition(this->window->getSize().x - this->player->getBounds().width +25.f , this->player->getBounds().top + 25.f);
-    }
-
-    //gorna granica ekranu gry
-    if (this->player->getBounds().top < 0.f)
-    {
-        this->player->setPosition(this->player->getBounds().left + 25.f, 25.f);
-    }
-
-
-    //dolna granica ekranu gry
-    else if (this->player->getBounds().top + this->player->getBounds().height >= this->window->getSize().y)
-    {
-        this->player->setPosition(this->player->getBounds().left + 25.f, this->window->getSize().y + 25.f - this->player->getBounds().height);
-    }
-}
 
 void Game::pollEvents()
 {
@@ -144,7 +116,6 @@ void Game::updatePlayer()
     {
         this->player->move(-1.f, 0.f);
         this->player->rotate_ob(270);
-        
         
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -272,11 +243,8 @@ void Game::update()
 {
     this->pollEvents();
 
-    
-
     this->updatePlayer();
 
-    this->updateCollision();
 
     this->updateBullets();
     this->player->update();

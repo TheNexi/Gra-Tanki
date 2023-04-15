@@ -20,12 +20,6 @@ private:
 	map<string, sf::Texture*> textures;
 	vector <Bullet*> bullets;
 
-	//Logika gry
-	int points;
-	float enemySpawnTimer;
-	float enemySpawnTimerMax;
-	int maxEnemies;
-
 	sf::Time time;
 	sf::Clock clock;
 
@@ -56,7 +50,8 @@ public:
 	//Funkcje
 	void run();
 	void spawnEnemy();
-	void updateCollision();
+
+	
 	void updatePlayer();
 	void updateBullets();
 	void pollEvents();

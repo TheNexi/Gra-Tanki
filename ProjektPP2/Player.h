@@ -14,8 +14,7 @@ private:
 	sf::Sprite sprite;
 	
 	float movementSpeed;
-
-
+	sf::Vector2f coord;
 
 	//Funkcje prywatne
 	void stworzZmienne();

@@ -73,10 +73,36 @@ void Player::setPosition(const float x, const float y)
 //Funkcje
 void Player::move(const float dirX, const float dirY)
 {
-	//flexible, move to diferent directions
-	
-	this->sprite.move(this->movementSpeed * dirX, this->movementSpeed * dirY);
+	//poruszanie sie obiektu
 
+	coord = this->sprite.getPosition();
+
+	if (coord.x > 25 && coord.x < 775 && coord.y > 25 && coord.y < 575)
+	{
+		this->sprite.move(this->movementSpeed * dirX, this->movementSpeed * dirY);
+	}
+	else if (coord.y <= 25)
+	{
+		this->sprite.move(dirX, dirY + 2);
+
+	}
+	else if (coord.x >= 775)
+	{
+		this->sprite.move(this->movementSpeed * dirX - 2, this->movementSpeed * dirY);
+
+	}
+	else if (coord.y >= 575)
+	{
+		this->sprite.move(this->movementSpeed * dirX, this->movementSpeed * dirY - 2);
+
+
+	}
+	else if (coord.x <= 25)
+	{
+		this->sprite.move(this->movementSpeed * dirX + 2, this->movementSpeed * dirY);
+
+
+	}
 
 }
 
@@ -84,21 +110,14 @@ void Player::rotate_ob(float angle)
 {
 	if (angle != this->sprite.getRotation())
 	{
-		
 		this->sprite.setRotation(angle);
-
-
 	}
 }
 
 float Player::ob_rotation()
 {
 	return this->sprite.getRotation();
-
 }
-
-
-
 
 
 void Player::update()
