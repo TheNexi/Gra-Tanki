@@ -1,6 +1,7 @@
 #pragma once
 #include "Player.h"
 #include "Bullet.h"
+#include "Bricks.h"
 
 #include <map>
 #include <vector>
@@ -29,7 +30,8 @@ private:
 	Player* player;
 	Player* enemy;
 	
-
+	//Obiekt cegly
+	Bricks* bricks;
 
 	
 	//Prywatne funkcje
@@ -39,7 +41,7 @@ private:
 
 	void stworzObiektGracz();
 	void stworzObiektPrzeciwnik();
-
+	void initBricks();
 
 public:
 	//Konstruktory / Destruktory

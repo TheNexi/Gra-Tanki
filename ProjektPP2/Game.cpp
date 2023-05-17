@@ -1,5 +1,6 @@
 #include "Game.h"
 
+
 using namespace std;
 
 //Metody prywatne
@@ -62,6 +63,11 @@ void Game::stworzObiektPrzeciwnik() //Metoda do tworzenia obiektu przeciwnika
 
 
 }
+void Game::initBricks()
+{
+    this->bricks = new Bricks(100.f, 100.f);
+
+}
 // Konstuktor 
 Game::Game()
 {
@@ -79,6 +85,7 @@ Game::~Game()
     delete this->window; //Usuwa okno gry
     delete this->player; //Usuwa obiekt gracza
     delete this->enemy; // Usuwa obiekt przeciwnika
+    delete this->bricks; //Usuwa cegly
 
     //usuwanie tekstur (mapa)
     for (auto& i : this->textures) //Iteracja po wszystkich teksturach z mapy "textures"
@@ -322,6 +329,7 @@ void Game::update()
     this->updateBullets();
     this->player->update();
     this->enemy->update();
+    this->bricks->update(); //TEST
 
     this->updateEnemies();
 
@@ -341,10 +349,15 @@ void Game::render()
     this->renderEnemies();
     this->player->render(*this->window); //Rysuje obiekt gracza na ekranie
 
+    
+
     for (auto* bullet : this->bullets) //Dla ka¿dego obiektu w wektorze
     {
         bullet->render(this->window); //Wyswietla ka¿dy obiekt na ekranie
     }
+
+    this->bricks->render(*this->window); // Wyswietla cegly na ekranie
+
 
     this->window->display(); //Wyswietla na ekranie obecnie narysowane obiekty
 
