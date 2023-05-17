@@ -1,6 +1,7 @@
 #include "Player.h"
 
 using namespace std;
+#include <string>
 
 void Player::stworzZmienne()// m.in przypisanie predkosci poruszania sie 
 {
@@ -27,6 +28,21 @@ void Player::initSprite()
 
 }
 
+void Player::setMovementControl(sf::Keyboard::Key left, sf::Keyboard::Key right, sf::Keyboard::Key up, sf::Keyboard::Key down, sf::Keyboard::Key shot)
+{
+	this->left = left;
+	this->right = right;
+	this->up = up;
+	this->down = down;
+	this->shot = shot;
+}
+/*
+sf::Keyboard::Key Player::getKeyControl(string key)
+{
+	
+
+}
+*/
 
 
 
@@ -130,7 +146,7 @@ void Player::render(sf::RenderTarget& target)//funkcja renderujaca obiekt
 
 }
 
-void Player::color_change()//funkcja zmieniaj¹ca kolor tekstu obiektu
+void Player::color_change()//funkcja do ustawienia tekstury obiektu
 {
 	if (!this->texture.loadFromFile("Textures/tank v3.png"))
 	{

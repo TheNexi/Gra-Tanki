@@ -19,7 +19,7 @@ private:
 	//Zasoby gry
 	map<string, sf::Texture*> textures;// mapa przechowuj¹ca tekstury 
 	vector <Bullet*> bullets;//wektor przechowujacy pociski
-
+	
 	sf::Time time;
 	sf::Clock clock;
 
@@ -28,8 +28,10 @@ private:
 	//Obiekt gracza i przeciwnika
 	Player* player;
 	Player* enemy;
+	
 
 
+	
 	//Prywatne funkcje
 	void stworzZmienne();
 	void stworzOkno();
@@ -37,6 +39,7 @@ private:
 
 	void stworzObiektGracz();
 	void stworzObiektPrzeciwnik();
+
 
 public:
 	//Konstruktory / Destruktory
@@ -49,14 +52,13 @@ public:
 	void spawnEnemy();
 
 
-	void updatePlayer();
+	void updatePlayer(Player* any_player);
 	void updateBullets();
 	void pollEvents();
 	void updateEnemies();
+	void renderEnemies();
 
 	void update();
-
-	void renderEnemies();
 	void render();
 
 };

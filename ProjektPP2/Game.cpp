@@ -22,11 +22,22 @@ void Game::stworzTekstury() //Metoda do za³adowania tekstur z pliku
     this->textures["BULLET"] = new sf::Texture(); //Utowrzenie nowego obiektu klasy Texture
     this->textures["BULLET"]->loadFromFile("Textures/bullet2.png"); //£adowanie tekstury pocisku z pliku
 
+    
 }
 void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
 {
     this->player = new Player(); //Utworzenie obiektu gracza
-
+    sf::Keyboard::Key leftMoveKey = sf::Keyboard::Left;
+    sf::Keyboard::Key rightMoveKey = sf::Keyboard::Right;
+    sf::Keyboard::Key upMoveKey = sf::Keyboard::Up;
+    sf::Keyboard::Key downMoveKey = sf::Keyboard::Down;
+    sf::Keyboard::Key shotKey = sf::Keyboard::Space;
+    
+    this->player->left = leftMoveKey;
+    this->player->right = rightMoveKey;
+    this->player->up = upMoveKey;
+    this->player->down = downMoveKey;
+    this->player->shot = shotKey;
     
     this->player->setPosition(300.f, 450.f); //Ustawienie pozycji poczatkowej gracza
 
@@ -34,6 +45,18 @@ void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
 void Game::stworzObiektPrzeciwnik() //Metoda do tworzenia obiektu przeciwnika
 {
     this->enemy = new Player(); //Utworzenie obiektu nowego obiektu (przeciwnik)
+
+    sf::Keyboard::Key leftMoveKey = sf::Keyboard::A;
+    sf::Keyboard::Key rightMoveKey = sf::Keyboard::D;
+    sf::Keyboard::Key upMoveKey = sf::Keyboard::W;
+    sf::Keyboard::Key downMoveKey = sf::Keyboard::S;
+    sf::Keyboard::Key shotKey = sf::Keyboard::LControl;
+
+    this->enemy->left = leftMoveKey;
+    this->enemy->right = rightMoveKey;
+    this->enemy->up = upMoveKey;
+    this->enemy->down = downMoveKey;
+    this->enemy->shot = shotKey;
 
     this->enemy->setPosition(500, 550); //Ustawienie pozycji pocz¹tkowej drugiego gracza (przeciwnik)
 
@@ -55,6 +78,7 @@ Game::~Game()
 {
     delete this->window; //Usuwa okno gry
     delete this->player; //Usuwa obiekt gracza
+    delete this->enemy; // Usuwa obiekt przeciwnika
 
     //usuwanie tekstur (mapa)
     for (auto& i : this->textures) //Iteracja po wszystkich teksturach z mapy "textures"
@@ -117,39 +141,38 @@ void Game::updateEnemies()
 
 }
 
-void Game::updatePlayer()
+void Game::updatePlayer(Player* player)
 {
     //Poruszanie obiektu gracza
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) //Lewa strza³ka
+    if (sf::Keyboard::isKeyPressed(player->left)) //Lewa strza³ka
     {
-        this->player->move(-1.f, 0.f); //Kierunek poruszania
-        this->player->rotate_ob(270); //Obrót obiektu
+        player->move(-1.f, 0.f); //Kierunek poruszania
+        player->rotate_ob(270); //Obrót obiektu
 
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))//analogicznie jak wy¿ej tylko w prawo
+    else if (sf::Keyboard::isKeyPressed(player->right))//analogicznie jak wy¿ej tylko w prawo
     {
-        this->player->move(1.f, 0.f);
-        this->player->rotate_ob(90);
+        player->move(1.f, 0.f);
+        player->rotate_ob(90);
 
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))//analogicznie jak wy¿ej tylko do góry
+    else if (sf::Keyboard::isKeyPressed(player->up))//analogicznie jak wy¿ej tylko do góry
     {
-        this->player->move(0.f, -1.f);
-        this->player->rotate_ob(0);
+        player->move(0.f, -1.f);
+        player->rotate_ob(0);
 
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))//analogicznie jak wy¿ej tylko w dó³
+    else if (sf::Keyboard::isKeyPressed(player->down))//analogicznie jak wy¿ej tylko w dó³
     {
-        this->player->move(0.f, 1.f);
-        this->player->rotate_ob(180);
+        player->move(0.f, 1.f);
+        player->rotate_ob(180);
 
     }
     //Poruszanie obiektu gracza koniec
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    if (sf::Keyboard::isKeyPressed(this->player->shot))
     {
-
 
         time = clock.getElapsedTime();
         //opoznienie miedzy strzalami
@@ -179,6 +202,46 @@ void Game::updatePlayer()
             case(270):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x - 25, this->player->getPos().y, -1.f, 0.f, 2.f));
+                clock.restart();
+                break;
+            }
+
+            }
+        }
+    }
+
+    if (sf::Keyboard::isKeyPressed(this->enemy->shot))
+    {
+
+
+        time = clock.getElapsedTime();
+        //opoznienie miedzy strzalami
+        if (time.asSeconds() > 0.5)
+        {
+            int angle = (int)this->enemy->ob_rotation();
+            switch (angle)//ustawianie kierunku strza³u
+            {
+            case(0):
+            {
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x, this->enemy->getPos().y - 25, 0.f, -1.f, 2.f));
+                clock.restart(); //Resetowanie zegara po wystrzeleniu pocisku
+                break;
+            }
+            case(90):
+            {
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x + 25, this->enemy->getPos().y, 1.f, 0.f, 2.f));
+                clock.restart();
+                break;
+            }
+            case(180):
+            {
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x, this->enemy->getPos().y + 25, 0.f, 1.f, 2.f));
+                clock.restart();
+                break;
+            }
+            case(270):
+            {
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x - 25, this->enemy->getPos().y, -1.f, 0.f, 2.f));
                 clock.restart();
                 break;
             }
@@ -252,11 +315,13 @@ void Game::update()
 {
     this->pollEvents();
 
-    this->updatePlayer();
+    this->updatePlayer(player);
+    this->updatePlayer(enemy);
 
 
     this->updateBullets();
     this->player->update();
+    this->enemy->update();
 
     this->updateEnemies();
 
