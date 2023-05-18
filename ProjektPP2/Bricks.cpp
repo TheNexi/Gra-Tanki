@@ -2,35 +2,14 @@
 #include <iostream>
 using namespace std;
 
+#include <SFML/Graphics.hpp>
 
-void Bricks::initVariables()
+Bricks::Bricks(sf::Texture* texture,float pos_x, float pos_y, float destructionHp)
 {
-	this->destructionHp = 2.0f;
+	this->shape.setTexture(*texture); //tekstura obrazu pocisku
 
-}
-
-void Bricks::initTexture()
-{
-	//Wczytanie tekstury z pliku
-	if (!this->texture.loadFromFile("Textures/cegla.png"))
-	{
-		cout << "ERROR::PLAYER::Blad przy wczytywaniu grafiki obiektu gracza" << endl;
-	}
-}
-
-void Bricks::initSprite()
-{
-	//inicjacja tekstury do obiektu typu sprite
-	this->sprite.setTexture(this->texture);
-}
-
-Bricks::Bricks(float pos_x, float pos_y)
-{
-	this->initVariables();
-	this->initTexture();
-	this->initSprite();
-	this->sprite.setOrigin(25, 25);
-	this->sprite.setPosition(pos_x, pos_y); // ustawienie pozycji cegly na ekranie
+	this->shape.setOrigin(25, 25);
+	this->shape.setPosition(pos_x, pos_y); // ustawienie pozycji cegly na ekranie
 }
 
 Bricks::~Bricks()
@@ -38,34 +17,20 @@ Bricks::~Bricks()
 
 }
 
-const sf::Vector2f& Bricks::getPos() const
-{
-	return this->sprite.getPosition();
-}
 
 const sf::FloatRect Bricks::getBounds() const
 {
-	return this->sprite.getGlobalBounds();
+	return this->shape.getGlobalBounds(); //Zwraca granice obiektu uwzglêdniaj¹c¹ pozycjê pocisku na ekranie
 }
 
-void Bricks::setPosition(const sf::Vector2f pos)
-{
-	this->sprite.setPosition(pos);
-}
-
-void Bricks::setPosition(const float x, const float y)
-{
-	//Czy potrzebne?
-	this->sprite.setPosition(x, y);
-}
 
 void Bricks::update()
 {
 
 }
 
-void Bricks::render(sf::RenderTarget& target)//funkcja renderujaca obiekt 
-{
-	target.draw(this->sprite);
 
+void Bricks::render(sf::RenderWindow& window)
+{
+	window.draw(shape); // Wyœwietlanie ceg³y na ekranie
 }

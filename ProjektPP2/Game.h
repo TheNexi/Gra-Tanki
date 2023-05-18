@@ -21,6 +21,10 @@ private:
 	map<string, sf::Texture*> textures;// mapa przechowuj¹ca tekstury 
 	vector <Bullet*> bullets;//wektor przechowujacy pociski
 	
+	//Obiekt cegly
+	vector <Bricks*> bricks;
+
+
 	sf::Time time;
 	sf::Clock clock;
 
@@ -30,8 +34,7 @@ private:
 	Player* player;
 	Player* enemy;
 	
-	//Obiekt cegly
-	Bricks* bricks;
+	
 
 	
 	//Prywatne funkcje
@@ -41,7 +44,9 @@ private:
 
 	void stworzObiektGracz();
 	void stworzObiektPrzeciwnik();
-	void initBricks();
+
+	void stworzCegly();
+	
 
 public:
 	//Konstruktory / Destruktory
@@ -52,9 +57,10 @@ public:
 	//Funkcje
 	void run();
 	void spawnEnemy();
-
+	void destroy();
 
 	void updatePlayer(Player* any_player);
+	void updateBricks();
 	void updateBullets();
 	void pollEvents();
 	void updateEnemies();

@@ -23,6 +23,8 @@ void Game::stworzTekstury() //Metoda do za³adowania tekstur z pliku
     this->textures["BULLET"] = new sf::Texture(); //Utowrzenie nowego obiektu klasy Texture
     this->textures["BULLET"]->loadFromFile("Textures/bullet2.png"); //£adowanie tekstury pocisku z pliku
 
+    this->textures["BRICKS"] = new sf::Texture(); //Utowrzenie nowego obiektu klasy Texture
+    this->textures["BRICKS"]->loadFromFile("Textures/cegla.png"); //£adowanie tekstury pocisku z pliku
     
 }
 void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
@@ -63,11 +65,22 @@ void Game::stworzObiektPrzeciwnik() //Metoda do tworzenia obiektu przeciwnika
 
 
 }
-void Game::initBricks()
+
+void Game::stworzCegly()
 {
-    this->bricks = new Bricks(100.f, 100.f);
+    int x = 100, y=75;
+    
+    //cegly poziome gora
+    for (int i = 0; i < 25; i++)
+    {
+        this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, y, 1.f));
+        x += 25;
+       
+    }
+    
 
 }
+
 // Konstuktor 
 Game::Game()
 {
@@ -77,6 +90,7 @@ Game::Game()
     this->stworzTekstury();
     this->stworzObiektGracz();
     this->stworzObiektPrzeciwnik();
+    this->stworzCegly();
 }
 
 // Destruktor
@@ -85,7 +99,7 @@ Game::~Game()
     delete this->window; //Usuwa okno gry
     delete this->player; //Usuwa obiekt gracza
     delete this->enemy; // Usuwa obiekt przeciwnika
-    delete this->bricks; //Usuwa cegly
+    
 
     //usuwanie tekstur (mapa)
     for (auto& i : this->textures) //Iteracja po wszystkich teksturach z mapy "textures"
@@ -94,6 +108,11 @@ Game::~Game()
     }
 
     for (auto* i : this->bullets)
+    {
+        delete i; // usuwa wszystkie obiekty pocisków z wektora "bullets"
+    }
+
+    for (auto* i : this->bricks)
     {
         delete i; // usuwa wszystkie obiekty pocisków z wektora "bullets"
     }
@@ -117,6 +136,12 @@ void Game::spawnEnemy()
 
 
 }
+
+void Game::destroy()
+{
+    delete this; // Usuwa obiekt gry
+}
+
 
 
 void Game::pollEvents()
@@ -259,6 +284,30 @@ void Game::updatePlayer(Player* player)
 
 }
 
+void Game::updateBricks()
+{
+    for (auto* brick : bricks) // Dla ka¿dej ceg³y w wektorze bricks
+    {
+        if (player->getBounds().intersects(brick->getBounds())) // SprawdŸ, czy gracz koliduje z ceg³¹
+        {
+             // Zniszcz ceg³ê
+        }
+
+        for (auto* bullet : bullets) // Dla ka¿dego pocisku w wektorze bullets
+        {
+            if (bullet->getBounds().intersects(brick->getBounds())) // SprawdŸ, czy pocisk koliduje z ceg³¹
+            {
+                // Zniszcz pocisk
+                // Zniszcz ceg³ê
+            }
+        }
+    }
+
+    // Usuñ zniszczone ceg³y z wektora bricks
+    
+}
+
+
 
 
 
@@ -325,11 +374,11 @@ void Game::update()
     this->updatePlayer(player);
     this->updatePlayer(enemy);
 
-
+    this->updateBricks();
     this->updateBullets();
     this->player->update();
     this->enemy->update();
-    this->bricks->update(); //TEST
+    
 
     this->updateEnemies();
 
@@ -349,14 +398,18 @@ void Game::render()
     this->renderEnemies();
     this->player->render(*this->window); //Rysuje obiekt gracza na ekranie
 
-    
+    for (auto* bricks : this->bricks) //Dla ka¿dego obiektu w wektorze
+    {
+        //bez this?
+        bricks->render(*this->window); //Wyswietla ka¿dy obiekt na ekranie
+    }
 
     for (auto* bullet : this->bullets) //Dla ka¿dego obiektu w wektorze
     {
         bullet->render(this->window); //Wyswietla ka¿dy obiekt na ekranie
     }
 
-    this->bricks->render(*this->window); // Wyswietla cegly na ekranie
+    
 
 
     this->window->display(); //Wyswietla na ekranie obecnie narysowane obiekty
