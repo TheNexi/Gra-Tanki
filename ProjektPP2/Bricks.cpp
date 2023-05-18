@@ -8,7 +8,7 @@ Bricks::Bricks(sf::Texture* texture,float pos_x, float pos_y, float destructionH
 {
 	this->shape.setTexture(*texture); //tekstura obrazu pocisku
 	
-	this->shape.setOrigin(25, 25);
+	//this->shape.setOrigin(25, 25);
 	this->shape.setPosition(pos_x, pos_y); // ustawienie pozycji cegly na ekranie
 }
 

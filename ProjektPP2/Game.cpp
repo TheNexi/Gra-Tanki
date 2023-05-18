@@ -1,4 +1,4 @@
-#include "Game.h"
+ï»¿#include "Game.h"
 
 
 using namespace std;
@@ -6,7 +6,7 @@ using namespace std;
 //Metody prywatne
 void Game::stworzZmienne()
 {
-    this->window = nullptr; //Inicjalizacja pola window na pusty wskaŸnik
+    this->window = nullptr; //Inicjalizacja pola window na pusty wskaÅºnik
 }
 
 void Game::stworzOkno() //Metoda do tworzenia okna gry
@@ -15,16 +15,16 @@ void Game::stworzOkno() //Metoda do tworzenia okna gry
     
 
     this->window->setFramerateLimit(144); //Limit klatek na sekunde
-    this->window->setVerticalSyncEnabled(false); //wy³¹czenie synchorizacji pionowej
+    this->window->setVerticalSyncEnabled(false); //wyÅ‚Ä…czenie synchorizacji pionowej
 
 }
-void Game::stworzTekstury() //Metoda do za³adowania tekstur z pliku
+void Game::stworzTekstury() //Metoda do zaÅ‚adowania tekstur z pliku
 {
     this->textures["BULLET"] = new sf::Texture(); //Utowrzenie nowego obiektu klasy Texture
-    this->textures["BULLET"]->loadFromFile("Textures/bullet2.png"); //£adowanie tekstury pocisku z pliku
+    this->textures["BULLET"]->loadFromFile("Textures/bullet2.png"); //Åadowanie tekstury pocisku z pliku
 
     this->textures["BRICKS"] = new sf::Texture(); //Utowrzenie nowego obiektu klasy Texture
-    this->textures["BRICKS"]->loadFromFile("Textures/brick.png"); //£adowanie tekstury pocisku z pliku
+    this->textures["BRICKS"]->loadFromFile("Textures/brick50.png"); //Åadowanie tekstury pocisku z pliku
     
 }
 void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
@@ -61,70 +61,82 @@ void Game::stworzObiektPrzeciwnik() //Metoda do tworzenia obiektu przeciwnika
     this->enemy->down = downMoveKey;
     this->enemy->shot = shotKey;
 
-    this->enemy->setPosition(150.f, 50.f); //Ustawienie pozycji pocz¹tkowej drugiego gracza (przeciwnik)
+    this->enemy->setPosition(175.f, 25.f); //Ustawienie pozycji poczÄ…tkowej drugiego gracza (przeciwnik)
 
 
 }
 
 void Game::stworzCegly()
 {
-    int x = 100, y=75;
-    
-    //cegly pion
-    for (int i = 0; i < 5; i++)
-    {
-        this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, y, 1.f));
-        y += 50;
-       
-    }
-    x = 200;
-    y = 75;
-    for (int i = 0; i < 5; i++)
-    {
-        this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, y, 1.f));
-        y += 50;
-
-    }
-    x = 300;
-    y = 75;
-
-    for (int i = 0; i < 5; i++)
-    {
-        this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, y, 1.f));
-        y += 50;
-
-    }
     
     
 
-    x = 400, y = 300;
+    int xCols[] = { 75, 175, 275 , 375, 475, 575, 675, 775}; // WspÃ³Å‚rzÄ™dne x dla kolumn cegieÅ‚
+    int yStart = 75; // PoczÄ…tkowa wspÃ³Å‚rzÄ™dna y
 
-    //cegly pion
-    for (int i = 0; i < 5; i++)
+    for (int column = 0; column < 8; column++)
     {
-        this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, y, 1.f));
-        y += 50;
+        int y = yStart;
 
+        for (int row = 0; row < 4; row++)
+        {
+            this->bricks.push_back(new Bricks(this->textures["BRICKS"], xCols[column], y, 1.f));
+            
+            y += 50;
+        }
+        //this->bricks.push_back(new Bricks(this->textures["BRICKS"], x-50, y, 1.f));
     }
-    x = 500;
-    y = 300;
-    for (int i = 0; i < 5; i++)
-    {
-        this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, y, 1.f));
-        y += 50;
 
-    }
-    x = 600;
-    y = 300;
-
-    for (int i = 0; i < 5; i++)
-    {
-        this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, y, 1.f));
-        y += 50;
-
-    }
     
-    
+    //CegÅ‚y linia pozioma
+    int xStart = 25;
+    yStart = 275;
+
+    for (int column = 0; column < 1; column++)
+    {
+        
+        int x = xStart;
+
+        for (int row = 0; row < 16; row++)
+        {
+            this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, yStart, 1.f));
+
+            x += 50;
+        }
+
+    }
+
+    //Cegly dla orzelka
+
+    xStart = 350;
+    yStart = 525;
+
+    for (int column = 0; column < 1; column++)
+    {
+        int x = xStart;
+        for (int row = 0; row < 4; row++)
+        {
+            this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, yStart, 1.f));
+
+            x += 50;
+        }
+    }
+    xStart = 350;
+    yStart = 575;
+
+    for (int column = 0; column < 1; column++)
+    {
+        int x = xStart;
+        for (int row = 0; row < 2; row++)
+        {
+            this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, yStart, 1.f));
+
+            x += 150;
+        }
+
+    }
+
+    this->bricks.push_back(new Bricks(this->textures["BRICKS"], 450, 400, 1.f));
 
 }
 
@@ -157,19 +169,19 @@ Game::~Game()
 
     for (auto* i : this->bullets)
     {
-        delete i; // usuwa wszystkie obiekty pocisków z wektora "bullets"
+        delete i; // usuwa wszystkie obiekty pociskÃ³w z wektora "bullets"
     }
 
     for (auto* i : this->bricks)
     {
-        delete i; // usuwa wszystkie obiekty pocisków z wektora "bullets"
+        delete i; // usuwa wszystkie obiekty pociskÃ³w z wektora "bullets"
     }
 }
 
 
-void Game::run() //G³ówna petla gry
+void Game::run() //GÅ‚Ã³wna petla gry
 {
-    //W ka¿dej iteracji petli podczas uruchomionego okna wywo³uje metody update() i render()
+    //W kaÅ¼dej iteracji petli podczas uruchomionego okna wywoÅ‚uje metody update() i render()
     while (this->window->isOpen())
     {
         this->update();
@@ -224,26 +236,26 @@ void Game::updateEnemies()
 void Game::updatePlayer(Player* player)
 {
     //Poruszanie obiektu gracza
-    if (sf::Keyboard::isKeyPressed(player->left)) //Lewa strza³ka
+    if (sf::Keyboard::isKeyPressed(player->left)) //Lewa strzaÅ‚ka
     {
         player->move(-1.f, 0.f); //Kierunek poruszania
-        player->rotate_ob(270); //Obrót obiektu
+        player->rotate_ob(270); //ObrÃ³t obiektu
 
     }
-    else if (sf::Keyboard::isKeyPressed(player->right))//analogicznie jak wy¿ej tylko w prawo
+    else if (sf::Keyboard::isKeyPressed(player->right))//analogicznie jak wyÅ¼ej tylko w prawo
     {
         player->move(1.f, 0.f);
         player->rotate_ob(90);
 
     }
-    else if (sf::Keyboard::isKeyPressed(player->up))//analogicznie jak wy¿ej tylko do góry
+    else if (sf::Keyboard::isKeyPressed(player->up))//analogicznie jak wyÅ¼ej tylko do gÃ³ry
     {
         player->move(0.f, -1.f);
         player->rotate_ob(0);
 
     }
 
-    else if (sf::Keyboard::isKeyPressed(player->down))//analogicznie jak wy¿ej tylko w dó³
+    else if (sf::Keyboard::isKeyPressed(player->down))//analogicznie jak wyÅ¼ej tylko w dÃ³Å‚
     {
         player->move(0.f, 1.f);
         player->rotate_ob(180);
@@ -259,7 +271,7 @@ void Game::updatePlayer(Player* player)
         if (time.asSeconds() > 0.5)
         {
             int angle = (int)this->player->ob_rotation();
-            switch (angle)//ustawianie kierunku strza³u
+            switch (angle)//ustawianie kierunku strzaÅ‚u
             {
             case(0):
             {
@@ -299,7 +311,7 @@ void Game::updatePlayer(Player* player)
         if (time.asSeconds() > 0.5)
         {
             int angle = (int)this->enemy->ob_rotation();
-            switch (angle)//ustawianie kierunku strza³u
+            switch (angle)//ustawianie kierunku strzaÅ‚u
             {
             case(0):
             {
@@ -334,37 +346,107 @@ void Game::updatePlayer(Player* player)
 
 void Game::updateBricks()
 {
+    //PROBLEM Z KOLIZJA NA ROGACH
+    
+    sf::FloatRect nextpos;
+    for (auto& brick : bricks) // Dla kazdej cegly w wektorze bricks
+    {
 
-    int bulletIndexToRemove = -1; // Indeks pocisku do usuniêcia (-1 oznacza brak usuwania)
-    int brickIndexToRemove = -1; // Indeks ceg³y do usuniêcia (-1 oznacza brak usuwania)
+        sf::FloatRect playerbounds = player->getBounds();
+
+        sf::FloatRect wallbounds = brick->getBounds();
+        nextpos = playerbounds;
+
+        //  nextpos = player->getBounds().left;
+
+        if (wallbounds.intersects(nextpos))
+        {
+           
+            //Bottom collision
+            if (playerbounds.top < wallbounds.top &&
+                playerbounds.top + playerbounds.height < wallbounds.top + wallbounds.height
+                && playerbounds.left<wallbounds.left + wallbounds.width
+                && playerbounds.left + playerbounds.width >wallbounds.left)
+            {
+                cout << "kolizja od gory\n";
+                
+
+                player->setPosition(playerbounds.left+ playerbounds.width -25, wallbounds.top - playerbounds.height+25);
+            }
+
+            //Top collision
+            if (playerbounds.top > wallbounds.top &&
+                playerbounds.top + playerbounds.height > wallbounds.top + wallbounds.height
+                && playerbounds.left<wallbounds.left + wallbounds.width
+                && playerbounds.left + playerbounds.width >wallbounds.left)
+            {
+                cout << "kolizja dolna\n";
+                player->setPosition(playerbounds.left+25, wallbounds.top + wallbounds.height+25);
+            }
+
+
+            //Right collision
+             if (playerbounds.left < wallbounds.left &&
+                playerbounds.left + playerbounds.width < wallbounds.left + wallbounds.width
+                && playerbounds.top<wallbounds.top + wallbounds.height
+                && playerbounds.top + playerbounds.height >wallbounds.top)
+            {
+                cout << "lewa kolizja\n";
+                player->setPosition(wallbounds.left-playerbounds.width+25, playerbounds.top + 25);
+            //Left collision
+            }
+            if (playerbounds.left > wallbounds.left &&
+                playerbounds.left + 25 > wallbounds.left + wallbounds.width
+                && playerbounds.top<wallbounds.top + wallbounds.height
+                && playerbounds.top + 25 >wallbounds.top)
+            {
+                cout << "prawa kolizja\n";
+                player->setPosition(wallbounds.left + wallbounds.width+25, playerbounds.top + 25);
+            }
+            
+
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    int bulletIndexToRemove = -1; // Indeks pocisku do usuniÄ™cia (-1 oznacza brak usuwania)
+    int brickIndexToRemove = -1; // Indeks cegÅ‚y do usuniÄ™cia (-1 oznacza brak usuwania)
     int bulletIndex; //Zmienna do przechowywania biezacego indeksu pocisku
-    int brickIndex;  //Zmienna do przechowywania biezacego indeksu ceg³y
+    int brickIndex;  //Zmienna do przechowywania biezacego indeksu cegÅ‚y
     
 
     for (bulletIndex = 0; bulletIndex < this->bullets.size(); bulletIndex++)
     {
         for (brickIndex = 0; brickIndex < this->bricks.size(); brickIndex++)
         {
-            if (this->bullets[bulletIndex]->getBounds().intersects(this->bricks[brickIndex]->getBounds())) //Sprawdzenie czy granice obiektu pocisku nak³adaj¹ siê na granice obiektu ceg³y
+            if (this->bullets[bulletIndex]->getBounds().intersects(this->bricks[brickIndex]->getBounds())) //Sprawdzenie czy granice obiektu pocisku nakÅ‚adajÄ… siÄ™ na granice obiektu cegÅ‚y
             {
-                // Kolizja pocisku z ceg³¹
-                bulletIndexToRemove = bulletIndex; //Ustawienie indeksu pocisku ktory sie zetknal z ceg³¹
+                // Kolizja pocisku z cegÅ‚Ä…
+                bulletIndexToRemove = bulletIndex; //Ustawienie indeksu pocisku ktory sie zetknal z cegÅ‚Ä…
                 brickIndexToRemove = brickIndex;   //Ustawienie indeksu cegly z ktora sie zetknal pocisk
-                break; //Przerwanie petli po zetknieciu jednego pocisku z jedn¹ ceg³¹
+                break; //Przerwanie petli po zetknieciu jednego pocisku z jednÄ… cegÅ‚Ä…
             }
         }
 
-        if (bulletIndexToRemove != -1 && brickIndexToRemove != -1) //Sprawdzenie czy wyst¹pi³a kolizja
+        if (bulletIndexToRemove != -1 && brickIndexToRemove != -1) //Sprawdzenie czy wystÄ…piÅ‚a kolizja
         {
             // Usuwanie pocisku
             delete this->bullets[bulletIndexToRemove];
             this->bullets.erase(this->bullets.begin() + bulletIndexToRemove);
 
-            // Usuwanie ceg³y
+            // Usuwanie cegÅ‚y
             delete this->bricks[brickIndexToRemove];
             this->bricks.erase(this->bricks.begin() + brickIndexToRemove);
 
-            // Zmniejszenie indeksów dla pêtli, aby uwzglêdniæ usuwanie elementów
+            // Zmniejszenie indeksÃ³w dla pÄ™tli, aby uwzglÄ™dniÄ‡ usuwanie elementÃ³w
             if (bulletIndexToRemove < bulletIndex)
             {
                 bulletIndex--;
@@ -374,7 +456,7 @@ void Game::updateBricks()
                 brickIndex--;
             }
 
-            // Zresetowanie indeksów do braku usuwania
+            // Zresetowanie indeksÃ³w do braku usuwania
             bulletIndexToRemove = -1;
             brickIndexToRemove = -1;
         }
@@ -391,34 +473,34 @@ void Game::updateBullets() //Metoda do usuwania pociskow
 {
     unsigned int licznik = 0;
 
-    for (auto* bullet : this->bullets) //W kazdej iteracji wskaŸnik bullet wskazuje na kolejny element wektora "bullets"
+    for (auto* bullet : this->bullets) //W kazdej iteracji wskaÅºnik bullet wskazuje na kolejny element wektora "bullets"
     {
         bullet->update(); //wywolanie metody update() dla kazdego pocisku
 
         //pozycja pocisku do okna gry
 
-        //góra ekranu
+        //gÃ³ra ekranu
         if (bullet->getBounds().top + bullet->getBounds().height < 0.f)
         {
-            delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowan¹ pamiêæ pocisku o indeksie licznik w wektorze bullets
+            delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowanÄ… pamiÄ™Ä‡ pocisku o indeksie licznik w wektorze bullets
             this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
             licznik--; //dekrementacja licznika po usunieciu pocisku
 
-            cout << "Pocisk gora: " << this->bullets.size() << endl; //Wyswietlenie na standardowym wyjœciu informacji o liczbie obecnych pociskow
+            cout << "Pocisk gora: " << this->bullets.size() << endl; //Wyswietlenie na standardowym wyjÅ›ciu informacji o liczbie obecnych pociskow
         }
 
         //lewa strona ekranu
-        else if (bullet->getBounds().left + bullet->getBounds().width < 0.f) //Sprawdza czy lewa krawêdŸ pocisku jest poza granica okna gry
+        else if (bullet->getBounds().left + bullet->getBounds().width < 0.f) //Sprawdza czy lewa krawÄ™dÅº pocisku jest poza granica okna gry
         {
             delete this->bullets.at(licznik);
             this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku
             licznik--; 
 
-            cout << "Pocisk lewa: " << this->bullets.size() << endl; //Wyswietlenie na standardowym wyjœciu informacji o liczbie obecnych pociskow
+            cout << "Pocisk lewa: " << this->bullets.size() << endl; //Wyswietlenie na standardowym wyjÅ›ciu informacji o liczbie obecnych pociskow
         }
 
         //prawa strona ekranu
-        else if (bullet->getBounds().left > this->window->getSize().x) //Analogicznie jak wy¿ej tylko warunek dla prawej strony ekranu
+        else if (bullet->getBounds().left > this->window->getSize().x) //Analogicznie jak wyÅ¼ej tylko warunek dla prawej strony ekranu
         {
             delete this->bullets.at(licznik); //dealokacja pamieci
             this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku z wektora
@@ -428,7 +510,7 @@ void Game::updateBullets() //Metoda do usuwania pociskow
         }
 
         //dol ekranu
-        else if (bullet->getBounds().top > this->window->getSize().y) //Analogicznie jak wy¿ej tylko warunek dla dolnej granicy ekranu
+        else if (bullet->getBounds().top > this->window->getSize().y) //Analogicznie jak wyÅ¼ej tylko warunek dla dolnej granicy ekranu
         {
             delete this->bullets.at(licznik);//dealokacja pamieci
             this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku z wektora
@@ -474,15 +556,15 @@ void Game::render()
     this->renderEnemies();
     this->player->render(*this->window); //Rysuje obiekt gracza na ekranie
 
-    for (auto* bricks : this->bricks) //Dla ka¿dego obiektu w wektorze
+    for (auto* bricks : this->bricks) //Dla kaÅ¼dego obiektu w wektorze
     {
         //bez this?
-        bricks->render(*this->window); //Wyswietla ka¿dy obiekt na ekranie
+        bricks->render(*this->window); //Wyswietla kaÅ¼dy obiekt na ekranie
     }
 
-    for (auto* bullet : this->bullets) //Dla ka¿dego obiektu w wektorze
+    for (auto* bullet : this->bullets) //Dla kaÅ¼dego obiektu w wektorze
     {
-        bullet->render(this->window); //Wyswietla ka¿dy obiekt na ekranie
+        bullet->render(this->window); //Wyswietla kaÅ¼dy obiekt na ekranie
     }
 
     
