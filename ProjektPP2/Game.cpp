@@ -24,7 +24,7 @@ void Game::stworzTekstury() //Metoda do za³adowania tekstur z pliku
     this->textures["BULLET"]->loadFromFile("Textures/bullet2.png"); //£adowanie tekstury pocisku z pliku
 
     this->textures["BRICKS"] = new sf::Texture(); //Utowrzenie nowego obiektu klasy Texture
-    this->textures["BRICKS"]->loadFromFile("Textures/cegla.png"); //£adowanie tekstury pocisku z pliku
+    this->textures["BRICKS"]->loadFromFile("Textures/brick.png"); //£adowanie tekstury pocisku z pliku
     
 }
 void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
@@ -42,7 +42,7 @@ void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
     this->player->down = downMoveKey;
     this->player->shot = shotKey;
     
-    this->player->setPosition(300.f, 450.f); //Ustawienie pozycji poczatkowej gracza
+    this->player->setPosition(700.f, 450.f); //Ustawienie pozycji poczatkowej gracza
 
 }
 void Game::stworzObiektPrzeciwnik() //Metoda do tworzenia obiektu przeciwnika
@@ -61,7 +61,7 @@ void Game::stworzObiektPrzeciwnik() //Metoda do tworzenia obiektu przeciwnika
     this->enemy->down = downMoveKey;
     this->enemy->shot = shotKey;
 
-    this->enemy->setPosition(500, 550); //Ustawienie pozycji pocz¹tkowej drugiego gracza (przeciwnik)
+    this->enemy->setPosition(150.f, 50.f); //Ustawienie pozycji pocz¹tkowej drugiego gracza (przeciwnik)
 
 
 }
@@ -70,16 +70,64 @@ void Game::stworzCegly()
 {
     int x = 100, y=75;
     
-    //cegly poziome gora
-    for (int i = 0; i < 25; i++)
+    //cegly pion
+    for (int i = 0; i < 5; i++)
     {
         this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, y, 1.f));
-        x += 25;
+        y += 50;
        
     }
+    x = 200;
+    y = 75;
+    for (int i = 0; i < 5; i++)
+    {
+        this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, y, 1.f));
+        y += 50;
+
+    }
+    x = 300;
+    y = 75;
+
+    for (int i = 0; i < 5; i++)
+    {
+        this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, y, 1.f));
+        y += 50;
+
+    }
+    
+    
+
+    x = 400, y = 300;
+
+    //cegly pion
+    for (int i = 0; i < 5; i++)
+    {
+        this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, y, 1.f));
+        y += 50;
+
+    }
+    x = 500;
+    y = 300;
+    for (int i = 0; i < 5; i++)
+    {
+        this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, y, 1.f));
+        y += 50;
+
+    }
+    x = 600;
+    y = 300;
+
+    for (int i = 0; i < 5; i++)
+    {
+        this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, y, 1.f));
+        y += 50;
+
+    }
+    
     
 
 }
+
 
 // Konstuktor 
 Game::Game()
@@ -286,25 +334,53 @@ void Game::updatePlayer(Player* player)
 
 void Game::updateBricks()
 {
-    for (auto* brick : bricks) // Dla ka¿dej ceg³y w wektorze bricks
+
+    int bulletIndexToRemove = -1; // Indeks pocisku do usuniêcia (-1 oznacza brak usuwania)
+    int brickIndexToRemove = -1; // Indeks ceg³y do usuniêcia (-1 oznacza brak usuwania)
+    int bulletIndex; //Zmienna do przechowywania biezacego indeksu pocisku
+    int brickIndex;  //Zmienna do przechowywania biezacego indeksu ceg³y
+    
+
+    for (bulletIndex = 0; bulletIndex < this->bullets.size(); bulletIndex++)
     {
-        if (player->getBounds().intersects(brick->getBounds())) // SprawdŸ, czy gracz koliduje z ceg³¹
+        for (brickIndex = 0; brickIndex < this->bricks.size(); brickIndex++)
         {
-             // Zniszcz ceg³ê
+            if (this->bullets[bulletIndex]->getBounds().intersects(this->bricks[brickIndex]->getBounds())) //Sprawdzenie czy granice obiektu pocisku nak³adaj¹ siê na granice obiektu ceg³y
+            {
+                // Kolizja pocisku z ceg³¹
+                bulletIndexToRemove = bulletIndex; //Ustawienie indeksu pocisku ktory sie zetknal z ceg³¹
+                brickIndexToRemove = brickIndex;   //Ustawienie indeksu cegly z ktora sie zetknal pocisk
+                break; //Przerwanie petli po zetknieciu jednego pocisku z jedn¹ ceg³¹
+            }
         }
 
-        for (auto* bullet : bullets) // Dla ka¿dego pocisku w wektorze bullets
+        if (bulletIndexToRemove != -1 && brickIndexToRemove != -1) //Sprawdzenie czy wyst¹pi³a kolizja
         {
-            if (bullet->getBounds().intersects(brick->getBounds())) // SprawdŸ, czy pocisk koliduje z ceg³¹
+            // Usuwanie pocisku
+            delete this->bullets[bulletIndexToRemove];
+            this->bullets.erase(this->bullets.begin() + bulletIndexToRemove);
+
+            // Usuwanie ceg³y
+            delete this->bricks[brickIndexToRemove];
+            this->bricks.erase(this->bricks.begin() + brickIndexToRemove);
+
+            // Zmniejszenie indeksów dla pêtli, aby uwzglêdniæ usuwanie elementów
+            if (bulletIndexToRemove < bulletIndex)
             {
-                // Zniszcz pocisk
-                // Zniszcz ceg³ê
+                bulletIndex--;
             }
+            if (brickIndexToRemove < brickIndex)
+            {
+                brickIndex--;
+            }
+
+            // Zresetowanie indeksów do braku usuwania
+            bulletIndexToRemove = -1;
+            brickIndexToRemove = -1;
         }
     }
 
-    // Usuñ zniszczone ceg³y z wektora bricks
-    
+
 }
 
 

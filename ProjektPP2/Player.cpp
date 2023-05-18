@@ -53,6 +53,7 @@ Player::Player()
 	this->initSprite();
 	this->sprite.setOrigin(25, 25);
 
+
 }
 
 Player::~Player()
