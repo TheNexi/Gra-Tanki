@@ -364,8 +364,8 @@ void Game::updateBricks()
            
             //Bottom collision
             if (playerbounds.top < wallbounds.top &&
-                playerbounds.top + playerbounds.height < wallbounds.top + wallbounds.height
-                && playerbounds.left<wallbounds.left + wallbounds.width
+                playerbounds.top + playerbounds.height < wallbounds.top + 25
+                && playerbounds.left<wallbounds.left + 25
                 && playerbounds.left + playerbounds.width >wallbounds.left)
             {
                 cout << "kolizja od gory\n";
@@ -376,9 +376,9 @@ void Game::updateBricks()
 
             //Top collision
             if (playerbounds.top > wallbounds.top &&
-                playerbounds.top + playerbounds.height > wallbounds.top + wallbounds.height
-                && playerbounds.left<wallbounds.left + wallbounds.width
-                && playerbounds.left + playerbounds.width >wallbounds.left)
+                playerbounds.top + playerbounds.height > wallbounds.top + 25
+                && playerbounds.left<wallbounds.left + 25
+                && playerbounds.left + 25 >wallbounds.left)
             {
                 cout << "kolizja dolna\n";
                 player->setPosition(playerbounds.left+25, wallbounds.top + wallbounds.height+25);
@@ -387,9 +387,9 @@ void Game::updateBricks()
 
             //Right collision
              if (playerbounds.left < wallbounds.left &&
-                playerbounds.left + playerbounds.width < wallbounds.left + wallbounds.width
-                && playerbounds.top<wallbounds.top + wallbounds.height
-                && playerbounds.top + playerbounds.height >wallbounds.top)
+                playerbounds.left + 25 < wallbounds.left + 25
+                && playerbounds.top<wallbounds.top + 25
+                && playerbounds.top + 25 >wallbounds.top)
             {
                 cout << "lewa kolizja\n";
                 player->setPosition(wallbounds.left-playerbounds.width+25, playerbounds.top + 25);
