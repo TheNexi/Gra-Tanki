@@ -347,74 +347,8 @@ void Game::updatePlayer(Player* player)
 void Game::updateBricks()
 {
     //PROBLEM Z KOLIZJA NA ROGACH
-    
-    sf::FloatRect nextpos;
-    for (auto& brick : bricks) // Dla kazdej cegly w wektorze bricks
-    {
-
-        sf::FloatRect playerbounds = player->getBounds();
-
-        sf::FloatRect wallbounds = brick->getBounds();
-        nextpos = playerbounds;
-
-        //  nextpos = player->getBounds().left;
-
-        if (wallbounds.intersects(nextpos))
-        {
-           
-            //Bottom collision
-            if (playerbounds.top < wallbounds.top &&
-                playerbounds.top + playerbounds.height < wallbounds.top + 25
-                && playerbounds.left<wallbounds.left + 25
-                && playerbounds.left + playerbounds.width >wallbounds.left)
-            {
-                cout << "kolizja od gory\n";
-                
-
-                player->setPosition(playerbounds.left+ playerbounds.width -25, wallbounds.top - playerbounds.height+25);
-            }
-
-            //Top collision
-            if (playerbounds.top > wallbounds.top &&
-                playerbounds.top + playerbounds.height > wallbounds.top + 25
-                && playerbounds.left<wallbounds.left + 25
-                && playerbounds.left + 25 >wallbounds.left)
-            {
-                cout << "kolizja dolna\n";
-                player->setPosition(playerbounds.left+25, wallbounds.top + wallbounds.height+25);
-            }
-
-
-            //Right collision
-             if (playerbounds.left < wallbounds.left &&
-                playerbounds.left + 25 < wallbounds.left + 25
-                && playerbounds.top<wallbounds.top + 25
-                && playerbounds.top + 25 >wallbounds.top)
-            {
-                cout << "lewa kolizja\n";
-                player->setPosition(wallbounds.left-playerbounds.width+25, playerbounds.top + 25);
-            //Left collision
-            }
-            if (playerbounds.left > wallbounds.left &&
-                playerbounds.left + 25 > wallbounds.left + wallbounds.width
-                && playerbounds.top<wallbounds.top + wallbounds.height
-                && playerbounds.top + 25 >wallbounds.top)
-            {
-                cout << "prawa kolizja\n";
-                player->setPosition(wallbounds.left + wallbounds.width+25, playerbounds.top + 25);
-            }
-            
-
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
+    Brickscollisions(player);
+    Brickscollisions(enemy);
     
     
     int bulletIndexToRemove = -1; // Indeks pocisku do usunięcia (-1 oznacza brak usuwania)
@@ -466,8 +400,139 @@ void Game::updateBricks()
 }
 
 
+void Game::Brickscollisions(Player *object)
+{
 
 
+    sf::FloatRect nextpos;
+    for (auto& brick : bricks) // Dla kazdej cegly w wektorze bricks
+    {
+
+        sf::FloatRect playerbounds = object->getBounds();
+
+        sf::FloatRect wallbounds = brick->getBounds();
+        nextpos = playerbounds;
+
+        //  nextpos = player->getBounds().left;
+
+        if (wallbounds.intersects(nextpos))
+        {
+
+            //Bottom collision
+            if (playerbounds.top < wallbounds.top &&
+                playerbounds.top + playerbounds.height < wallbounds.top + 25
+                && playerbounds.left<wallbounds.left + 25
+                && playerbounds.left + playerbounds.width >wallbounds.left)
+            {
+                cout << "kolizja od gory\n";
+
+
+                object->setPosition(playerbounds.left + playerbounds.width - 25, wallbounds.top - playerbounds.height + 25);
+            }
+
+            //Top collision
+            if (playerbounds.top > wallbounds.top &&
+                playerbounds.top + playerbounds.height > wallbounds.top + 25
+                && playerbounds.left<wallbounds.left + 25
+                && playerbounds.left + 25 >wallbounds.left)
+            {
+                cout << "kolizja dolna\n";
+                player->setPosition(playerbounds.left + 25, wallbounds.top + wallbounds.height + 25);
+            }
+
+
+            //Right collision
+            if (playerbounds.left < wallbounds.left &&
+                playerbounds.left + 25 < wallbounds.left + 25
+                && playerbounds.top<wallbounds.top + 25
+                && playerbounds.top + 25 >wallbounds.top)
+            {
+                cout << "lewa kolizja\n";
+                object->setPosition(wallbounds.left - playerbounds.width + 25, playerbounds.top + 25);
+                //Left collision
+            }
+            if (playerbounds.left > wallbounds.left &&
+                playerbounds.left + 25 > wallbounds.left + wallbounds.width
+                && playerbounds.top<wallbounds.top + wallbounds.height
+                && playerbounds.top + 25 >wallbounds.top)
+            {
+                cout << "prawa kolizja\n";
+                object->setPosition(wallbounds.left + wallbounds.width + 25, playerbounds.top + 25);
+            }
+
+
+        }
+    }
+
+}
+
+void Game::Playerscollisions(Player *object,Player *object2)
+
+{
+    sf::FloatRect nextpos;
+    
+
+        sf::FloatRect playerbounds = object->getBounds();
+        sf::FloatRect player1bounds = object2->getBounds();
+
+        sf::FloatRect wallbounds = object2->getBounds();
+        nextpos = playerbounds;
+
+        //  nextpos = player->getBounds().left;
+
+        if (wallbounds.intersects(nextpos))
+        {
+
+            //Bottom collision
+            if (playerbounds.top < wallbounds.top &&
+                playerbounds.top + playerbounds.height < wallbounds.top + 25
+                && playerbounds.left<wallbounds.left + 25
+                && playerbounds.left + playerbounds.width >wallbounds.left)
+            {
+                cout << "kolizja od gory\n";
+                object->setPosition(playerbounds.left + playerbounds.width - 25, wallbounds.top - playerbounds.height + 25);
+                
+
+
+                
+            }
+
+            //Top collision
+            if (playerbounds.top > wallbounds.top &&
+                playerbounds.top + playerbounds.height > wallbounds.top + 25
+                && playerbounds.left<wallbounds.left + 25
+                && playerbounds.left + 25 >wallbounds.left)
+            {
+                cout << "kolizja dolna\n";
+              object->setPosition(playerbounds.left + 25, wallbounds.top + wallbounds.height + 25);
+                
+            }
+
+
+            //Right collision
+            if (playerbounds.left < wallbounds.left &&
+                playerbounds.left + 25 < wallbounds.left + 25
+                && playerbounds.top<wallbounds.top + 25
+                && playerbounds.top + 25 >wallbounds.top)
+            {
+                cout << "lewa kolizja\n";
+                object->setPosition(wallbounds.left - playerbounds.width + 25, playerbounds.top + 25);
+                
+                //Left collision
+            }
+            if (playerbounds.left > wallbounds.left &&
+                playerbounds.left + 25 > wallbounds.left + wallbounds.width
+                && playerbounds.top<wallbounds.top + wallbounds.height
+                && playerbounds.top + 25 >wallbounds.top)
+            {
+                cout << "prawa kolizja\n";
+                object->setPosition(wallbounds.left + wallbounds.width + 25, playerbounds.top + 25);
+            }
+
+
+        }
+    
+}
 
 void Game::updateBullets() //Metoda do usuwania pociskow
 {
@@ -528,9 +593,13 @@ void Game::updateBullets() //Metoda do usuwania pociskow
 void Game::update()
 {
     this->pollEvents();
+   
 
     this->updatePlayer(player);
     this->updatePlayer(enemy);
+    this->Playerscollisions(enemy, player);
+    this->Playerscollisions(player, enemy);
+   
 
     this->updateBricks();
     this->updateBullets();

@@ -61,6 +61,8 @@ public:
 
 	void updatePlayer(Player* any_player);
 	void updateBricks();
+	void Brickscollisions(Player* object);
+	void Playerscollisions(Player* object, Player* object1);
 	void updateBullets();
 	void pollEvents();
 	void updateEnemies();
