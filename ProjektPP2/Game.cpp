@@ -27,6 +27,38 @@ void Game::stworzTekstury() //Metoda do załadowania tekstur z pliku
     this->textures["BRICKS"]->loadFromFile("Textures/brick50.png"); //Ładowanie tekstury pocisku z pliku
     
 }
+void Game::initFonts()
+{
+    if (!this->font.loadFromFile("Fonts/PixellettersFull.ttf"))
+    {
+        cout << "Blad w Game::initFonts()";
+    }
+
+}
+void Game::initGuiText()
+{
+    this->guiTextPlayer.setFont(this->font);
+    this->guiTextPlayer.setFillColor(sf::Color::Green);
+    this->guiTextPlayer.setCharacterSize(24);
+    this->guiTextPlayer.setPosition(0.f, 550.f);
+    
+    this->guiTextEnemy.setFont(this->font);
+    this->guiTextEnemy.setFillColor(sf::Color::Blue);
+    this->guiTextEnemy.setCharacterSize(24);
+    this->guiTextEnemy.setPosition(0.f, 0.f);
+}
+void Game::updateGui()
+{
+    
+    stringstream ssplayer;
+    stringstream ssenemy;
+    ssplayer << "Points: " << this->player->points;
+    ssenemy << "Points: " << this->enemy->points;
+
+    this->guiTextPlayer.setString(ssplayer.str());
+    this->guiTextEnemy.setString(ssenemy.str());
+
+}
 void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
 {
     this->player = new Player(); //Utworzenie obiektu gracza
@@ -71,26 +103,26 @@ void Game::stworzCegly()
     
     
 
-    int xCols[] = { 75, 175, 275 , 375, 475, 575, 675, 775}; // Współrzędne x dla kolumn cegieł
-    int yStart = 75; // Początkowa współrzędna y
+    int xCols[] = { 100, 250, 400 ,550}; // Współrzędne x dla kolumn cegieł
+    int yStart = 60; // Początkowa współrzędna y
 
-    for (int column = 0; column < 8; column++)
+    for (int column = 0; column < 4; column++)
     {
         int y = yStart;
 
-        for (int row = 0; row < 4; row++)
+        for (int row = 0; row < 2; row++)
         {
             this->bricks.push_back(new Bricks(this->textures["BRICKS"], xCols[column], y, 1.f));
             
             y += 50;
         }
-        //this->bricks.push_back(new Bricks(this->textures["BRICKS"], x-50, y, 1.f));
+        
     }
 
     
     //Cegły linia pozioma
-    int xStart = 25;
-    yStart = 275;
+    int xStart = 0;
+    yStart = 160;
 
     for (int column = 0; column < 1; column++)
     {
@@ -109,7 +141,7 @@ void Game::stworzCegly()
     //Cegly dla orzelka
 
     xStart = 350;
-    yStart = 525;
+    yStart = 500;
 
     for (int column = 0; column < 1; column++)
     {
@@ -122,7 +154,7 @@ void Game::stworzCegly()
         }
     }
     xStart = 350;
-    yStart = 575;
+    yStart = 550;
 
     for (int column = 0; column < 1; column++)
     {
@@ -148,6 +180,8 @@ Game::Game()
     this->stworzZmienne();
     this->stworzOkno();
     this->stworzTekstury();
+    this->initFonts();
+    this->initGuiText();
     this->stworzObiektGracz();
     this->stworzObiektPrzeciwnik();
     this->stworzCegly();
@@ -315,7 +349,7 @@ void Game::updatePlayer(Player* player)
             {
             case(0):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x, this->enemy->getPos().y - 35, 0.f, -1.f, 2.f));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x, this->enemy->getPos().y - 36, 0.f, -1.f, 2.f));
                 clock.restart(); //Resetowanie zegara po wystrzeleniu pocisku
                 break;
             }
@@ -327,7 +361,7 @@ void Game::updatePlayer(Player* player)
             }
             case(180):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x, this->enemy->getPos().y + 25, 0.f, 1.f, 2.f));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x, this->enemy->getPos().y + 26, 0.f, 1.f, 2.f));
                 clock.restart();
                 break;
             }
@@ -344,11 +378,11 @@ void Game::updatePlayer(Player* player)
 
 }
 
-void Game::updateBricks()
+void Game::updateBricks(Player *object)
 {
     //PROBLEM Z KOLIZJA NA ROGACH
-    Brickscollisions(player);
-    Brickscollisions(enemy);
+    Brickscollisions(object);
+    
     
     
     int bulletIndexToRemove = -1; // Indeks pocisku do usunięcia (-1 oznacza brak usuwania)
@@ -372,7 +406,9 @@ void Game::updateBricks()
 
         if (bulletIndexToRemove != -1 && brickIndexToRemove != -1) //Sprawdzenie czy wystąpiła kolizja
         {
+           
             // Usuwanie pocisku
+            object->points += 1;
             delete this->bullets[bulletIndexToRemove];
             this->bullets.erase(this->bullets.begin() + bulletIndexToRemove);
 
@@ -437,7 +473,7 @@ void Game::Brickscollisions(Player *object)
                 && playerbounds.left + 25 >wallbounds.left)
             {
                 cout << "kolizja dolna\n";
-                player->setPosition(playerbounds.left + 25, wallbounds.top + wallbounds.height + 25);
+                object->setPosition(playerbounds.left + 25, wallbounds.top + wallbounds.height + 25);
             }
 
 
@@ -540,83 +576,87 @@ void Game::bulletcollision(Player* object)
     int licznik = 0;
     for (auto* bullet : this->bullets) // Dla kazdej cegly w wektorze bricks
     {
-    sf::FloatRect nextpos;
+        sf::FloatRect nextpos;
 
-    
-    sf::FloatRect playerbounds = object->getBounds();
-    sf::FloatRect wallbounds = bullet->getBounds();
-    nextpos = playerbounds;
+        sf::FloatRect playerbounds = object->getBounds();
+        sf::FloatRect wallbounds = bullet->getBounds();
+        nextpos = playerbounds;
 
-    //  nextpos = player->getBounds().left;
+        //  nextpos = player->getBounds().left;
 
-    if (wallbounds.intersects(nextpos))
-    {
+        if (wallbounds.intersects(nextpos))
+        {
 
-        //Bottom collision
-        if (playerbounds.top < wallbounds.top &&
+            //Bottom collision
+            if (playerbounds.top < wallbounds.top &&
             playerbounds.top + playerbounds.height < wallbounds.top + 25
             && playerbounds.left<wallbounds.left + 25
             && playerbounds.left + playerbounds.width >wallbounds.left)
-        {
-            delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
-            this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
-            cout << "punkt";
-            object->hp--;
-            cout << object->hp;
-            licznik--;
-           // delete bullet;
+            {
+                delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
+                this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
+                object->points+=10;
+                
+                cout << "hp: ";
+                object->hp--;
+                cout << object->hp;
+                licznik--;
+                // delete bullet;
 
-        }
+            }
 
-        //Top collision
-        if (playerbounds.top > wallbounds.top &&
+            //Top collision
+            else if (playerbounds.top > wallbounds.top &&
             playerbounds.top + playerbounds.height > wallbounds.top + 25
             && playerbounds.left<wallbounds.left + 25
             && playerbounds.left + 25 >wallbounds.left)
-        {
-            delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
-            this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
-            cout << "punkt";
-            object->hp--;
-            cout << object->hp;
-            licznik--;
-          //  delete bullet;
-        }
+            {
+                delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
+                this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
+                object->points+=10;
+                cout << "hp: ";
+                object->hp--;
+                cout << object->hp;
+                licznik--;
+                //  delete bullet;
+            }
 
 
-        //Right collision
-        if (playerbounds.left < wallbounds.left &&
+            //Right collision
+            else if (playerbounds.left < wallbounds.left &&
             playerbounds.left + 25 < wallbounds.left + 25
             && playerbounds.top<wallbounds.top + 25
             && playerbounds.top + 25 >wallbounds.top)
-        {
-            delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
-            this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
-            cout << "punkt";
-            object->hp--;
-            cout << object->hp;
-            licznik--;
-          //  delete bullet;
+            {
+                delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
+                this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
+                object->points+=10;
+                cout << "hp: ";
+                object->hp--;
+                cout << object->hp;
+                licznik--;
+                // delete bullet;
 
+            }
             //Left collision
-        }
-        if (playerbounds.left > wallbounds.left &&
+            else if (playerbounds.left > wallbounds.left &&
             playerbounds.left + 25 > wallbounds.left + wallbounds.width
             && playerbounds.top<wallbounds.top + wallbounds.height
             && playerbounds.top + 25 >wallbounds.top)
-        {
-            delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
-            this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
-            cout << "punkt";
-            object->hp--;
-            cout << object->hp;
-            licznik--;
-            //delete bullet;
+            {
+                delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
+                this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
+                object->points+=10;
+                cout << "hp: ";
+                object->hp--;
+                cout << object->hp;
+                licznik--;
+                //delete bullet;
+            
+            }
             
         }
-        
-    }
-    licznik++;
+        licznik++;
     }
 
 }
@@ -686,16 +726,26 @@ void Game::update()
     this->updatePlayer(player);
     this->updatePlayer(enemy);
     this->Playerscollisions(enemy, player);
+    this->updateGui();
+    //this->updateGui(enemy);
     this->Playerscollisions(player, enemy);
-   
+    
 
-    this->updateBricks();
+    this->updateBricks(player);
+    this->updateBricks(enemy);
     this->updateBullets();
     this->player->update();
     this->enemy->update();
     
 
     this->updateEnemies();
+
+}
+
+void Game::renderGui(sf::RenderTarget* target)
+{
+    target->draw(this->guiTextPlayer);
+    target->draw(this->guiTextEnemy);
 
 }
 
@@ -709,13 +759,12 @@ void Game::render()
 {
     this->window->clear(); //czysci okno gry
 
-
+    this->renderGui(this->window);
     this->renderEnemies();
     this->player->render(*this->window); //Rysuje obiekt gracza na ekranie
 
     for (auto* bricks : this->bricks) //Dla każdego obiektu w wektorze
     {
-        //bez this?
         bricks->render(*this->window); //Wyswietla każdy obiekt na ekranie
     }
 

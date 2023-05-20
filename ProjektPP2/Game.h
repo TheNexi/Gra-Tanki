@@ -5,6 +5,7 @@
 
 #include <map>
 #include <vector>
+#include <sstream>
 
 
 using namespace std;
@@ -15,12 +16,20 @@ class Game
 private:
 	//obiekt obslugujacy okno gry i zdarzenia
 	sf::RenderWindow* window;
+	bool endGame;
 	sf::Event ev;
+
+	
 
 	//Zasoby gry
 	map<string, sf::Texture*> textures;// mapa przechowuj¹ca tekstury 
 	vector <Bullet*> bullets;//wektor przechowujacy pociski
 	
+	sf::Font font;
+
+	sf::Text guiTextPlayer;
+	sf::Text guiTextEnemy;
+
 	//Obiekt cegly
 	vector <Bricks*> bricks;
 
@@ -41,6 +50,9 @@ private:
 	void stworzZmienne();
 	void stworzOkno();
 	void stworzTekstury();
+	void initFonts();
+	void initGuiText();
+	void updateGui();
 
 	void stworzObiektGracz();
 	void stworzObiektPrzeciwnik();
@@ -60,7 +72,7 @@ public:
 	void destroy();
 
 	void updatePlayer(Player* any_player);
-	void updateBricks();
+	void updateBricks(Player* object);
 	void Brickscollisions(Player* object);
 	void Playerscollisions(Player* object, Player* object1);
 	void updateBullets();
@@ -69,6 +81,7 @@ public:
 	void renderEnemies();
 	void bulletcollision(Player* object);
 	void update();
+	void renderGui(sf::RenderTarget* target);
 	void render();
 
 };

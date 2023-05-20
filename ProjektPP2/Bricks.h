@@ -16,7 +16,7 @@ private:
 	
 	sf::Vector2f coord;//obiekt klasy Vector2f z biblioteki sfml
 
-	float destructionHp;
+	
 
 public:
 	Bricks(sf::Texture* texture, float pos_x, float pos_y, float destructionHp);
@@ -24,6 +24,7 @@ public:
 
 	const sf::FloatRect getBounds() const; ////Metoda do granic obiektu(prostokatu)
 
+	float destructionHp = 2;
 	void update(); //Metoda aktualizuj¹ca pozycjê pocisku na ekranie
 	void render(sf::RenderWindow& window);
 };
