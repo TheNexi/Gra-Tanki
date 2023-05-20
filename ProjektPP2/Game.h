@@ -78,7 +78,7 @@ public:
 	void destroy();
 	void boom_sound();
 	void updatePlayer(Player* any_player);
-	void updateBricks();
+	void updateBricks(Player* object);
 	void Brickscollisions(Player* object);
 	void Playerscollisions(Player* object, Player* object1);
 	void updateBullets();

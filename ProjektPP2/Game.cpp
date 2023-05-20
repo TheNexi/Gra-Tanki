@@ -259,7 +259,7 @@ void Game::run() //Główna petla gry
             
         if (this->endGame == true)
         {
-            sf::sleep(sf::seconds(5.f));
+            sf::sleep(sf::seconds(2.f));
         }
 
     }
@@ -418,17 +418,17 @@ void Game::updatePlayer(Player* player)
 
 }
 
-void Game::updateBricks()
+void Game::updateBricks(Player* object)
 {
     Brickscollisions(object);
-    
-    
-    
+
+
+
     int bulletIndexToRemove = -1; // Indeks pocisku do usunięcia (-1 oznacza brak usuwania)
     int brickIndexToRemove = -1; // Indeks cegły do usunięcia (-1 oznacza brak usuwania)
     int bulletIndex; //Zmienna do przechowywania biezacego indeksu pocisku
     int brickIndex;  //Zmienna do przechowywania biezacego indeksu cegły
-    
+
 
     for (bulletIndex = 0; bulletIndex < this->bullets.size(); bulletIndex++)
     {
@@ -445,7 +445,7 @@ void Game::updateBricks()
 
         if (bulletIndexToRemove != -1 && brickIndexToRemove != -1) //Sprawdzenie czy wystąpiła kolizja
         {
-           
+
             // Usuwanie pocisku
             //object->points += 1;
             delete this->bullets[bulletIndexToRemove];
@@ -643,7 +643,7 @@ void Game::bulletcollision(Player* object)
             if (sound.getStatus() != sf::Sound::Playing)
             {
                 sound.play();
-                cout << "gra muzyka";
+                cout << "gra muzyka\n";
             }
 
             sf::Music music;
@@ -663,9 +663,9 @@ void Game::bulletcollision(Player* object)
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
                 object->points += 10;
 
-                cout << "hp: ";
+                cout << "\nhp: ";
                 object->hp--;
-                cout << object->hp;
+                cout << object->hp<<endl;
                 licznik--;
                 // delete bullet;
 
@@ -680,9 +680,9 @@ void Game::bulletcollision(Player* object)
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
                 object->points += 10;
-                cout << "hp: ";
+                cout << "\nhp: ";
                 object->hp--;
-                cout << object->hp;
+                cout << object->hp<<endl;
                 licznik--;
                 //  delete bullet;
             }
@@ -697,9 +697,9 @@ void Game::bulletcollision(Player* object)
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
                 object->points += 10;
-                cout << "hp: ";
+                cout << "\nhp: ";
                 object->hp--;
-                cout << object->hp;
+                cout << object->hp <<endl;
                 licznik--;
                 // delete bullet;
 
@@ -713,9 +713,9 @@ void Game::bulletcollision(Player* object)
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
                 object->points += 10;
-                cout << "hp: ";
+                cout << "\nhp: ";
                 object->hp--;
-                cout << object->hp;
+                cout << object->hp<<endl;
                 licznik--;
                 //delete bullet;
             
@@ -905,7 +905,8 @@ void Game::update()
     this->bulletcollision(enemy);
     this->bulletcollision(orzel);
 
-    this->updateBricks();
+    this->updateBricks(player);
+    this->updateBricks(enemy);
     this->updateBullets();
     this->player->update();
     this->enemy->update();
