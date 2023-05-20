@@ -2,10 +2,11 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "Bricks.h"
-
+#include <SFML/Audio.hpp>
 #include <map>
 #include <vector>
 #include <sstream>
+#include <iostream>
 
 
 using namespace std;
@@ -19,7 +20,6 @@ private:
 	bool endGame;
 	sf::Event ev;
 
-	
 
 	//Zasoby gry
 	map<string, sf::Texture*> textures;// mapa przechowuj¹ca tekstury 
@@ -70,7 +70,7 @@ public:
 	void run();
 	void spawnEnemy();
 	void destroy();
-
+	void boom_sound();
 	void updatePlayer(Player* any_player);
 	void updateBricks(Player* object);
 	void Brickscollisions(Player* object);

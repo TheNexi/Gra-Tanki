@@ -1,5 +1,5 @@
 ﻿#include "Game.h"
-
+#include <iostream>
 
 using namespace std;
 
@@ -570,23 +570,50 @@ void Game::Playerscollisions(Player *object,Player *object2)
     
 }
 
+void Game::boom_sound()
+{
+
+}
 void Game::bulletcollision(Player* object)
 {
     sf::FloatRect nextpos;
     int licznik = 0;
-    for (auto* bullet : this->bullets) // Dla kazdej cegly w wektorze bricks
+   
+       
+
+    for (auto* bullet : this->bullets) // Dla kazdej cegly w wektorze bullets
     {
         sf::FloatRect nextpos;
-
+        
         sf::FloatRect playerbounds = object->getBounds();
         sf::FloatRect wallbounds = bullet->getBounds();
         nextpos = playerbounds;
 
         //  nextpos = player->getBounds().left;
 
-        if (wallbounds.intersects(nextpos))
-        {
+        if (wallbounds.intersects(nextpos)){
+            sf::SoundBuffer buff;
+            if (!buff.loadFromFile("boom2.wav"))
+            {
+                cout << "\n-----------------blad-----------\n";
 
+            }
+            sf::Sound sound;
+            sound.setBuffer(buff);
+            cout << "\n\n dzwiek\n\n";
+            if (sound.getStatus() != sf::Sound::Playing)
+            {
+                sound.play();
+                cout << "gra muzyka";
+            }
+
+            sf::Music music;
+            music.openFromFile("boom2.wav");
+            music.setVolume(50);
+            music.play();
+        
+           
+           
             //Bottom collision
             if (playerbounds.top < wallbounds.top &&
                 playerbounds.top + playerbounds.height < wallbounds.top + 25
@@ -733,7 +760,7 @@ void Game::update()
     this->updateBricks(player);
     this->updateBricks(enemy);
    
-    
+   
     this->updateBullets();
     this->player->update();
     this->enemy->update();
