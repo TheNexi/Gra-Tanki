@@ -18,7 +18,7 @@ public:
 
 	//Destruktor
 	virtual ~Bullet();
-
+	
 	const sf::FloatRect getBounds() const; ////Metoda do granic obiektu(prostokatu)
 
 	void update(); //Metoda aktualizuj¹ca pozycjê pocisku na ekranie

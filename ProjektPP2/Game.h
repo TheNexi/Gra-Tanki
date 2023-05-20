@@ -67,7 +67,7 @@ public:
 	void pollEvents();
 	void updateEnemies();
 	void renderEnemies();
-
+	void bulletcollision(Player* object);
 	void update();
 	void render();
 

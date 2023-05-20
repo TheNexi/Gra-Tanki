@@ -29,7 +29,7 @@ private:
 public:
 	Player();
 	virtual ~Player();
-
+	int hp = 10;
 	sf::Keyboard::Key left;
 	sf::Keyboard::Key right;
 	sf::Keyboard::Key up;
