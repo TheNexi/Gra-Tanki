@@ -309,8 +309,196 @@ void Game::updateBricks()
 
 
 
+            //Top collision
+            if (playerbounds.top > wallbounds.top &&
+                playerbounds.top + playerbounds.height > wallbounds.top + 25
+                && playerbounds.left<wallbounds.left + 25
+                && playerbounds.left + 25 >wallbounds.left)
+            {
+                cout << "kolizja dolna\n";
+                player->setPosition(playerbounds.left + 25, wallbounds.top + wallbounds.height + 25);
+            }
 
 
+            //Right collision
+            if (playerbounds.left < wallbounds.left &&
+                playerbounds.left + 25 < wallbounds.left + 25
+                && playerbounds.top<wallbounds.top + 25
+                && playerbounds.top + 25 >wallbounds.top)
+            {
+                cout << "lewa kolizja\n";
+                object->setPosition(wallbounds.left - playerbounds.width + 25, playerbounds.top + 25);
+                //Left collision
+            }
+            if (playerbounds.left > wallbounds.left &&
+                playerbounds.left + 25 > wallbounds.left + wallbounds.width
+                && playerbounds.top<wallbounds.top + wallbounds.height
+                && playerbounds.top + 25 >wallbounds.top)
+            {
+                cout << "prawa kolizja\n";
+                object->setPosition(wallbounds.left + wallbounds.width + 25, playerbounds.top + 25);
+            }
+
+
+        }
+    }
+
+}
+
+void Game::Playerscollisions(Player *object,Player *object2)
+
+{
+    sf::FloatRect nextpos;
+    
+
+        sf::FloatRect playerbounds = object->getBounds();
+        sf::FloatRect player1bounds = object2->getBounds();
+
+        sf::FloatRect wallbounds = object2->getBounds();
+        nextpos = playerbounds;
+
+        //  nextpos = player->getBounds().left;
+
+        if (wallbounds.intersects(nextpos))
+        {
+
+            //Bottom collision
+            if (playerbounds.top < wallbounds.top &&
+                playerbounds.top + playerbounds.height < wallbounds.top + 25
+                && playerbounds.left<wallbounds.left + 25
+                && playerbounds.left + playerbounds.width >wallbounds.left)
+            {
+                cout << "kolizja od gory\n";
+                object->setPosition(playerbounds.left + playerbounds.width - 25, wallbounds.top - playerbounds.height + 25);
+                
+
+
+                
+            }
+
+            //Top collision
+            if (playerbounds.top > wallbounds.top &&
+                playerbounds.top + playerbounds.height > wallbounds.top + 25
+                && playerbounds.left<wallbounds.left + 25
+                && playerbounds.left + 25 >wallbounds.left)
+            {
+                cout << "kolizja dolna\n";
+              object->setPosition(playerbounds.left + 25, wallbounds.top + wallbounds.height + 25);
+                
+            }
+
+
+            //Right collision
+            if (playerbounds.left < wallbounds.left &&
+                playerbounds.left + 25 < wallbounds.left + 25
+                && playerbounds.top<wallbounds.top + 25
+                && playerbounds.top + 25 >wallbounds.top)
+            {
+                cout << "lewa kolizja\n";
+                object->setPosition(wallbounds.left - playerbounds.width + 25, playerbounds.top + 25);
+                
+                //Left collision
+            }
+            if (playerbounds.left > wallbounds.left &&
+                playerbounds.left + 25 > wallbounds.left + wallbounds.width
+                && playerbounds.top<wallbounds.top + wallbounds.height
+                && playerbounds.top + 25 >wallbounds.top)
+            {
+                cout << "prawa kolizja\n";
+                object->setPosition(wallbounds.left + wallbounds.width + 25, playerbounds.top + 25);
+            }
+
+
+        }
+    
+}
+
+void Game::bulletcollision(Player* object)
+{
+    sf::FloatRect nextpos;
+    int licznik = 0;
+    for (auto* bullet : this->bullets) // Dla kazdej cegly w wektorze bricks
+    {
+    sf::FloatRect nextpos;
+
+    
+    sf::FloatRect playerbounds = object->getBounds();
+    sf::FloatRect wallbounds = bullet->getBounds();
+    nextpos = playerbounds;
+
+    //  nextpos = player->getBounds().left;
+
+    if (wallbounds.intersects(nextpos))
+    {
+
+        //Bottom collision
+        if (playerbounds.top < wallbounds.top &&
+            playerbounds.top + playerbounds.height < wallbounds.top + 25
+            && playerbounds.left<wallbounds.left + 25
+            && playerbounds.left + playerbounds.width >wallbounds.left)
+        {
+            delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowan¹ pamiêæ pocisku o indeksie licznik w wektorze bullets
+            this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
+            cout << "punkt";
+            object->hp--;
+            cout << object->hp;
+            licznik--;
+           // delete bullet;
+
+        }
+
+        //Top collision
+        if (playerbounds.top > wallbounds.top &&
+            playerbounds.top + playerbounds.height > wallbounds.top + 25
+            && playerbounds.left<wallbounds.left + 25
+            && playerbounds.left + 25 >wallbounds.left)
+        {
+            delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowan¹ pamiêæ pocisku o indeksie licznik w wektorze bullets
+            this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
+            cout << "punkt";
+            object->hp--;
+            cout << object->hp;
+            licznik--;
+          //  delete bullet;
+        }
+
+
+        //Right collision
+        if (playerbounds.left < wallbounds.left &&
+            playerbounds.left + 25 < wallbounds.left + 25
+            && playerbounds.top<wallbounds.top + 25
+            && playerbounds.top + 25 >wallbounds.top)
+        {
+            delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowan¹ pamiêæ pocisku o indeksie licznik w wektorze bullets
+            this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
+            cout << "punkt";
+            object->hp--;
+            cout << object->hp;
+            licznik--;
+          //  delete bullet;
+
+            //Left collision
+        }
+        if (playerbounds.left > wallbounds.left &&
+            playerbounds.left + 25 > wallbounds.left + wallbounds.width
+            && playerbounds.top<wallbounds.top + wallbounds.height
+            && playerbounds.top + 25 >wallbounds.top)
+        {
+            delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowan¹ pamiêæ pocisku o indeksie licznik w wektorze bullets
+            this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
+            cout << "punkt";
+            object->hp--;
+            cout << object->hp;
+            licznik--;
+            //delete bullet;
+            
+        }
+        
+    }
+    licznik++;
+    }
+
+}
 void Game::updateBullets() //Metoda do usuwania pociskow
 {
     unsigned int licznik = 0;
@@ -373,6 +561,9 @@ void Game::update()
 
     this->updatePlayer(player);
     this->updatePlayer(enemy);
+    this->Playerscollisions(enemy, player);
+    this->Playerscollisions(player, enemy);
+   
 
     this->updateBricks();
     this->updateBullets();
