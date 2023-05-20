@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <sstream>
 
 
 class Bullet
@@ -13,9 +14,11 @@ private:
 	float movementSpeed; //zmienna do prêdkoœci pocisku
 
 public:
+	std::string p_name;
 	//Konstruktor
-	Bullet(sf::Texture* texture,float pos_x, float pos_y, float dir_x, float dir_y, float movement_speed); //Przyjmuje wskaŸnik do tekstury, pozycje pocz¹tkow¹, kierunek ruchu i prêdkoœæ
-
+	Bullet(sf::Texture* texture,float pos_x, float pos_y, float dir_x, float dir_y, float movement_speed,std::string p_name); //Przyjmuje wskaŸnik do tekstury, pozycje pocz¹tkow¹, kierunek ruchu i prêdkoœæ
+	
+	
 	//Destruktor
 	virtual ~Bullet();
 	

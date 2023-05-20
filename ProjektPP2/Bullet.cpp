@@ -1,7 +1,7 @@
 #include "Bullet.h"
 
 
-Bullet::Bullet(sf::Texture* texture, float pos_x, float pos_y, float dir_x, float dir_y, float movement_speed) //konstuktor klasy Bullet do tworzenia obiektu pocisku
+Bullet::Bullet(sf::Texture* texture, float pos_x, float pos_y, float dir_x, float dir_y, float movement_speed,std::string p_name) //konstuktor klasy Bullet do tworzenia obiektu pocisku
 {
 	this->shape.setTexture(*texture); //tekstura obrazu pocisku
 
@@ -9,6 +9,8 @@ Bullet::Bullet(sf::Texture* texture, float pos_x, float pos_y, float dir_x, floa
 	this->direction.x = dir_x; //przypisanie kierunku x przekazanego przez parametr do wektora direction
 	this->direction.y = dir_y; //przypisanie kierunku y przekazanego przez parametr do wektora direction
 	this->movementSpeed = movement_speed; //predkosc pocisku z przekazanego parametru
+	this->p_name = p_name;
+	std::cout << p_name << "\n";
 
 }
 
