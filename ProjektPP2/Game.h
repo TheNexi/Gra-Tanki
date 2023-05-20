@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "Bricks.h"
+#include "Flag.h"
+
 #include <SFML/Audio.hpp>
 #include <map>
 #include <vector>
@@ -29,6 +31,7 @@ private:
 
 	sf::Text guiTextPlayer;
 	sf::Text guiTextEnemy;
+	sf::Text endGameText;
 
 	//Obiekt cegly
 	vector <Bricks*> bricks;
@@ -44,6 +47,7 @@ private:
 	Player* enemy;
 	
 	
+	Flag* orzel;
 
 	
 	//Prywatne funkcje
@@ -59,6 +63,8 @@ private:
 
 	void stworzCegly();
 	
+	void stworzFlage();
+	
 
 public:
 	//Konstruktory / Destruktory
@@ -72,7 +78,7 @@ public:
 	void destroy();
 	void boom_sound();
 	void updatePlayer(Player* any_player);
-	void updateBricks(Player* object);
+	void updateBricks();
 	void Brickscollisions(Player* object);
 	void Playerscollisions(Player* object, Player* object1);
 	void updateBullets();
@@ -80,8 +86,9 @@ public:
 	void updateEnemies();
 	void renderEnemies();
 	void bulletcollision(Player* object);
+	void bulletcollision(Flag* object);
 	void update();
 	void renderGui(sf::RenderTarget* target);
 	void render();
-
+	
 };

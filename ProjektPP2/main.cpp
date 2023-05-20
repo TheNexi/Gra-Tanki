@@ -14,11 +14,10 @@ int main()
     Game game;
     
     //Petla gry
- 
-
     
-
     game.run();
+ 
+    
           
     //Petla gry koniec
   

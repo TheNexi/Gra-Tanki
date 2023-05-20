@@ -9,6 +9,7 @@
 
 
 
+
 class Player
 {
 private:
@@ -30,8 +31,8 @@ public:
 	Player();
 	virtual ~Player();
 	
-	int hp = 10;
-	int points = 0;
+	int hp=10;
+	int points=0;
 
 	sf::Keyboard::Key left;
 	sf::Keyboard::Key right;

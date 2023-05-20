@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="Bricks.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Flag.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
@@ -142,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="Bricks.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Flag.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
