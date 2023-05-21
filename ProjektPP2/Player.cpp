@@ -36,14 +36,6 @@ void Player::setMovementControl(sf::Keyboard::Key left, sf::Keyboard::Key right,
 	this->down = down;
 	this->shot = shot;
 }
-/*
-sf::Keyboard::Key Player::getKeyControl(string key)
-{
-	
-
-}
-*/
-
 
 
 Player::Player()

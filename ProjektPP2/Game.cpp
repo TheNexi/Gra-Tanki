@@ -54,11 +54,12 @@ void Game::updateGui()
 {
     stringstream ssplayer;
     stringstream ssenemy;
-    ssplayer << "Points: " << enemy->points;
-    ssplayer << "\nHp: " << player->hp;
+    ssplayer << "Points: " << player->points;
+        
+    ssplayer << "\nHp: " <<  enemy->hp;
 
-    ssenemy << "Points: " << player->points;
-    ssenemy << "\nHp: " << enemy->hp;
+    ssenemy << "Points: " << enemy->points;
+    ssenemy << "\nHp: " << player->hp;
 
     this->guiTextPlayer.setString(ssplayer.str());
     this->guiTextEnemy.setString(ssenemy.str());
@@ -147,7 +148,7 @@ void Game::stworzCegly()
     }
  
     //Cegły linia pozioma
-    float xStart = 0.f;
+    float xStart = 1.f;
     yStart = 160.f;
 
     for (int column = 0; column < 1; column++)
@@ -194,7 +195,24 @@ void Game::stworzCegly()
 
     }
 
-    this->bricks.push_back(new Bricks(this->textures["BRICKS"], 450.f, 400.f, 1.f));
+    xStart = 275.f;
+    yStart = 275.f;
+
+    for (int column = 0; column < 4; column++)
+    {
+        float x = xStart;
+        float y = yStart;
+
+        for (int row = 0; row < 3; row++)
+        {
+            this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, yStart, 1.f));
+
+            x += 125.f;
+            y += 75.f;
+        }
+
+    }
+    
 
 }
 
@@ -259,7 +277,7 @@ void Game::run() //Główna petla gry
             
         if (this->endGame == true)
         {
-            sf::sleep(sf::seconds(2.f));
+            sf::sleep(sf::seconds(3.f));
         }
 
     }
@@ -333,6 +351,31 @@ void Game::updatePlayer(Player* player)
 
     if (sf::Keyboard::isKeyPressed(this->player->shot))
     {
+        /*
+        sf::SoundBuffer buff;
+        
+        if (!buff.loadFromFile("boom2.wav"))
+        {
+            cout << "\n-----------------blad-----------\n";
+
+        }
+        
+        sf::Sound sound;
+        sound.setBuffer(buff);
+        cout << "\n\n dzwiek\n\n";
+        
+        if (sound.getStatus() != sf::Sound::Playing)
+        {
+            sound.play();
+            cout << "gra muzyka\n";
+        }
+        */
+        /*
+        sf::Music music;
+        music.openFromFile("boom2.wav");
+        music.setVolume(50);
+        music.play();
+        */
 
         time = clock.getElapsedTime();
         //opoznienie miedzy strzalami
@@ -609,6 +652,74 @@ void Game::Playerscollisions(Player *object,Player *object2)
     
 }
 
+void Game::Playerscollisions(Player* object, Flag* object2)
+
+{
+    sf::FloatRect nextpos;
+
+
+    sf::FloatRect playerbounds = object->getBounds();
+    sf::FloatRect player1bounds = object2->getBounds();
+
+    sf::FloatRect wallbounds = object2->getBounds();
+    nextpos = playerbounds;
+
+    //  nextpos = player->getBounds().left;
+
+    if (wallbounds.intersects(nextpos))
+    {
+
+        //Bottom collision
+        if (playerbounds.top < wallbounds.top &&
+            playerbounds.top + playerbounds.height < wallbounds.top + 25
+            && playerbounds.left<wallbounds.left + 25
+            && playerbounds.left + playerbounds.width >wallbounds.left)
+        {
+            cout << "kolizja od gory\n";
+            object->setPosition(playerbounds.left + playerbounds.width - 25, wallbounds.top - playerbounds.height + 25);
+
+
+
+
+        }
+
+        //Top collision
+        if (playerbounds.top > wallbounds.top &&
+            playerbounds.top + playerbounds.height > wallbounds.top + 25
+            && playerbounds.left<wallbounds.left + 25
+            && playerbounds.left + 25 >wallbounds.left)
+        {
+            cout << "kolizja dolna\n";
+            object->setPosition(playerbounds.left + 25, wallbounds.top + wallbounds.height + 25);
+
+        }
+
+
+        //Right collision
+        if (playerbounds.left < wallbounds.left &&
+            playerbounds.left + 25 < wallbounds.left + 25
+            && playerbounds.top<wallbounds.top + 25
+            && playerbounds.top + 25 >wallbounds.top)
+        {
+            cout << "lewa kolizja\n";
+            object->setPosition(wallbounds.left - playerbounds.width + 25, playerbounds.top + 25);
+
+            //Left collision
+        }
+        if (playerbounds.left > wallbounds.left &&
+            playerbounds.left + 25 > wallbounds.left + wallbounds.width
+            && playerbounds.top<wallbounds.top + wallbounds.height
+            && playerbounds.top + 25 >wallbounds.top)
+        {
+            cout << "prawa kolizja\n";
+            object->setPosition(wallbounds.left + wallbounds.width + 25, playerbounds.top + 25);
+        }
+
+
+    }
+
+}
+
 void Game::boom_sound()
 {
 
@@ -631,25 +742,7 @@ void Game::bulletcollision(Player* object)
         //  nextpos = player->getBounds().left;
 
         if (wallbounds.intersects(nextpos)){
-            sf::SoundBuffer buff;
-            if (!buff.loadFromFile("boom2.wav"))
-            {
-                cout << "\n-----------------blad-----------\n";
-
-            }
-            sf::Sound sound;
-            sound.setBuffer(buff);
-            cout << "\n\n dzwiek\n\n";
-            if (sound.getStatus() != sf::Sound::Playing)
-            {
-                sound.play();
-                cout << "gra muzyka\n";
-            }
-
-            sf::Music music;
-            music.openFromFile("boom2.wav");
-            music.setVolume(50);
-            music.play();
+            
         
            
            
@@ -892,9 +985,11 @@ void Game::update()
     this->updatePlayer(player);
     this->updatePlayer(enemy);
     this->Playerscollisions(enemy, player);
-    this->updateGui();
+    
     //this->updateGui(enemy);
     this->Playerscollisions(player, enemy);
+    this->Playerscollisions(player, orzel);
+    this->Playerscollisions(enemy, orzel);
     
     this->updateBricks(player);
     this->updateBricks(enemy);
@@ -913,7 +1008,8 @@ void Game::update()
     
 
     this->updateEnemies();
-    
+ 
+    this->updateGui();
 }
 
 void Game::renderGui(sf::RenderTarget* target)
