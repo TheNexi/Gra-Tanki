@@ -26,7 +26,7 @@ private:
 	//Zasoby gry
 	map<string, sf::Texture*> textures;// mapa przechowuj¹ca tekstury 
 	vector <Bullet*> bullets;//wektor przechowujacy pociski
-	
+
 	sf::Font font;
 
 	sf::Text guiTextPlayer;
@@ -35,7 +35,7 @@ private:
 
 	//Obiekt cegly
 	vector <Bricks*> bricks;
-
+	vector <Player>enemies;
 
 	sf::Time time;
 	sf::Clock clock;
@@ -45,11 +45,12 @@ private:
 	//Obiekt gracza i przeciwnika
 	Player* player;
 	Player* enemy;
-	
-	
+	Player* bot;
+
+
 	Flag* orzel;
 
-	
+
 	//Prywatne funkcje
 	void stworzZmienne();
 	void stworzOkno();
@@ -57,14 +58,20 @@ private:
 	void initFonts();
 	void initGuiText();
 	void updateGui();
+	void m_left(Player* object);
+	void m_right(Player* object);
+	void m_up(Player* object);
+	void m_down(Player* object);
+	void logic_enemy(Player* object);
+
 
 	void stworzObiektGracz();
 	void stworzObiektPrzeciwnik();
 
 	void stworzCegly();
-	
+
 	void stworzFlage();
-	
+
 
 public:
 	//Konstruktory / Destruktory
@@ -79,6 +86,7 @@ public:
 	void boom_sound();
 	void updatePlayer(Player* any_player);
 	void updateBricks(Player* object);
+
 	void Brickscollisions(Player* object);
 	void Playerscollisions(Player* object, Player* object1);
 	void Playerscollisions(Player* object, Flag* object2);
@@ -91,5 +99,5 @@ public:
 	void update();
 	void renderGui(sf::RenderTarget* target);
 	void render();
-	
+
 };

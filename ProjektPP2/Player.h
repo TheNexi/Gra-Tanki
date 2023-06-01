@@ -16,7 +16,7 @@ private:
 	sf::Texture texture;//obiekt klasy texture z biblioteki sfml
 	sf::Sprite sprite;//obiekt klasy sprite z biblioteki sfml
 
-	float movementSpeed;
+	float movementSpeed = 5.0;
 	sf::Vector2f coord;//obiekt klasy Vector2f z biblioteki sfml
 
 	

@@ -8,13 +8,13 @@ void Game::stworzZmienne()
 {
     this->window = nullptr; //Inicjalizacja pola window na pusty wskaźnik
     this->endGame = false;
-   
+
 }
 
 void Game::stworzOkno() //Metoda do tworzenia okna gry
 {
     this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "Gra Tanki", sf::Style::Close); //Utworzenie nowego obiektu klasy RenderWindow
-    
+
 
     this->window->setFramerateLimit(144); //Limit klatek na sekunde
     this->window->setVerticalSyncEnabled(false); //wyłączenie synchorizacji pionowej
@@ -27,7 +27,7 @@ void Game::stworzTekstury() //Metoda do załadowania tekstur z pliku
 
     this->textures["BRICKS"] = new sf::Texture(); //Utowrzenie nowego obiektu klasy Texture
     this->textures["BRICKS"]->loadFromFile("Textures/brick50.png"); //Ładowanie tekstury pocisku z pliku
-    
+
 
 }
 void Game::initFonts()
@@ -44,7 +44,7 @@ void Game::initGuiText()
     this->guiTextPlayer.setFillColor(sf::Color::Blue);
     this->guiTextPlayer.setCharacterSize(24);
     this->guiTextPlayer.setPosition(0.f, 550.f);
-    
+
     this->guiTextEnemy.setFont(this->font);
     this->guiTextEnemy.setFillColor(sf::Color::Green);
     this->guiTextEnemy.setCharacterSize(24);
@@ -55,8 +55,8 @@ void Game::updateGui()
     stringstream ssplayer;
     stringstream ssenemy;
     ssplayer << "Points: " << player->points;
-        
-    ssplayer << "\nHp: " <<  enemy->hp;
+
+    ssplayer << "\nHp: " << enemy->hp;
 
     ssenemy << "Points: " << enemy->points;
     ssenemy << "\nHp: " << player->hp;
@@ -72,12 +72,12 @@ void Game::updateGui()
     this->endGameText.setPosition(250.f, 300.f);
 
     //this->endGameText.setString("Blue team won!");
-    
+
     if (enemy->hp == 0)
     {
         this->endGameText.setString("Green team won!");
     }
-    else if(player->hp == 0)
+    else if (player->hp == 0)
     {
         this->endGameText.setString("Blue team won!");
     }
@@ -85,7 +85,7 @@ void Game::updateGui()
     {
         this->endGameText.setString("Blue team won!");
     }
-    
+
 }
 void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
 {
@@ -95,7 +95,7 @@ void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
     sf::Keyboard::Key upMoveKey = sf::Keyboard::Up;
     sf::Keyboard::Key downMoveKey = sf::Keyboard::Down;
     sf::Keyboard::Key shotKey = sf::Keyboard::Space;
-    
+
     this->player->left = leftMoveKey;
     this->player->right = rightMoveKey;
     this->player->up = upMoveKey;
@@ -103,7 +103,7 @@ void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
     this->player->shot = shotKey;
     this->player->hp = 10;
     this->player->points = 0;
-    
+
     this->player->setPosition(700.f, 450.f); //Ustawienie pozycji poczatkowej gracza
 
 }
@@ -130,8 +130,8 @@ void Game::stworzObiektPrzeciwnik() //Metoda do tworzenia obiektu przeciwnika
 
 void Game::stworzCegly()
 {
-    
-    float xCols[] = { 100.f, 250.f, 400.f ,550.f}; // Współrzędne x dla kolumn cegieł
+
+    float xCols[] = { 100.f, 250.f, 400.f ,550.f }; // Współrzędne x dla kolumn cegieł
     float yStart = 60.f; // Początkowa współrzędna y
 
     for (int column = 0; column < 4; column++)
@@ -141,19 +141,19 @@ void Game::stworzCegly()
         for (int row = 0; row < 2; row++)
         {
             this->bricks.push_back(new Bricks(this->textures["BRICKS"], xCols[column], y, 1.f));
-            
+
             y += 50.f;
         }
-        
+
     }
- 
+
     //Cegły linia pozioma
     float xStart = 1.f;
     yStart = 160.f;
 
     for (int column = 0; column < 1; column++)
     {
-        
+
         float x = xStart;
 
         for (int row = 0; row < 16; row++)
@@ -212,7 +212,7 @@ void Game::stworzCegly()
         }
 
     }
-    
+
 
 }
 
@@ -236,6 +236,7 @@ Game::Game()
     this->initGuiText();
     this->stworzObiektGracz();
     this->stworzObiektPrzeciwnik();
+    this->spawnEnemy();
     this->stworzCegly();
     this->stworzFlage();
 }
@@ -274,7 +275,7 @@ void Game::run() //Główna petla gry
 
         this->update();
         this->render();
-            
+
         if (this->endGame == true)
         {
             sf::sleep(sf::seconds(3.f));
@@ -287,7 +288,15 @@ void Game::run() //Główna petla gry
 //Funkcje
 void Game::spawnEnemy()
 {
+    this->bot = new Player();
 
+    this->bot = new Player(); //Utworzenie obiektu nowego obiektu (przeciwnik)
+
+    this->bot->color_change();
+    this->bot->hp = 10;
+    this->bot->points = 0;
+
+    this->bot->setPosition(260.f, 25.f); //Ustawienie pozycji 
 
 }
 
@@ -314,10 +323,39 @@ void Game::pollEvents()
     }
 }
 
-void Game::updateEnemies()
+//void Game::updateEnemies(Player* object)
+//{
+//   
+//}
+void Game::logic_enemy(Player* object)
 {
-
+    
+        m_down(object);
+        this->Brickscollisions(object);
+    
 }
+
+void Game::m_left(Player* object)
+{
+    object->move(-1.f, 0.f); //Kierunek poruszania
+    object->rotate_ob(270); //Obrót obiektu
+}
+void Game::m_right(Player* object)
+{
+    object->move(1.f, 0.f);
+    object->rotate_ob(90);
+}
+void Game::m_up(Player* object)
+{
+    object->move(0.f, -1.f);
+    object->rotate_ob(0);
+}
+void Game::m_down(Player* object)
+{
+    object->move(0.f, 1.f);
+    object->rotate_ob(180);
+}
+
 
 void Game::updatePlayer(Player* player)
 {
@@ -338,14 +376,12 @@ void Game::updatePlayer(Player* player)
     {
         player->move(0.f, -1.f);
         player->rotate_ob(0);
-
     }
 
     else if (sf::Keyboard::isKeyPressed(player->down))//analogicznie jak wyżej tylko w dół
     {
         player->move(0.f, 1.f);
         player->rotate_ob(180);
-
     }
     //Poruszanie obiektu gracza koniec
 
@@ -353,17 +389,17 @@ void Game::updatePlayer(Player* player)
     {
         /*
         sf::SoundBuffer buff;
-        
+
         if (!buff.loadFromFile("boom2.wav"))
         {
             cout << "\n-----------------blad-----------\n";
 
         }
-        
+
         sf::Sound sound;
         sound.setBuffer(buff);
         cout << "\n\n dzwiek\n\n";
-        
+
         if (sound.getStatus() != sf::Sound::Playing)
         {
             sound.play();
@@ -386,26 +422,26 @@ void Game::updatePlayer(Player* player)
             {
             case(0):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y - 35, 0.f, -1.f, 2.f,"player"));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y - 35, 0.f, -1.f, 2.f, "player"));
                 clock.restart(); //Resetowanie zegara po wystrzeleniu pocisku
-               
+
                 break;
             }
             case(90):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x + 25, this->player->getPos().y, 1.f, 0.f, 2.f,"player"));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x + 25, this->player->getPos().y, 1.f, 0.f, 2.f, "player"));
                 clock.restart();
                 break;
             }
             case(180):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y + 25, 0.f, 1.f, 2.f,"player"));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y + 25, 0.f, 1.f, 2.f, "player"));
                 clock.restart();
                 break;
             }
             case(270):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x - 35, this->player->getPos().y, -1.f, 0.f, 2.f,"player"));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x - 35, this->player->getPos().y, -1.f, 0.f, 2.f, "player"));
                 clock.restart();
                 break;
             }
@@ -451,7 +487,7 @@ void Game::updatePlayer(Player* player)
 
             }
         }
-     
+
     }
 
     if (player->hp <= 0)
@@ -518,7 +554,7 @@ void Game::updateBricks(Player* object)
 }
 
 
-void Game::Brickscollisions(Player *object)
+void Game::Brickscollisions(Player* object)
 {
 
 
@@ -584,72 +620,72 @@ void Game::Brickscollisions(Player *object)
 
 }
 
-void Game::Playerscollisions(Player *object,Player *object2)
+void Game::Playerscollisions(Player* object, Player* object2)
 
 {
     sf::FloatRect nextpos;
-    
 
-        sf::FloatRect playerbounds = object->getBounds();
-        sf::FloatRect player1bounds = object2->getBounds();
 
-        sf::FloatRect wallbounds = object2->getBounds();
-        nextpos = playerbounds;
+    sf::FloatRect playerbounds = object->getBounds();
+    sf::FloatRect player1bounds = object2->getBounds();
 
-        //  nextpos = player->getBounds().left;
+    sf::FloatRect wallbounds = object2->getBounds();
+    nextpos = playerbounds;
 
-        if (wallbounds.intersects(nextpos))
+    //  nextpos = player->getBounds().left;
+
+    if (wallbounds.intersects(nextpos))
+    {
+
+        //Bottom collision
+        if (playerbounds.top < wallbounds.top &&
+            playerbounds.top + playerbounds.height < wallbounds.top + 25
+            && playerbounds.left<wallbounds.left + 25
+            && playerbounds.left + playerbounds.width >wallbounds.left)
         {
-
-            //Bottom collision
-            if (playerbounds.top < wallbounds.top &&
-                playerbounds.top + playerbounds.height < wallbounds.top + 25
-                && playerbounds.left<wallbounds.left + 25
-                && playerbounds.left + playerbounds.width >wallbounds.left)
-            {
-                cout << "kolizja od gory\n";
-                object->setPosition(playerbounds.left + playerbounds.width - 25, wallbounds.top - playerbounds.height + 25);
-                
+            cout << "kolizja od gory\n";
+            object->setPosition(playerbounds.left + playerbounds.width - 25, wallbounds.top - playerbounds.height + 25);
 
 
-                
-            }
-
-            //Top collision
-            if (playerbounds.top > wallbounds.top &&
-                playerbounds.top + playerbounds.height > wallbounds.top + 25
-                && playerbounds.left<wallbounds.left + 25
-                && playerbounds.left + 25 >wallbounds.left)
-            {
-                cout << "kolizja dolna\n";
-              object->setPosition(playerbounds.left + 25, wallbounds.top + wallbounds.height + 25);
-                
-            }
-
-
-            //Right collision
-            if (playerbounds.left < wallbounds.left &&
-                playerbounds.left + 25 < wallbounds.left + 25
-                && playerbounds.top<wallbounds.top + 25
-                && playerbounds.top + 25 >wallbounds.top)
-            {
-                cout << "lewa kolizja\n";
-                object->setPosition(wallbounds.left - playerbounds.width + 25, playerbounds.top + 25);
-                
-                //Left collision
-            }
-            if (playerbounds.left > wallbounds.left &&
-                playerbounds.left + 25 > wallbounds.left + wallbounds.width
-                && playerbounds.top<wallbounds.top + wallbounds.height
-                && playerbounds.top + 25 >wallbounds.top)
-            {
-                cout << "prawa kolizja\n";
-                object->setPosition(wallbounds.left + wallbounds.width + 25, playerbounds.top + 25);
-            }
 
 
         }
-    
+
+        //Top collision
+        if (playerbounds.top > wallbounds.top &&
+            playerbounds.top + playerbounds.height > wallbounds.top + 25
+            && playerbounds.left<wallbounds.left + 25
+            && playerbounds.left + 25 >wallbounds.left)
+        {
+            cout << "kolizja dolna\n";
+            object->setPosition(playerbounds.left + 25, wallbounds.top + wallbounds.height + 25);
+
+        }
+
+
+        //Right collision
+        if (playerbounds.left < wallbounds.left &&
+            playerbounds.left + 25 < wallbounds.left + 25
+            && playerbounds.top<wallbounds.top + 25
+            && playerbounds.top + 25 >wallbounds.top)
+        {
+            cout << "lewa kolizja\n";
+            object->setPosition(wallbounds.left - playerbounds.width + 25, playerbounds.top + 25);
+
+            //Left collision
+        }
+        if (playerbounds.left > wallbounds.left &&
+            playerbounds.left + 25 > wallbounds.left + wallbounds.width
+            && playerbounds.top<wallbounds.top + wallbounds.height
+            && playerbounds.top + 25 >wallbounds.top)
+        {
+            cout << "prawa kolizja\n";
+            object->setPosition(wallbounds.left + wallbounds.width + 25, playerbounds.top + 25);
+        }
+
+
+    }
+
 }
 
 void Game::Playerscollisions(Player* object, Flag* object2)
@@ -728,24 +764,24 @@ void Game::bulletcollision(Player* object)
 {
     sf::FloatRect nextpos;
     int licznik = 0;
-   
-       
+
+
 
     for (auto* bullet : this->bullets) // Dla kazdej cegly w wektorze bullets
     {
         sf::FloatRect nextpos;
-        
+
         sf::FloatRect playerbounds = object->getBounds();
         sf::FloatRect wallbounds = bullet->getBounds();
         nextpos = playerbounds;
 
         //  nextpos = player->getBounds().left;
 
-        if (wallbounds.intersects(nextpos)){
-            
-        
-           
-           
+        if (wallbounds.intersects(nextpos)) {
+
+
+
+
             //Bottom collision
             if (playerbounds.top < wallbounds.top &&
                 playerbounds.top + playerbounds.height < wallbounds.top + 25
@@ -758,7 +794,7 @@ void Game::bulletcollision(Player* object)
 
                 cout << "\nhp: ";
                 object->hp--;
-                cout << object->hp<<endl;
+                cout << object->hp << endl;
                 licznik--;
                 // delete bullet;
 
@@ -775,7 +811,7 @@ void Game::bulletcollision(Player* object)
                 object->points += 10;
                 cout << "\nhp: ";
                 object->hp--;
-                cout << object->hp<<endl;
+                cout << object->hp << endl;
                 licznik--;
                 //  delete bullet;
             }
@@ -792,7 +828,7 @@ void Game::bulletcollision(Player* object)
                 object->points += 10;
                 cout << "\nhp: ";
                 object->hp--;
-                cout << object->hp <<endl;
+                cout << object->hp << endl;
                 licznik--;
                 // delete bullet;
 
@@ -808,19 +844,19 @@ void Game::bulletcollision(Player* object)
                 object->points += 10;
                 cout << "\nhp: ";
                 object->hp--;
-                cout << object->hp<<endl;
+                cout << object->hp << endl;
                 licznik--;
                 //delete bullet;
-            
+
             }
-            
+
         }
         licznik++;
     }
 
 }
 
-void Game::bulletcollision(Flag *object)
+void Game::bulletcollision(Flag* object)
 {
     sf::FloatRect nextpos;
     int licznik = 0;
@@ -848,7 +884,7 @@ void Game::bulletcollision(Flag *object)
                 object->destructionHp--;
 
                 cout << "Orzelek hp: ";
-               
+
                 cout << object->destructionHp;
                 licznik--;
                 // delete bullet;
@@ -922,7 +958,7 @@ void Game::bulletcollision(Flag *object)
 void Game::updateBullets() //Metoda do usuwania pociskow
 {
     unsigned int licznik = 0;
-    
+
 
     for (auto* bullet : this->bullets) //W kazdej iteracji wskaźnik bullet wskazuje na kolejny element wektora "bullets"
     {
@@ -945,7 +981,7 @@ void Game::updateBullets() //Metoda do usuwania pociskow
         {
             delete this->bullets.at(licznik);
             this->bullets.erase(this->bullets.begin() + licznik);// usuwanie pocisku
-            licznik--; 
+            licznik--;
 
             cout << "Pocisk lewa: " << this->bullets.size() << endl; //Wyswietlenie na standardowym wyjściu informacji o liczbie obecnych pociskow
         }
@@ -977,24 +1013,27 @@ void Game::updateBullets() //Metoda do usuwania pociskow
 
 
 void Game::update()
-{     
-    
+{
+
     this->pollEvents();
-   
+
 
     this->updatePlayer(player);
     this->updatePlayer(enemy);
     this->Playerscollisions(enemy, player);
-    
+
     //this->updateGui(enemy);
     this->Playerscollisions(player, enemy);
+    this->Playerscollisions(bot, enemy);
+    this->Playerscollisions(enemy, bot);
     this->Playerscollisions(player, orzel);
     this->Playerscollisions(enemy, orzel);
-    
+   
+
     this->updateBricks(player);
     this->updateBricks(enemy);
-   
-   
+    this->logic_enemy(bot);
+
     //this->Playerscollisions(player, enemy);
     this->bulletcollision(player);
     this->bulletcollision(enemy);
@@ -1005,10 +1044,10 @@ void Game::update()
     this->updateBullets();
     this->player->update();
     this->enemy->update();
+
+
     
 
-    this->updateEnemies();
- 
     this->updateGui();
 }
 
@@ -1016,7 +1055,7 @@ void Game::renderGui(sf::RenderTarget* target)
 {
     target->draw(this->guiTextPlayer);
     target->draw(this->guiTextEnemy);
-  
+
 }
 
 void Game::renderEnemies()
@@ -1033,6 +1072,7 @@ void Game::render()
     this->renderEnemies();
     this->player->render(*this->window); //Rysuje obiekt gracza na ekranie
     this->orzel->render(*this->window);
+    this->bot->render(*this->window);
 
     for (auto* bricks : this->bricks) //Dla każdego obiektu w wektorze
     {
