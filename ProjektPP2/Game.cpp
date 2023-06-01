@@ -332,7 +332,7 @@ void Game::logic_enemy(Player* object)
     
         m_down(object);
         this->Brickscollisions(object);
-    
+            
 }
 
 void Game::m_left(Player* object)
