@@ -64,7 +64,7 @@ private:
 	void m_down(Player* object);
 	void logic_enemy(Player* object);
 
-
+	void updateEnemies(Player* object);
 	void stworzObiektGracz();
 	void stworzObiektPrzeciwnik();
 

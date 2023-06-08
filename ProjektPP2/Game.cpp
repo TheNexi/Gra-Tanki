@@ -286,19 +286,7 @@ void Game::run() //Główna petla gry
 }
 
 //Funkcje
-void Game::spawnEnemy()
-{
-    this->bot = new Player();
 
-    this->bot = new Player(); //Utworzenie obiektu nowego obiektu (przeciwnik)
-
-    this->bot->color_change();
-    this->bot->hp = 10;
-    this->bot->points = 0;
-
-    this->bot->setPosition(260.f, 25.f); //Ustawienie pozycji 
-
-}
 
 
 void Game::pollEvents()
@@ -322,15 +310,80 @@ void Game::pollEvents()
         }
     }
 }
+void Game::spawnEnemy()
+{
+    this->bot = new Player();
 
-//void Game::updateEnemies(Player* object)
-//{
-//   
-//}
+    this->bot = new Player(); //Utworzenie obiektu nowego obiektu (przeciwnik)
+
+    this->bot->color_change();
+    this->bot->hp = 10;
+    this->bot->points = 0;
+
+    this->bot->setPosition(260.f, 200.f); //Ustawienie pozycji 
+
+}
+void Game::updateEnemies(Player* object)
+{
+   
+    //Poruszanie obiektu gracza koniec
+
+    
+
+        time = clock.getElapsedTime();
+        //opoznienie miedzy strzalami
+        if (time.asSeconds() > 1)
+        {
+            int angle = (int)object->ob_rotation();
+            switch (angle)//ustawianie kierunku strzału
+            {
+            case(0):
+            {
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], object->getPos().x, object->getPos().y - 35, 0.f, -1.f, 4.f, "player"));
+                clock.restart(); //Resetowanie zegara po wystrzeleniu pocisku
+
+                break;
+            }
+            case(90):
+            {
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], object->getPos().x + 35, object->getPos().y, 1.f, 0.f, 4.f, "player"));
+                clock.restart();
+                break;
+            }
+            case(180):
+            {
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], object->getPos().x, object->getPos().y + 35, 0.f, 1.f, 4.f, "player"));
+                clock.restart();
+                break;
+            }
+            case(270):
+            {
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], object->getPos().x - 35, object->getPos().y, -1.f, 0.f, 4.f, "player"));
+                clock.restart();
+                break;
+            }
+
+            }
+        }
+    
+
+
+}
 void Game::logic_enemy(Player* object)
 {
-    
-        m_down(object);
+    if (object->getPos().y >= orzel->getBounds().top + 24 && object->getPos().y <= orzel->getBounds().top + 26)
+    {
+        if (object->getPos().x < orzel->getBounds().left)
+        m_right(object);
+        if (object->getPos().x > orzel->getBounds().left)
+            m_left(object);
+    }
+        else 
+        {
+         
+            m_down(object);
+        }
+
         this->Brickscollisions(object);
             
 }
@@ -1020,6 +1073,7 @@ void Game::update()
 
     this->updatePlayer(player);
     this->updatePlayer(enemy);
+    this->updateEnemies(bot);
     this->Playerscollisions(enemy, player);
 
     //this->updateGui(enemy);
@@ -1028,7 +1082,7 @@ void Game::update()
     this->Playerscollisions(enemy, bot);
     this->Playerscollisions(player, orzel);
     this->Playerscollisions(enemy, orzel);
-   
+    this->Playerscollisions(bot, orzel);
 
     this->updateBricks(player);
     this->updateBricks(enemy);
@@ -1038,6 +1092,7 @@ void Game::update()
     this->bulletcollision(player);
     this->bulletcollision(enemy);
     this->bulletcollision(orzel);
+    this->bulletcollision(bot);
 
     this->updateBricks(player);
     this->updateBricks(enemy);
