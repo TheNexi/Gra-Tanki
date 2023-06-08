@@ -3,6 +3,7 @@
 #include "Bullet.h"
 #include "Bricks.h"
 #include "Flag.h"
+#include "Menu.h"
 
 #include <SFML/Audio.hpp>
 #include <map>
@@ -20,7 +21,9 @@ private:
 	//obiekt obslugujacy okno gry i zdarzenia
 	sf::RenderWindow* window;
 	bool endGame;
+	bool returnToMenu;
 	sf::Event ev;
+	int selectedMenuOption;
 
 
 	//Zasoby gry
@@ -78,11 +81,14 @@ public:
 	Game();
 	virtual ~Game();
 
+	
+
 
 	//Funkcje
 	void run();
+	void renderMenu();
+	bool shouldReturnToMenu();
 	void spawnEnemy();
-	void destroy();
 	void boom_sound();
 	void updatePlayer(Player* any_player);
 	void updateBricks(Player* object);
@@ -99,5 +105,6 @@ public:
 	void update();
 	void renderGui(sf::RenderTarget* target);
 	void render();
-
+	void resetGame();
+	
 };

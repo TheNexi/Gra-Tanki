@@ -11,6 +11,8 @@ void Game::stworzZmienne()
 
 }
 
+
+
 void Game::stworzOkno() //Metoda do tworzenia okna gry
 {
     this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "Gra Tanki", sf::Style::Close); //Utworzenie nowego obiektu klasy RenderWindow
@@ -18,7 +20,7 @@ void Game::stworzOkno() //Metoda do tworzenia okna gry
 
     this->window->setFramerateLimit(144); //Limit klatek na sekunde
     this->window->setVerticalSyncEnabled(false); //wyłączenie synchorizacji pionowej
-
+    
 }
 void Game::stworzTekstury() //Metoda do załadowania tekstur z pliku
 {
@@ -198,12 +200,12 @@ void Game::stworzCegly()
     xStart = 275.f;
     yStart = 275.f;
 
-    for (int column = 0; column < 4; column++)
+    for (int column = 0; column < 1; column++)
     {
         float x = xStart;
         float y = yStart;
 
-        for (int row = 0; row < 3; row++)
+        for (int row = 0; row < 4; row++)
         {
             this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, yStart, 1.f));
 
@@ -270,20 +272,121 @@ Game::~Game()
 void Game::run() //Główna petla gry
 {
     //W każdej iteracji petli podczas uruchomionego okna wywołuje metody update() i render()
-    while (this->window->isOpen() && this->endGame == false)
-    {
 
         this->update();
         this->render();
 
+
+
+    
+    while (this->window->isOpen())
+    {
+        if (returnToMenu)
+        {
+            resetGame();
+            renderMenu();
+            returnToMenu = false;
+        }
+        else
+        {
+            this->update();
+            this->render();
+        }
+        
+        
+          
         if (this->endGame == true)
         {
             sf::sleep(sf::seconds(3.f));
+            resetGame();
+            
+            endGame = false;
+            returnToMenu = true;
+
         }
 
-    }
 
+    }
+    
 }
+
+void Game::renderMenu()
+{
+    Menu menu(this->window->getSize().x, this->window->getSize().y);
+
+    
+    bool menuActive = true;
+    sf::Event event;
+    //menu.pollEvents(*this->window);
+
+    //while (this->window->isOpen() && menuActive)
+    while (menuActive)
+    {
+        
+        while (this->window->pollEvent(event))
+        {
+            switch (event.type)
+            {
+            case sf::Event::KeyReleased:
+                switch (event.key.code)
+                {
+                case sf::Keyboard::Up:
+                    menu.MoveUp();
+                    break;
+
+                case sf::Keyboard::Down:
+                    menu.MoveDown();
+                    break;
+
+                case sf::Keyboard::Return:
+                    switch (menu.getPressedOption())
+                    {
+                    case 0:
+                        cout << "Wcisnieto graj" << endl;
+                        menuActive = false;
+                        break;
+                    case 1:
+                        cout << "Wcisnieto wyjdz" << endl;
+                        this->window->close();
+                        menuActive = false;
+                        break;
+                    }
+
+                    break;
+
+
+                }
+
+                break;
+            case sf::Event::Closed:
+                this->window->close();
+                break;
+            /*
+            case sf::Keyboard::Escape:
+                this->window->close();
+                break;
+            */
+            
+            
+                
+            }
+        }
+
+        this->window->clear();
+
+        menu.render(*this->window);
+
+        this->window->display();
+    }
+}
+
+bool Game::shouldReturnToMenu()
+{
+    return returnToMenu;
+}
+
+
+
 
 //Funkcje
 
@@ -1122,6 +1225,9 @@ void Game::renderEnemies()
 void Game::render()
 {
     this->window->clear(); //czysci okno gry
+    
+    
+    
 
     this->renderGui(this->window);
     this->renderEnemies();
@@ -1147,5 +1253,16 @@ void Game::render()
 
 
     this->window->display(); //Wyswietla na ekranie obecnie narysowane obiekty
+
+}
+
+void Game::resetGame()
+{
+    player->points = 0;
+    player->hp = 10;
+    enemy->points = 0;
+    enemy->hp = 10;
+
+    
 
 }

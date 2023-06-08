@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include "Game.h"
 #include "Player.h"
+#include "Menu.h"
 #include <time.h>
 
 
@@ -13,11 +14,21 @@ int main()
 
     Game game;
     
-    //Petla gry
-    
-    game.run();
  
+
+    //Petla gry
+    game.renderMenu();
     
+    if (game.shouldReturnToMenu())
+    {
+        game.resetGame();
+        game.renderMenu();
+    }
+    else
+    {
+        game.run();
+    }
+  
           
     //Petla gry koniec
   

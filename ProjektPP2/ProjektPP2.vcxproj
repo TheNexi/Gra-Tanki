@@ -138,6 +138,7 @@
     <ClCompile Include="main.cpp">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
     </ClCompile>
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +146,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
