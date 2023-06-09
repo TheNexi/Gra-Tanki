@@ -455,41 +455,35 @@ void Game::spawnEnemy()
     float pos_y = 30.f;
 
 
-    Player* bot = new Player(); // Tworzenie nowego obiektu komputera
-
-    bot->hp = 3;
-    bot->bot_texture();
-    // Ustawienie pozycji dla każdego obiektu gracza
-    bot->setPosition(pos_x, pos_y);
-    pos_x += 50.f;
-    pos_y += 50.f;
-
-    enemies.push_back(bot); // Dodanie obiektu gracza do wektora enemies
-
     
-    float spawnTime = clock.getElapsedTime().asSeconds();
-
-    if (spawnTime > 5)
-    {
-
-        for (int i = 0; i < 5; i++)
-        {
-            Player* bot = new Player(); // Tworzenie nowego obiektu komputera
-
-            bot->hp = 3;
-            bot->bot_texture();
-            // Ustawienie pozycji dla każdego obiektu gracza
-            bot->setPosition(pos_x, pos_y);
-            pos_x += 50.f;
-            pos_y += 50.f;
-
-
-            enemies.push_back(bot); // Dodanie obiektu gracza do wektora enemies
-        }
-    }
     
+     spawnTime = spawnclock.getElapsedTime();
 
+     if (spawnTime.asSeconds() > 8)
+     {
+
+
+         Player* bot = new Player(); // Tworzenie nowego obiektu komputera
+
+         bot->hp = 2;
+         bot->bot_texture();
+         // Ustawienie pozycji dla każdego obiektu gracza
+         bot->setPosition(pos_x, pos_y);
+         pos_x += 50.f;
+         pos_y += 50.f;
+
+
+         enemies.push_back(bot); // Dodanie obiektu gracza do wektora enemies
+         printf("\n\n\nnowy bot\n");
+         spawnclock.restart();
+
+         
+
+     }
 }
+    
+
+
     
 
 
@@ -573,7 +567,7 @@ void Game::updateAllEnemies()
 
         
     }
-
+   
 }
 
 
@@ -1355,7 +1349,7 @@ void Game::update()
 
     this->bulletcollision(player);
     this->updateBricks(player);
-
+    this->spawnEnemy();
     this->updatePlayer(player);
 
     this->Playerscollisions(player, orzel);
@@ -1363,12 +1357,12 @@ void Game::update()
     if (!playervsbot)
     {  
         this->updatePlayer(enemy);
-
+         this->spawnEnemy();
         this->Playerscollisions(enemy, player);
         this->Playerscollisions(player, enemy);
         
         this->Playerscollisions(enemy, orzel);
-        
+       
          //this->updateGui(enemy);
 
       
@@ -1381,7 +1375,7 @@ void Game::update()
 
     }
     else
-    {
+    { 
         this->updateAllEnemies();
        
     }

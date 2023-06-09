@@ -44,7 +44,9 @@ private:
 	//vector <Player>enemies;
 
 	sf::Time time;
+	sf::Time spawnTime;
 	sf::Clock clock;
+	sf::Clock spawnclock;
 
 
 
