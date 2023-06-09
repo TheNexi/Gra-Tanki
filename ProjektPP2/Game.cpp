@@ -30,6 +30,8 @@ void Game::stworzTekstury() //Metoda do załadowania tekstur z pliku
     this->textures["BRICKS"] = new sf::Texture(); //Utowrzenie nowego obiektu klasy Texture
     this->textures["BRICKS"]->loadFromFile("Textures/brick50.png"); //Ładowanie tekstury pocisku z pliku
 
+    this->textures["ENEMIES"] = new sf::Texture();
+    this->textures["ENEMIES"]->loadFromFile("Textures/Tank v4.png");
 
 }
 void Game::initFonts()
@@ -250,7 +252,6 @@ Game::~Game()
     delete this->player; //Usuwa obiekt gracza
     delete this->enemy; // Usuwa obiekt przeciwnika
     delete this->orzel; //Usuwa obiekt flagi
-    delete this->bot; // Usuwa obiekt komputera
 
     //usuwanie tekstur (mapa)
     for (auto& i : this->textures) //Iteracja po wszystkich teksturach z mapy "textures"
@@ -262,11 +263,19 @@ Game::~Game()
     {
         delete i; // usuwa wszystkie obiekty pocisków z wektora "bullets"
     }
+    this->bullets.clear();
+
+    for (auto* i : this->enemies)
+    {
+        delete i; // usuwa wszystkie obiekty bota z wektora "enemies"
+    }
+    this->enemies.clear();
 
     for (auto* i : this->bricks)
     {
-        delete i; // usuwa wszystkie obiekty pocisków z wektora "bullets"
+        delete i; // usuwa wszystkie obiekty cegly z wektora "bricks"
     }
+    this->bricks.clear();
 }
 
 
@@ -382,11 +391,11 @@ void Game::renderMenu()
         this->window->clear();
 
         menu.render(*this->window);
-
+        
         
     }
-
     this->window->display();
+    
 }
         
     }
@@ -429,41 +438,45 @@ void Game::pollEvents()
 }
 void Game::spawnEnemy()
 {
-    //this->bot = new Player();
+
+    //DO POPRAWIENIA DODAWANIE BOTOW DO WEKTORA
+    float pos_x = 50.f;
+    float pos_y = 30.f;
+
+
+    Player* bot = new Player(); // Tworzenie nowego obiektu komputera
+
+    bot->hp = 3;
+    bot->bot_texture();
+    // Ustawienie pozycji dla każdego obiektu gracza
+    bot->setPosition(pos_x, pos_y);
+    pos_x += 50.f;
+    pos_y += 50.f;
+
+    enemies.push_back(bot); // Dodanie obiektu gracza do wektora enemies
+
     
-    
-    this->bot = new Player();
+    float spawnTime = clock.getElapsedTime().asSeconds();
 
-    this->bot = new Player(); //Utworzenie obiektu nowego obiektu (przeciwnik)
-
-    this->bot->color_change();
-    this->bot->hp = 3;
-    this->bot->points = 0;
-
-    this->bot->setPosition(80.f, 60.f); //Ustawienie pozycji 
-    
-
-    /*
-    time = clock.getElapsedTime();
-
-    if (time.asSeconds() > 5)
-    for (int i = 0; i < 5; i++)
+    if (spawnTime > 5)
     {
-        Player* enemy = new Player(); // Tworzenie nowego obiektu gracza
 
-        enemy->color_change();
-        enemy->hp = 3;
-        enemy->points = 0;
+        for (int i = 0; i < 5; i++)
+        {
+            Player* bot = new Player(); // Tworzenie nowego obiektu komputera
 
-        // Ustawienie pozycji dla każdego obiektu gracza
-        float posX = 80.f + i * 100.f;
-        float posY = 60.f;
-        enemy->setPosition(posX, posY);
+            bot->hp = 3;
+            bot->bot_texture();
+            // Ustawienie pozycji dla każdego obiektu gracza
+            bot->setPosition(pos_x, pos_y);
+            pos_x += 50.f;
+            pos_y += 50.f;
 
-        enemies.push_back(enemy); // Dodanie obiektu gracza do wektora enemies
+
+            enemies.push_back(bot); // Dodanie obiektu gracza do wektora enemies
+        }
     }
-
-    */
+    
 
 }
     
@@ -478,6 +491,10 @@ void Game::updateEnemies(Player* object)
 
         time = clock.getElapsedTime();
         //opoznienie miedzy strzalami
+        if (object->bot_destroyed == false)
+        {
+
+    
         if (time.asSeconds() > 1)
         {
             int angle = (int)object->ob_rotation();
@@ -511,21 +528,40 @@ void Game::updateEnemies(Player* object)
 
             }
         }
-    
+        }
         // Sprawdzanie stanu przeciwników
      
-       /*
+       
            object->update();
 
-           // Jeśli przeciwnik ma 0 punktów życia, usuń go
-           if (object->hp == 0)
+           // Jeśli przeciwnik ma 0 punktów życia
+           if (object->hp <= 0)
            {
-               delete object;
+               object->bot_destroyed = true;
+               object->destroyed_tank_bot();
            }
-       */     
+       
         
 }
 
+void Game::updateAllEnemies()
+{
+    for (auto& bot : enemies)
+    {
+        updateEnemies(bot);
+        if (bot->bot_destroyed == false)
+        {
+            Playerscollisions(bot, player);
+            Playerscollisions(player, bot);
+            Playerscollisions(bot, orzel);
+            bulletcollision(bot);
+            logic_enemy(bot);
+           
+        }
+        
+    }
+
+}
 
 
 
@@ -572,9 +608,53 @@ void Game::logic_enemy(Player* object)
        
 
         this->Brickscollisions(object);
-
-   
+    }
+  
 }
+
+
+
+/*
+void Game::logic_enemy(Player* object)
+{
+    sf::FloatRect nextpos;
+
+    
+
+    for (auto& brick : bricks) // Dla każdej cegły w wektorze bricks
+    {
+        sf::FloatRect playerbounds = object->getBounds();
+        sf::FloatRect wallbounds = brick->getBounds();
+        nextpos = playerbounds;
+
+        int randomDirection = 1;
+        
+
+        if (wallbounds.intersects(nextpos))
+        {
+            // Logika poruszania się po kolizji z cegłą
+            randomDirection = rand() % 4; // Losowy wybór kierunku
+            switch (randomDirection)
+            {
+            case 0: // Góra
+                m_up(object);
+                break;
+            case 1: // Dół
+                m_down(object);
+                break;
+            case 2: // Lewo
+                m_left(object);
+                break;
+            case 3: // Prawo
+                m_right(object);
+                break;
+            default:
+                break;
+            }
+        }
+    }
+}
+*/
 
 
 void Game::m_left(Player* object)
@@ -1305,17 +1385,21 @@ void Game::update()
     }
     else
     {
-        this->updateEnemies(bot);
-
-        this->Playerscollisions(bot, player);
-        this->Playerscollisions(player, bot);
-
-        this->Playerscollisions(bot, orzel);
+        //this->updateEnemies(bot);
+        this->updateAllEnemies();
 
         
-        this->bulletcollision(bot);
+        //this->Playerscollisions(bot, player);
+        //this->Playerscollisions(player, bot);
+        
+        
 
-        this->logic_enemy(bot);
+        //this->Playerscollisions(bot, orzel);
+
+        
+        //this->bulletcollision(bot);
+
+        //this->logic_enemy(bot);
     }
 
     this->updateGui();
@@ -1333,16 +1417,19 @@ void Game::renderGui(sf::RenderTarget* target)
 
 void Game::renderEnemies()
 {
-    this->enemy->render(*this->window); //Wyswietlenie obiektu przeciwnika
-    enemy->color_change(); //Zmiana koloru obiektu przeciwnika
+    for (auto* bot : this->enemies) //Dla każdego obiektu w wektorze
+    {
+        bot->render(*this->window); //Wyswietla każdy obiekt na ekranie
+    }
+
 }
 
 void Game::render()
 {
     this->window->clear(); //czysci okno gry
     this->renderGui(this->window);
-    this->player->render(*this->window); //Rysuje obiekt gracza na ekranie
-    this->orzel->render(*this->window);
+   
+   
 
     for (auto* bricks : this->bricks) //Dla każdego obiektu w wektorze
     {
@@ -1354,15 +1441,23 @@ void Game::render()
         bullet->render(this->window); //Wyswietla każdy obiekt na ekranie
     }
 
+
+
     if (!playervsbot)
     {
-        this->renderEnemies();
+        
+        this->enemy->render(*this->window); //Wyswietlenie obiektu przeciwnika
+        enemy->color_change(); //Zmiana koloru obiektu przeciwnika
     }
     else
     {   
-        this->bot->render(*this->window);
+        this->renderEnemies();
+        
     }
          
+    this->orzel->render(*this->window);
+    this->player->render(*this->window); //Rysuje obiekt gracza na ekranie
+
 
     //Wyswietlenie informacji o zakonczeniu rozgrywki
     if (this->endGame == true)
@@ -1393,10 +1488,18 @@ void Game::resetGame()
     this->player->points = 0;
     this->player->hp = 10;
 
+
+    float pos_x = 50.f;
+    float pos_y = 30.f;
     // Przywrocenie ustawien poczatkowych przeciwnika
-    this->bot->setPosition(80.f, 60.f);
-    this->bot->hp = 3;
-    this->bot->points = 0;
+    for (auto* bot : enemies)
+    {
+        bot->hp = 3;
+        // Ustawienie pozycji dla każdego obiektu gracza
+        bot->setPosition(pos_x, pos_y);
+        pos_x += 50.f;
+        pos_y += 50.f;
+    }
 
     // Przywróć cegły do początkowego stanu
     for (auto* brick : bricks)
@@ -1412,6 +1515,13 @@ void Game::resetGame()
         delete bullet;
     }
     bullets.clear();
+
+    // Usuń boty
+    for (auto* bot : enemies)
+    {
+        delete bot;
+    }
+    enemies.clear();
 
     // Zresetuj flagę
     this->orzel->setPosition(450.f, 550.f);

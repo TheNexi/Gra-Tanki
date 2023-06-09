@@ -25,7 +25,7 @@ private:
 	bool menuRendered;
 	sf::Event ev;
 	int selectedMenuOption;
-
+	
 
 	//Zasoby gry
 	map<string, sf::Texture*> textures;// mapa przechowuj¹ca tekstury 
@@ -51,7 +51,7 @@ private:
 	//Obiekt gracza i przeciwnika
 	Player* player;
 	Player* enemy;
-	Player* bot;
+
 
 
 	Flag* orzel;
@@ -71,6 +71,7 @@ private:
 	void logic_enemy(Player* object);
 
 	void updateEnemies(Player* object);
+	void updateAllEnemies();
 	void stworzObiektGracz();
 	void stworzObiektPrzeciwnik();
 

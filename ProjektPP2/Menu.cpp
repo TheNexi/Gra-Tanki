@@ -10,10 +10,12 @@ Menu::Menu(float width, float height)
 
 	menu[0].setFont(font);
 	menu[0].setCharacterSize(52);
-	menu[0].setFillColor(sf::Color::Red);
+	menu[0].setFillColor(sf::Color::Blue);
 	menu[0].setString("Gracz vs Komputer");
 	menu[0].setPosition(sf::Vector2f(width / 2, height / (MAX_NUMBER_OF_OPTIONS + 1) * 1));
 	menu[0].setOrigin(menu[0].getLocalBounds().width / 2, menu[0].getLocalBounds().height / 2);
+	menu[0].setOutlineColor(sf::Color::Black);
+	menu[0].setOutlineThickness(2.5f);
 
 	menu[1].setFont(font);
 	menu[1].setCharacterSize(52);
@@ -21,6 +23,8 @@ Menu::Menu(float width, float height)
 	menu[1].setString("Gracz vs Gracz");
 	menu[1].setPosition(sf::Vector2f(width / 2, height / (MAX_NUMBER_OF_OPTIONS + 1) * 2));
 	menu[1].setOrigin(menu[1].getLocalBounds().width / 2, menu[1].getLocalBounds().height / 2); 
+	menu[1].setOutlineColor(sf::Color::Black);
+	menu[1].setOutlineThickness(2.5f);
 
 	menu[2].setFont(font);
 	menu[2].setCharacterSize(52);
@@ -28,6 +32,8 @@ Menu::Menu(float width, float height)
 	menu[2].setString("Wyjdz");
 	menu[2].setPosition(sf::Vector2f(width / 2, height / (MAX_NUMBER_OF_OPTIONS + 1) * 3));
 	menu[2].setOrigin(menu[2].getLocalBounds().width / 2, menu[2].getLocalBounds().height / 2); 
+	menu[2].setOutlineColor(sf::Color::Black);
+	menu[2].setOutlineThickness(2.5f);
 
 	selectedOptionIndex = 0;
 
@@ -42,7 +48,7 @@ void Menu::initBackground()
 {
 	background.setSize(sf::Vector2f(800.f, 600.f));
 	
-	if (!background_texture.loadFromFile("Textures/tanki_tlo.png"))
+	if (!background_texture.loadFromFile("Textures/tlo2.png"))
 	{
 		std::cout << "Blad zaladowania tekstury tla!\n";
 	}
@@ -68,7 +74,7 @@ void Menu::MoveUp()
 	{
 		menu[selectedOptionIndex].setFillColor(sf::Color::White);
 		selectedOptionIndex--;
-		menu[selectedOptionIndex].setFillColor(sf::Color::Red);
+		menu[selectedOptionIndex].setFillColor(sf::Color::Blue);
 	}
 
 
@@ -80,7 +86,7 @@ void Menu::MoveDown()
 	{
 		menu[selectedOptionIndex].setFillColor(sf::Color::White);
 		selectedOptionIndex++;
-		menu[selectedOptionIndex].setFillColor(sf::Color::Red);
+		menu[selectedOptionIndex].setFillColor(sf::Color::Blue);
 	}
 }
 

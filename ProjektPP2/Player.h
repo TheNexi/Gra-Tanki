@@ -15,7 +15,7 @@ class Player
 private:
 	sf::Texture texture;//obiekt klasy texture z biblioteki sfml
 	sf::Sprite sprite;//obiekt klasy sprite z biblioteki sfml
-
+	
 	
 	sf::Vector2f coord;//obiekt klasy Vector2f z biblioteki sfml
 
@@ -33,6 +33,7 @@ public:
 	float movementSpeed = 5.0;
 	int hp=10;
 	int points=0;
+	bool bot_destroyed;
 
 	sf::Keyboard::Key left;
 	sf::Keyboard::Key right;
@@ -58,6 +59,8 @@ public:
 	void update();
 	void render(sf::RenderTarget& target);
 	void color_change();
+	void bot_texture();
+	void destroyed_tank_bot();
 
 	float ob_rotation();
 

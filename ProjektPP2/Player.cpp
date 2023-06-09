@@ -6,7 +6,7 @@ using namespace std;
 void Player::stworzZmienne()// m.in przypisanie predkosci poruszania sie 
 {
 	this->movementSpeed = 1.0f;
-
+	this->bot_destroyed = false;
 }
 
 void Player::initTexture()
@@ -150,5 +150,23 @@ void Player::color_change()//funkcja do ustawienia tekstury obiektu
 	if (!this->texture.loadFromFile("Textures/tank v3.png"))
 	{
 		cout << "ERROR::PLAYER::Blad przy wczytywaniu grafiki obiektu gracza" << endl;
+	}
+}
+
+void Player::bot_texture()
+{
+	if (!this->texture.loadFromFile("Textures/tank v4.png"))
+	{
+		cout << "ERROR::PLAYER::Blad przy wczytywaniu grafiki bota" << endl;
+	}
+
+
+}
+
+void Player::destroyed_tank_bot()
+{
+	if (!this->texture.loadFromFile("Textures/tank_yellow_destroyed.png"))
+	{
+		cout << "ERROR::PLAYER::Blad przy wczytywaniu grafiki bota zniszczone" << endl;
 	}
 }
