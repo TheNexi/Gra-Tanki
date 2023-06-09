@@ -28,6 +28,8 @@ void Player::initSprite()
 
 }
 
+
+
 void Player::setMovementControl(sf::Keyboard::Key left, sf::Keyboard::Key right, sf::Keyboard::Key up, sf::Keyboard::Key down, sf::Keyboard::Key shot)
 {
 	this->left = left;
