@@ -136,7 +136,7 @@ void Player::update()
 
 void Player::render(sf::RenderTarget& target)//funkcja renderujaca obiekt 
 {
-	if(this->hp>0)
+	
 	target.draw(this->sprite);
 
 }
