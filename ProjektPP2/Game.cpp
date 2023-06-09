@@ -398,9 +398,7 @@ void Game::renderMenu()
     
 }
         
-    }
-    this->window->display();
-}
+
 
 bool Game::shouldReturnToMenu()
 {
@@ -439,7 +437,20 @@ void Game::pollEvents()
 void Game::spawnEnemy()
 {
 
+    // ==================================================================================
+
+
+
     //DO POPRAWIENIA DODAWANIE BOTOW DO WEKTORA
+
+
+
+
+    // ===================================================================================
+
+
+
+
     float pos_x = 50.f;
     float pos_y = 30.f;
 
@@ -481,9 +492,8 @@ void Game::spawnEnemy()
 }
     
 
-    this->bot->setPosition(260.f, 200.f); //Ustawienie pozycji 
 
-}
+
 void Game::updateEnemies(Player* object)
 {
    
@@ -535,6 +545,7 @@ void Game::updateEnemies(Player* object)
            object->update();
 
            // Jeśli przeciwnik ma 0 punktów życia
+         
            if (object->hp <= 0)
            {
                object->bot_destroyed = true;
@@ -558,6 +569,8 @@ void Game::updateAllEnemies()
             logic_enemy(bot);
            
         }
+
+
         
     }
 
@@ -565,12 +578,6 @@ void Game::updateAllEnemies()
 
 
 
-        if (object->hp <= 0&&object!=NULL)
-        {
-            object->delete_object();
-        }
-
-}
 void Game::logic_enemy(Player* object)
 {
 
@@ -608,7 +615,7 @@ void Game::logic_enemy(Player* object)
        
 
         this->Brickscollisions(object);
-    }
+    
   
 }
 
@@ -1362,19 +1369,9 @@ void Game::update()
         
         this->Playerscollisions(enemy, orzel);
         
-    //this->updateGui(enemy);
+         //this->updateGui(enemy);
 
-    this->Playerscollisions(player, enemy);
-    this->Playerscollisions(bot, enemy);
-    this->Playerscollisions(enemy, bot);
-    this->Playerscollisions(player, orzel);
-    this->Playerscollisions(enemy, orzel);
-    this->Playerscollisions(bot, orzel);
-
-    this->updateBricks(player);
-    this->updateBricks(enemy);
-    this->logic_enemy(bot);
-
+      
         this->bulletcollision(enemy);
 
         
@@ -1385,21 +1382,8 @@ void Game::update()
     }
     else
     {
-        //this->updateEnemies(bot);
         this->updateAllEnemies();
-
-        
-        //this->Playerscollisions(bot, player);
-        //this->Playerscollisions(player, bot);
-        
-        
-
-        //this->Playerscollisions(bot, orzel);
-
-        
-        //this->bulletcollision(bot);
-
-        //this->logic_enemy(bot);
+       
     }
 
     this->updateGui();
