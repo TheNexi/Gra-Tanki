@@ -8,7 +8,7 @@ void Game::stworzZmienne()
 {
     this->window = nullptr; //Inicjalizacja pola window na pusty wskaźnik
     this->endGame = false;
-
+    this->menuRendered = false;
 }
 
 
@@ -61,7 +61,7 @@ void Game::updateGui()
     ssplayer << "\nHp: " << enemy->hp;
 
     ssenemy << "Points: " << enemy->points;
-    ssenemy << "\nHp: " << player->hp;
+    ssenemy << "\nHp: " << player->hp; 
 
     this->guiTextPlayer.setString(ssplayer.str());
     this->guiTextEnemy.setString(ssenemy.str());
@@ -250,6 +250,7 @@ Game::~Game()
     delete this->player; //Usuwa obiekt gracza
     delete this->enemy; // Usuwa obiekt przeciwnika
     delete this->orzel; //Usuwa obiekt flagi
+    delete this->bot; // Usuwa obiekt komputera
 
     //usuwanie tekstur (mapa)
     for (auto& i : this->textures) //Iteracja po wszystkich teksturach z mapy "textures"
@@ -273,12 +274,12 @@ void Game::run() //Główna petla gry
 {
     //W każdej iteracji petli podczas uruchomionego okna wywołuje metody update() i render()
 
-        this->update();
-        this->render();
+    this->update();
+    this->render();
 
 
 
-    
+
     while (this->window->isOpen())
     {
         if (returnToMenu)
@@ -292,37 +293,37 @@ void Game::run() //Główna petla gry
             this->update();
             this->render();
         }
-        
-        
-          
+
+
+
         if (this->endGame == true)
         {
             sf::sleep(sf::seconds(3.f));
             resetGame();
-            
-            endGame = false;
+
             returnToMenu = true;
 
         }
 
 
     }
-    
+
 }
 
 void Game::renderMenu()
 {
     Menu menu(this->window->getSize().x, this->window->getSize().y);
-
     
+
     bool menuActive = true;
+    
     sf::Event event;
     //menu.pollEvents(*this->window);
 
     //while (this->window->isOpen() && menuActive)
     while (menuActive)
     {
-        
+
         while (this->window->pollEvent(event))
         {
             switch (event.type)
@@ -342,10 +343,16 @@ void Game::renderMenu()
                     switch (menu.getPressedOption())
                     {
                     case 0:
-                        cout << "Wcisnieto graj" << endl;
+                        cout << "Wcisnieto gracz vs komputer" << endl;
+                        playervsbot = true;
                         menuActive = false;
                         break;
                     case 1:
+                        cout << "Wcisnieto gracz vs gracz" << endl;
+                        playervsbot = false;
+                        menuActive = false;
+                        break;
+                    case 2:
                         cout << "Wcisnieto wyjdz" << endl;
                         this->window->close();
                         menuActive = false;
@@ -361,14 +368,14 @@ void Game::renderMenu()
             case sf::Event::Closed:
                 this->window->close();
                 break;
-            /*
-            case sf::Keyboard::Escape:
-                this->window->close();
-                break;
-            */
-            
-            
-                
+                /*
+                case sf::Keyboard::Escape:
+                    this->window->close();
+                    break;
+                */
+
+
+
             }
         }
 
@@ -376,8 +383,10 @@ void Game::renderMenu()
 
         menu.render(*this->window);
 
-        this->window->display();
+        
     }
+
+    this->window->display();
 }
 
 bool Game::shouldReturnToMenu()
@@ -407,7 +416,8 @@ void Game::pollEvents()
             //zamykanie gry klawiszem escape
         case sf::Event::KeyPressed:
             if (this->ev.key.code == sf::Keyboard::Escape)
-                this->window->close();
+                returnToMenu = true;
+                //this->window->close();
             break;
             //zamykanie gry koniec
         }
@@ -415,23 +425,44 @@ void Game::pollEvents()
 }
 void Game::spawnEnemy()
 {
-    this->bot = new Player();
-
+    //this->bot = new Player();
+    
     this->bot = new Player(); //Utworzenie obiektu nowego obiektu (przeciwnik)
 
     this->bot->color_change();
-    this->bot->hp = 10;
+    this->bot->hp = 3;
     this->bot->points = 0;
 
-    this->bot->setPosition(260.f, 200.f); //Ustawienie pozycji 
+    this->bot->setPosition(80.f, 60.f); //Ustawienie pozycji 
+    
+
+    /*
+    time = clock.getElapsedTime();
+
+    if (time.asSeconds() > 5)
+    for (int i = 0; i < 5; i++)
+    {
+        Player* enemy = new Player(); // Tworzenie nowego obiektu gracza
+
+        enemy->color_change();
+        enemy->hp = 3;
+        enemy->points = 0;
+
+        // Ustawienie pozycji dla każdego obiektu gracza
+        float posX = 80.f + i * 100.f;
+        float posY = 60.f;
+        enemy->setPosition(posX, posY);
+
+        enemies.push_back(enemy); // Dodanie obiektu gracza do wektora enemies
+    }
+
+    */
 
 }
 void Game::updateEnemies(Player* object)
 {
    
     //Poruszanie obiektu gracza koniec
-
-    
 
         time = clock.getElapsedTime();
         //opoznienie miedzy strzalami
@@ -469,9 +500,23 @@ void Game::updateEnemies(Player* object)
             }
         }
     
+        // Sprawdzanie stanu przeciwników
+     
+       /*
+           object->update();
 
-
+           // Jeśli przeciwnik ma 0 punktów życia, usuń go
+           if (object->hp == 0)
+           {
+               delete object;
+           }
+       */     
+        
 }
+
+
+
+
 void Game::logic_enemy(Player* object)
 {
     if (object->getPos().y >= orzel->getBounds().top + 24 && object->getPos().y <= orzel->getBounds().top + 26)
@@ -493,22 +538,22 @@ void Game::logic_enemy(Player* object)
 
 void Game::m_left(Player* object)
 {
-    object->move(-1.f, 0.f); //Kierunek poruszania
+    object->move(-0.5f, 0.f); //Kierunek poruszania
     object->rotate_ob(270); //Obrót obiektu
 }
 void Game::m_right(Player* object)
 {
-    object->move(1.f, 0.f);
+    object->move(0.5f, 0.f);
     object->rotate_ob(90);
 }
 void Game::m_up(Player* object)
 {
-    object->move(0.f, -1.f);
+    object->move(0.f, -0.5f);
     object->rotate_ob(0);
 }
 void Game::m_down(Player* object)
 {
-    object->move(0.f, 1.f);
+    object->move(0.f, 0.5f);
     object->rotate_ob(180);
 }
 
@@ -1170,43 +1215,56 @@ void Game::updateBullets() //Metoda do usuwania pociskow
 
 void Game::update()
 {
-
     this->pollEvents();
+    this->updateBullets();
+    
+    this->player->update();
+    this->bulletcollision(orzel);
 
+    this->bulletcollision(player);
+    this->updateBricks(player);
 
     this->updatePlayer(player);
-    this->updatePlayer(enemy);
-    this->updateEnemies(bot);
-    this->Playerscollisions(enemy, player);
 
-    //this->updateGui(enemy);
-    this->Playerscollisions(player, enemy);
-    this->Playerscollisions(bot, enemy);
-    this->Playerscollisions(enemy, bot);
     this->Playerscollisions(player, orzel);
-    this->Playerscollisions(enemy, orzel);
-    this->Playerscollisions(bot, orzel);
 
-    this->updateBricks(player);
-    this->updateBricks(enemy);
-    this->logic_enemy(bot);
+    if (!playervsbot)
+    {  
+        this->updatePlayer(enemy);
 
-    //this->Playerscollisions(player, enemy);
-    this->bulletcollision(player);
-    this->bulletcollision(enemy);
-    this->bulletcollision(orzel);
-    this->bulletcollision(bot);
+        this->Playerscollisions(enemy, player);
+        this->Playerscollisions(player, enemy);
+        
+        this->Playerscollisions(enemy, orzel);
+        
 
-    this->updateBricks(player);
-    this->updateBricks(enemy);
-    this->updateBullets();
-    this->player->update();
-    this->enemy->update();
+        this->bulletcollision(enemy);
 
+        
+        this->enemy->update();
+        
+        this->updateBricks(enemy);
 
-    
+    }
+    else
+    {
+        this->updateEnemies(bot);
+
+        this->Playerscollisions(bot, player);
+        this->Playerscollisions(player, bot);
+
+        this->Playerscollisions(bot, orzel);
+
+        
+        this->bulletcollision(bot);
+
+        this->logic_enemy(bot);
+    }
 
     this->updateGui();
+
+       
+    
 }
 
 void Game::renderGui(sf::RenderTarget* target)
@@ -1225,15 +1283,9 @@ void Game::renderEnemies()
 void Game::render()
 {
     this->window->clear(); //czysci okno gry
-    
-    
-    
-
     this->renderGui(this->window);
-    this->renderEnemies();
     this->player->render(*this->window); //Rysuje obiekt gracza na ekranie
     this->orzel->render(*this->window);
-    this->bot->render(*this->window);
 
     for (auto* bricks : this->bricks) //Dla każdego obiektu w wektorze
     {
@@ -1244,6 +1296,16 @@ void Game::render()
     {
         bullet->render(this->window); //Wyswietla każdy obiekt na ekranie
     }
+
+    if (!playervsbot)
+    {
+        this->renderEnemies();
+    }
+    else
+    {   
+        this->bot->render(*this->window);
+    }
+         
 
     //Wyswietlenie informacji o zakonczeniu rozgrywki
     if (this->endGame == true)
@@ -1258,11 +1320,45 @@ void Game::render()
 
 void Game::resetGame()
 {
-    player->points = 0;
-    player->hp = 10;
-    enemy->points = 0;
-    enemy->hp = 10;
+    //Przywrocenie ustawien poczatkowych przeciwnika
+    this->enemy->setPosition(175.f, 25.f);
+    this->enemy->points = 0;
+    this->enemy->hp = 10;
 
-    
 
+    //Przywrocenie ustawien poczatkowych flagi
+    this->orzel->destructionHp = 5;
+
+
+
+    //Przywrocenie ustawien poczatkowych gracza
+    this->player->setPosition(700.f, 450.f);
+    this->player->points = 0;
+    this->player->hp = 10;
+
+    // Przywrocenie ustawien poczatkowych przeciwnika
+    this->bot->setPosition(80.f, 60.f);
+    this->bot->hp = 3;
+    this->bot->points = 0;
+
+    // Przywróć cegły do początkowego stanu
+    for (auto* brick : bricks)
+    {
+        delete brick;
+    }
+    bricks.clear();
+    stworzCegly();
+
+    // Usuń pociski
+    for (auto* bullet : bullets)
+    {
+        delete bullet;
+    }
+    bullets.clear();
+
+    // Zresetuj flagę
+    this->orzel->setPosition(450.f, 550.f);
+
+    // Zresetuj tekst końca gry
+    this->endGame = false;
 }

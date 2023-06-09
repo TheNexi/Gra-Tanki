@@ -22,6 +22,7 @@ private:
 	sf::RenderWindow* window;
 	bool endGame;
 	bool returnToMenu;
+	bool menuRendered;
 	sf::Event ev;
 	int selectedMenuOption;
 
@@ -29,6 +30,8 @@ private:
 	//Zasoby gry
 	map<string, sf::Texture*> textures;// mapa przechowuj¹ca tekstury 
 	vector <Bullet*> bullets;//wektor przechowujacy pociski
+	vector <Player*> enemies;
+
 
 	sf::Font font;
 
@@ -38,7 +41,7 @@ private:
 
 	//Obiekt cegly
 	vector <Bricks*> bricks;
-	vector <Player>enemies;
+	//vector <Player>enemies;
 
 	sf::Time time;
 	sf::Clock clock;
@@ -82,7 +85,7 @@ public:
 	virtual ~Game();
 
 	
-
+	bool playervsbot;
 
 	//Funkcje
 	void run();
@@ -98,7 +101,6 @@ public:
 	void Playerscollisions(Player* object, Flag* object2);
 	void updateBullets();
 	void pollEvents();
-	void updateEnemies();
 	void renderEnemies();
 	void bulletcollision(Player* object);
 	void bulletcollision(Flag* object);
