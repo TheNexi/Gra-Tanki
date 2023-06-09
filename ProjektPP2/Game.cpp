@@ -376,8 +376,9 @@ void Game::renderMenu()
 
         menu.render(*this->window);
 
-        this->window->display();
+        
     }
+    this->window->display();
 }
 
 bool Game::shouldReturnToMenu()
@@ -415,6 +416,7 @@ void Game::pollEvents()
 }
 void Game::spawnEnemy()
 {
+    
     this->bot = new Player();
 
     this->bot = new Player(); //Utworzenie obiektu nowego obiektu (przeciwnik)
@@ -422,6 +424,7 @@ void Game::spawnEnemy()
     this->bot->color_change();
     this->bot->hp = 10;
     this->bot->points = 0;
+    
 
     this->bot->setPosition(260.f, 200.f); //Ustawienie pozycji 
 
@@ -469,46 +472,72 @@ void Game::updateEnemies(Player* object)
             }
         }
     
-
+        if (object->hp <= 0&&object!=NULL)
+        {
+            object->delete_object();
+        }
 
 }
 void Game::logic_enemy(Player* object)
 {
-    if (object->getPos().y >= orzel->getBounds().top + 24 && object->getPos().y <= orzel->getBounds().top + 26)
+
+     if (object->getPos().y >= orzel->getBounds().top+24 && object->getPos().y <= orzel->getBounds().top+26 )
     {
+         printf("prawo/lewo\n");
         if (object->getPos().x < orzel->getBounds().left)
-        m_right(object);
+            m_right(object);
         if (object->getPos().x > orzel->getBounds().left)
             m_left(object);
+        
+
     }
-        else 
-        {
+    else
+    {
+         if (object->getPos().y >= player->getPos().y && object->getPos().y <= player->getPos().y)
+         {
+             if (object->getPos().x < player->getPos().x)
+                 m_right(object);
+             if (object->getPos().x > player->getPos().x)
+                 m_left(object);
+         }
+         else
+         {
+             printf("down\n");
+             m_down(object);
+         }
+    }
+    /*if (object->getPos().y < player->getPos().y)
+        m_down(object);
+    else if (object->getPos().y > player->getPos().y)
+        m_up(object);*/
+
          
-            m_down(object);
-        }
+       
 
         this->Brickscollisions(object);
-            
+
+   
 }
+
 
 void Game::m_left(Player* object)
 {
-    object->move(-1.f, 0.f); //Kierunek poruszania
+    object->move(-0.5, 0.f); //Kierunek poruszania
     object->rotate_ob(270); //Obrót obiektu
 }
 void Game::m_right(Player* object)
 {
-    object->move(1.f, 0.f);
+    object->move(0.5, 0.f);
     object->rotate_ob(90);
 }
 void Game::m_up(Player* object)
 {
-    object->move(0.f, -1.f);
+    object->move(0.f, -0.5);
     object->rotate_ob(0);
 }
 void Game::m_down(Player* object)
 {
-    object->move(0.f, 1.f);
+    object->move(0.f, 0.5);
     object->rotate_ob(180);
 }
 
@@ -1180,6 +1209,7 @@ void Game::update()
     this->Playerscollisions(enemy, player);
 
     //this->updateGui(enemy);
+
     this->Playerscollisions(player, enemy);
     this->Playerscollisions(bot, enemy);
     this->Playerscollisions(enemy, bot);
@@ -1262,7 +1292,4 @@ void Game::resetGame()
     player->hp = 10;
     enemy->points = 0;
     enemy->hp = 10;
-
-    
-
 }

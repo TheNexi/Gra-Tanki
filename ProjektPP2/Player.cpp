@@ -134,8 +134,13 @@ void Player::update()
 
 void Player::render(sf::RenderTarget& target)//funkcja renderujaca obiekt 
 {
+	if(this->hp>0)
 	target.draw(this->sprite);
 
+}
+void Player::delete_object()
+{
+	delete this;
 }
 
 void Player::color_change()//funkcja do ustawienia tekstury obiektu

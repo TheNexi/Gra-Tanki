@@ -38,7 +38,7 @@ private:
 
 	//Obiekt cegly
 	vector <Bricks*> bricks;
-	vector <Player>enemies;
+	vector <Player*>enemies;
 
 	sf::Time time;
 	sf::Clock clock;
