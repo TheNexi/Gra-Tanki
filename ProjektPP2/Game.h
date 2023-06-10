@@ -1,5 +1,11 @@
 #pragma once
 
+/**
+*
+*@file Game.h
+*@brief Plik nag³ówkowy klasy Game
+*/
+
 #include "Player.h"
 #include "Bullet.h"
 #include "Bricks.h"

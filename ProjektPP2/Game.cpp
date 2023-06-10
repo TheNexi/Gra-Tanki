@@ -1,6 +1,11 @@
 ﻿#include "Game.h"
 #include <iostream>
 
+/**
+ * @file Game.cpp
+ * @brief Plik źródłowy klasy Game
+ */
+
 using namespace std;
 
 //Metody prywatne
