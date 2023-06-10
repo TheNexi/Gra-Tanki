@@ -9,8 +9,6 @@ void Game::stworzZmienne()
     this->window = nullptr; //Inicjalizacja pola window na pusty wskaźnik
     this->endGame = false;
     this->menuRendered = false;
-    this->numberOfEnemies = 5;
-    this->destroyedEnemies = 0;
 }
 
 
@@ -49,12 +47,17 @@ void Game::initGuiText()
     this->guiTextPlayer.setFont(this->font);
     this->guiTextPlayer.setFillColor(sf::Color::Blue);
     this->guiTextPlayer.setCharacterSize(24);
-    this->guiTextPlayer.setPosition(0.f, 550.f);
+    this->guiTextPlayer.setPosition(0.f, 0.f);
 
     this->guiTextEnemy.setFont(this->font);
     this->guiTextEnemy.setFillColor(sf::Color::Green);
     this->guiTextEnemy.setCharacterSize(24);
-    this->guiTextEnemy.setPosition(0.f, 0.f);
+    this->guiTextEnemy.setPosition(700.f, 545.f);
+
+    this->guiTextFlag.setFont(this->font);
+    this->guiTextFlag.setFillColor(sf::Color::Red);
+    this->guiTextFlag.setCharacterSize(24);
+    this->guiTextFlag.setPosition(0.f, 550.f);
 
     this->guiTextBots.setFont(this->font);
     this->guiTextBots.setFillColor(sf::Color::Yellow);
@@ -65,16 +68,18 @@ void Game::updateGui()
 {
     stringstream ssplayer;
     stringstream ssenemy;
-    ssplayer << "Points: " << player->points;
+    stringstream ssflag;
+    ssplayer << "Punkty: " << player->points;
+    ssplayer << "\nPancerz: " << player->hp;
 
-    ssplayer << "\nHp: " << player->hp;
+    ssenemy << "Punkty: " << enemy->points;
+    ssenemy << "\nPancerz: " << enemy->hp; 
 
-    ssenemy << "Points: " << enemy->points;
-    ssenemy << "\nHp: " << enemy->hp; 
+    ssflag << "Flaga\nZdrowie: " << orzel->destructionHp;
 
     this->guiTextPlayer.setString(ssplayer.str());
     this->guiTextEnemy.setString(ssenemy.str());
-
+    this->guiTextFlag.setString(ssflag.str());
 
     //Tekst zakonczenia gry
     this->endGameText.setFont(this->font);
@@ -103,20 +108,22 @@ void Game::updateGuiVsBots()
 {
     stringstream ssplayer;
     stringstream ssbots;
+    stringstream ssflag;
 
-       
+    this->guiTextPlayer.setPosition(700.f, 545.f);
     
-    ssplayer << "Points: " << player->points;
+    ssplayer << "Punkty: " << player->points;
 
-    ssplayer << "\nHp: " << player->hp;
+    ssplayer << "\nPancerz: " << player->hp;
 
-    ssbots << "Liczba przeciwnikow: " << numberOfEnemies;
-    ssbots << "\nZniszczeni przeciwnicy: " << destroyedEnemies;
+    ssbots << "Liczba przeciwnikow: " << player->numberOfEnemies;
+    ssbots << "\nZniszczeni przeciwnicy: " << player->destroyedEnemies;
 
+    ssflag << "Flaga\nZdrowie: " << orzel->destructionHp;
 
     this->guiTextPlayer.setString(ssplayer.str());
     this->guiTextBots.setString(ssbots.str());
-
+    this->guiTextFlag.setString(ssflag.str());
 
     //Tekst zakonczenia gry
     this->endGameText.setFont(this->font);
@@ -126,7 +133,7 @@ void Game::updateGuiVsBots()
 
     if (player->points == 50)
     {
-        this->endGameText.setString("Green team won!");
+        this->endGameText.setString("Blue team won!");
         endGame = true;
     }
     else if (player->hp == 0)
@@ -248,9 +255,9 @@ void Game::stworzCegly()
         }
     }
     xStart = 350.f;
-    yStart = 550.f;
+    yStart = 540.f;
 
-    for (int column = 0; column < 1; column++)
+    for (int column = 0; column < 2; column++)
     {
         float x = xStart;
         for (int row = 0; row < 2; row++)
@@ -601,9 +608,19 @@ void Game::updateAllEnemies()
             Playerscollisions(bot, player);
             Playerscollisions(player, bot);
             Playerscollisions(bot, orzel);
-            Playerscollisions(bot, bot);
-            bulletcollisionVsSi(player, bot);
+            //Playerscollisions(bot, bot);
+            
+            //bulletcollision(player);
+            
+            //bulletcollisionSi(player, bot);
+            bulletcollisionSi(player,bot);
             bulletcollisionVsSi(bot, player);
+
+
+            //bulletcollisionVsSi(bot, player); // dodane teraz
+
+
+            //bulletcollisionVsSi(bot, player); // albo player bot
             logic_enemy(bot);
            
         }
@@ -1169,6 +1186,9 @@ void Game::bulletcollision(Player* object)
                 object->hp--;
                 cout << object->hp << endl;
                 licznik--;
+
+
+
                 // delete bullet;
 
             }
@@ -1328,8 +1348,7 @@ void Game::bulletcollision(Flag* object)
 
 }
 
-
-void Game::bulletcollisionVsSi(Player* object, Player* object2)
+void Game::bulletcollisionSi(Player* object, Player* object2) // player bot
 {
     sf::FloatRect nextpos;
     int licznik = 0;
@@ -1359,15 +1378,110 @@ void Game::bulletcollisionVsSi(Player* object, Player* object2)
             {
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
-                object2->points += 10;
 
                 cout << "\nhp: ";
                 object->hp--;
                 cout << object->hp << endl;
                 licznik--;
 
-                destroyedEnemies++;
-                numberOfEnemies--;
+                // delete bullet;
+
+            }
+
+            //Top collision
+            else if (playerbounds.top > wallbounds.top &&
+                playerbounds.top + playerbounds.height > wallbounds.top + 25
+                && playerbounds.left<wallbounds.left + 25
+                && playerbounds.left + 25 >wallbounds.left)
+            {
+                delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
+                this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
+
+                cout << "\nhp: ";
+                object->hp--;
+                cout << object->hp << endl;
+                licznik--;
+
+                //  delete bullet;
+            }
+
+
+            //Right collision
+            else if (playerbounds.left < wallbounds.left &&
+                playerbounds.left + 25 < wallbounds.left + 25
+                && playerbounds.top<wallbounds.top + 25
+                && playerbounds.top + 25 >wallbounds.top)
+            {
+                delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
+                this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
+
+                cout << "\nhp: ";
+                object->hp--;
+                cout << object->hp << endl;
+                licznik--;
+
+                // delete bullet;
+
+            }
+            //Left collision
+            else if (playerbounds.left > wallbounds.left &&
+                playerbounds.left + 25 > wallbounds.left + wallbounds.width
+                && playerbounds.top<wallbounds.top + wallbounds.height
+                && playerbounds.top + 25 >wallbounds.top)
+            {
+                delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
+                this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
+
+                cout << "\nhp: ";
+                object->hp--;
+                cout << object->hp << endl;
+                licznik--;
+
+                //delete bullet;
+
+            }
+
+        }
+        licznik++;
+    }
+
+}
+
+void Game::bulletcollisionVsSi(Player* object, Player* object2)
+{
+    sf::FloatRect nextpos;
+    int licznik = 0;
+
+
+
+    for (auto* bullet : this->bullets) // Dla kazdej cegly w wektorze bullets
+    {
+        sf::FloatRect nextpos;
+
+        sf::FloatRect playerbounds = object->getBounds();
+        sf::FloatRect wallbounds = bullet->getBounds();
+        nextpos = playerbounds;
+
+        //  nextpos = player->getBounds().left;
+
+        if (wallbounds.intersects(nextpos)) {
+
+
+            //Bottom collision
+            if (playerbounds.top < wallbounds.top &&
+                playerbounds.top + playerbounds.height < wallbounds.top + 25
+                && playerbounds.left<wallbounds.left + 25
+                && playerbounds.left + playerbounds.width >wallbounds.left)
+            {
+                delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
+                this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
+                object2->points += 10;
+
+                object->hp--;
+                licznik--;
+
+                object2->destroyedEnemies +=1;
+                object2->numberOfEnemies -=1;
 
                 // delete bullet;
 
@@ -1382,12 +1496,10 @@ void Game::bulletcollisionVsSi(Player* object, Player* object2)
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
                 object2->points += 10;
-                cout << "\nhp: ";
                 object->hp--;
-                cout << object->hp << endl;
                 licznik--;
-                destroyedEnemies++;
-                numberOfEnemies--;
+                object2->destroyedEnemies += 1;
+                object2->numberOfEnemies -= 1;
                 //  delete bullet;
             }
 
@@ -1401,12 +1513,10 @@ void Game::bulletcollisionVsSi(Player* object, Player* object2)
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
                 object2->points += 10;
-                cout << "\nhp: ";
                 object->hp--;
-                cout << object->hp << endl;
                 licznik--;
-                destroyedEnemies++;
-                numberOfEnemies--;
+                object2->destroyedEnemies += 1;
+                object2->numberOfEnemies -= 1;
                 // delete bullet;
 
             }
@@ -1419,12 +1529,10 @@ void Game::bulletcollisionVsSi(Player* object, Player* object2)
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
                 object2->points += 10;
-                cout << "\nhp: ";
                 object->hp--;
-                cout << object->hp << endl;
                 licznik--;
-                destroyedEnemies++;
-                numberOfEnemies--;
+                object2->destroyedEnemies += 1;
+                object2->numberOfEnemies -= 1;
                 //delete bullet;
 
             }
@@ -1472,8 +1580,7 @@ void Game::bulletcollisionVsEnemy(Player* object, Player* object2)
                 cout << object->hp << endl;
                 licznik--;
 
-                destroyedEnemies++;
-                numberOfEnemies--;
+                
 
                 // delete bullet;
 
@@ -1492,8 +1599,7 @@ void Game::bulletcollisionVsEnemy(Player* object, Player* object2)
                 object2->hp--;
                 cout << object->hp << endl;
                 licznik--;
-                destroyedEnemies++;
-                numberOfEnemies--;
+
                 //  delete bullet;
             }
 
@@ -1511,8 +1617,7 @@ void Game::bulletcollisionVsEnemy(Player* object, Player* object2)
                 object2->hp--;
                 cout << object->hp << endl;
                 licznik--;
-                destroyedEnemies++;
-                numberOfEnemies--;
+
                 // delete bullet;
 
             }
@@ -1529,8 +1634,7 @@ void Game::bulletcollisionVsEnemy(Player* object, Player* object2)
                 object2->hp--;
                 cout << object->hp << endl;
                 licznik--;
-                destroyedEnemies++;
-                numberOfEnemies--;
+
                 //delete bullet;
 
             }
@@ -1618,7 +1722,6 @@ void Game::update()
     {  
         this->updateGui();
         this->updatePlayer(enemy);
-         this->spawnEnemy();
         this->Playerscollisions(enemy, player);
         this->Playerscollisions(player, enemy);
         
@@ -1653,6 +1756,7 @@ void Game::renderGui(sf::RenderTarget* target)
 {
     target->draw(this->guiTextPlayer);
     target->draw(this->guiTextEnemy);
+    target->draw(this->guiTextFlag);
 
 }
 
@@ -1660,6 +1764,7 @@ void Game::renderGuiBots(sf::RenderTarget* target)
 {
     target->draw(this->guiTextPlayer);
     target->draw(this->guiTextBots);
+    target->draw(this->guiTextFlag);
 }
 
 void Game::renderEnemies()
@@ -1690,18 +1795,7 @@ void Game::render()
 
 
 
-    if (!playervsbot)
-    {
-        this->renderGui(this->window);
-        this->enemy->render(*this->window); //Wyswietlenie obiektu przeciwnika
-        enemy->color_change(); //Zmiana koloru obiektu przeciwnika
-    }
-    else
-    {   
-        this->renderGuiBots(this->window);
-        this->renderEnemies();
-        
-    }
+    
          
     this->orzel->render(*this->window);
     this->player->render(*this->window); //Rysuje obiekt gracza na ekranie
@@ -1713,6 +1807,19 @@ void Game::render()
         this->window->draw(this->endGameText);
     }
 
+    if (!playervsbot)
+    {
+        this->renderGui(this->window);
+        this->enemy->render(*this->window); //Wyswietlenie obiektu przeciwnika
+        enemy->color_change(); //Zmiana koloru obiektu przeciwnika
+    }
+    else
+    {
+        player->color_change();
+        this->renderGuiBots(this->window);
+        this->renderEnemies();
+
+    }
 
     this->window->display(); //Wyswietla na ekranie obecnie narysowane obiekty
 
@@ -1781,6 +1888,7 @@ void Game::resetGame()
     player->hp = 10;
     enemy->points = 0;
     enemy->hp = 10;
-    this->numberOfEnemies = 5;
-    this->destroyedEnemies = 0;
+    this->player->numberOfEnemies = 5;
+    this->player->destroyedEnemies = 0;
+    this->guiTextPlayer.setPosition(0.f, 0.f);
 }
