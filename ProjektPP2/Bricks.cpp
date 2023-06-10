@@ -1,6 +1,6 @@
 /**
  * @file Bricks.cpp
- * @brief Plik nag³ówkowy klasy Bricks
+ * @brief Plik Ÿród³owy klasy Bricks
  */
 #include "Bricks.h"
 #include <iostream>

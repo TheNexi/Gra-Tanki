@@ -1,4 +1,10 @@
+/**
+ * @file Menu.cpp
+ * @brief Plik Ÿród³owy klasy Menu
+ */
+
 #include "Menu.h"
+
 
 /**
  * @brief Konstruktor klasy Menu.

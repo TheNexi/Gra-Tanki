@@ -1,11 +1,23 @@
-﻿#include <iostream>
+﻿/**
+ * @file main.cpp
+ * @brief Plik źródłowy główny main
+ */
+
+#include <iostream>
 #include "Game.h"
 #include "Player.h"
 #include "Menu.h"
 #include <time.h>
 
 
-
+ /**
+  * @brief Główna funkcja programu.
+  *
+  * Funkcja `main` jest punktem wejścia do programu. Inicjuje ona grę, wywołuje funkcję renderowania menu gry,
+  * a następnie uruchamia pętlę gry lub powraca do menu w zależności od decyzji gracza.
+  *
+  * @return Wartość 0 po zakończeniu programu.
+  */
 int main()
 {
     srand(time(NULL));
@@ -13,8 +25,6 @@ int main()
     //Inicjacja Gry
 
     Game game;
-    
- 
 
     //Petla gry
     game.renderMenu();

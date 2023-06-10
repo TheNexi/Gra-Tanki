@@ -1,7 +1,7 @@
 /**
  * @file Bullet.cpp
  *
- * @brief Plik nag³ówkowy klasy Bullet.
+ * @brief Plik Ÿród³owy klasy Bullet.
  */
 
 #include "Bullet.h"
@@ -17,7 +17,7 @@
  * @param dir_x Kierunek ruchu pocisku w osi x.
  * @param dir_y Kierunek ruchu pocisku w osi y.
  * @param movement_speed Prêdkoœæ poruszania siê pocisku.
- * @param p_name Nazwa pocisku.
+ * @param p_name Nazwa gracza przypisanego do danego pocisku.
  */
 Bullet::Bullet(sf::Texture* texture, float pos_x, float pos_y, float dir_x, float dir_y, float movement_speed,std::string p_name) //konstuktor klasy Bullet do tworzenia obiektu pocisku
 {

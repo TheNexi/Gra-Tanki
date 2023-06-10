@@ -1,3 +1,9 @@
+/**
+*
+*@file Menu.h
+*@brief Plik nag³ówkowy klasy Menu
+*/
+
 #pragma once
 
 #include <iostream>

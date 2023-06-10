@@ -1,3 +1,8 @@
+/**
+ * @file Player.h
+ * @brief Plik nag³ówkowy klasy Player
+ */
+
 #pragma once
 #include <iostream>
 
@@ -9,7 +14,16 @@
 
 
 
-
+ /**
+* @brief Klasa reprezentuj¹ca gracza w grze.
+*
+* Klasa `Player` zawiera wszystkie sk³adowe i metody zwi¹zane z graczem w grze.
+* Pozwala na sterowanie graczem, okreœlanie jego pozycji, obliczanie granic, manipulowanie
+* parametrami takimi jak punkty ¿ycia, liczba zdobytych punktów, liczba zniszczonych przeciwników
+* oraz sterowanie ruchem i akcjami gracza. Gracz mo¿e byæ renderowany na ekranie gry i podlegaæ
+* ró¿nym modyfikacjom, takim jak zmiana koloru czy tekstury. Klasa `Player` posiada równie¿
+* funkcje pomocnicze do inicjalizacji wewnêtrznych zmiennych i manipulacji obiektami graficznymi.
+*/
 class Player
 {
 private:

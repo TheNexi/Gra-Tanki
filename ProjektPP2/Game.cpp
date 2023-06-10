@@ -347,7 +347,7 @@ void Game::stworzCegly()
         float x = xStart;
         float y = yStart;
 
-        for (int row = 0; row < 4; row++)
+        for (int row = 0; row < 3; row++)
         {
             this->bricks.push_back(new Bricks(this->textures["BRICKS"], x, yStart, 1.f));
 
