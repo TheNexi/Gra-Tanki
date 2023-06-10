@@ -11,6 +11,14 @@ using namespace std;
 
 #define MAX_NUMBER_OF_OPTIONS 3
 
+/**
+ * @class Menu
+ * @brief Klasa reprezentujaca menu w grze.
+ *
+ * Klasa Menu odpowiada za wyswietlanie i obsluge menu w grze.
+ * Pozwala na poruszanie siê po opcjach menu i zwraca wybran¹ opcje.
+ */
+
 class Menu
 {
 private:
@@ -20,12 +28,9 @@ private:
 	sf::Texture background_texture;
 	sf::RectangleShape background;
 
-
 public:
-	
 	Menu(float width, float height);
 	virtual ~Menu();
-
 	void initBackground();
 	void render(sf::RenderWindow& window);
 	void MoveUp();

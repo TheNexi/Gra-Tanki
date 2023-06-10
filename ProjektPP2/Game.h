@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Player.h"
 #include "Bullet.h"
 #include "Bricks.h"
@@ -15,15 +16,26 @@
 using namespace std;
 
 
+/**
+ * @class Game
+ * @brief G³ówna klasa reprezentuj¹ca logikê gry.
+ *
+ * Klasa Game zawiera wszystkie niezbêdne metody i pola, aby zarz¹dzaæ logik¹ gry.
+ * Odpowiada za inicjalizacjê, aktualizacjê i renderowanie elementów gry.
+ * Wykorzystuje klasy Player, Bullet, Bricks, Flag, Menu oraz zewnêtrzne biblioteki takie jak SFML.
+ */
+
 class Game
 {
 private:
 	//obiekt obslugujacy okno gry i zdarzenia
 	sf::RenderWindow* window;
+	sf::Event ev;
+
+	//Zmienne prywatne s³u¿¹ce jako flagi do obs³ugi menu
 	bool endGame;
 	bool returnToMenu;
 	bool menuRendered;
-	sf::Event ev;
 	int selectedMenuOption;
 	
 
@@ -33,8 +45,8 @@ private:
 	vector <Player*> enemies;
 
 
+	//Obiekty do interfejsu graficznego
 	sf::Font font;
-
 	sf::Text guiTextPlayer;
 	sf::Text guiTextEnemy;
 	sf::Text guiTextBots;
@@ -43,8 +55,8 @@ private:
 
 	//Obiekt cegly
 	vector <Bricks*> bricks;
-	//vector <Player>enemies;
 
+	//Obiekty do obs³ugi czasu
 	sf::Time time;
 	sf::Time spawnTime;
 	sf::Clock clock;
@@ -56,8 +68,7 @@ private:
 	Player* player;
 	Player* enemy;
 
-
-
+	//Obiekt flagi
 	Flag* orzel;
 
 
@@ -69,39 +80,34 @@ private:
 	void initGuiText();
 	void updateGui();
 	void updateGuiVsBots();
-	void updatePoints();
 	void m_left(Player* object);
 	void m_right(Player* object);
 	void m_up(Player* object);
 	void m_down(Player* object);
 	void logic_enemy(Player* object);
-
 	void updateEnemies(Player* object);
 	void updateAllEnemies();
 	void stworzObiektGracz();
 	void stworzObiektPrzeciwnik();
-
 	void stworzCegly();
-
 	void stworzFlage();
 
-
 public:
-	//Konstruktory / Destruktory
+	// Konstruktor
 	Game();
+	// Destruktor
 	virtual ~Game();
 
+	//Zmienna do obs³ugi trybu gry
 	bool playervsbot;
 
-	//Funkcje
+	// Funkcje
 	void run();
 	void renderMenu();
 	bool shouldReturnToMenu();
 	void spawnEnemy();
-	void boom_sound();
 	void updatePlayer(Player* any_player);
 	void updateBricks(Player* object);
-
 	void Brickscollisions(Player* object);
 	void Playerscollisions(Player* object, Player* object1);
 	void Playerscollisions(Player* object, Flag* object2);

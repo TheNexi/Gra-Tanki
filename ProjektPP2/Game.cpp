@@ -4,6 +4,15 @@
 using namespace std;
 
 //Metody prywatne
+
+/**
+ * @brief Inicjalizuje zmienne w klasie Game.
+ *
+ * Funkcja inicjalizuje zmienne składowe klasy Game, takie jak window, endGame i menuRendered.
+ * Pole window zostaje zainicjalizowane jako pusty wskaźnik.
+ * Pole endGame jest ustawione na wartość false, oznaczającą kontynuację gry.
+ * Pole menuRendered jest ustawione na wartość false, oznaczającą, że menu gry nie zostało jeszcze wyrenderowane.
+ */
 void Game::stworzZmienne()
 {
     this->window = nullptr; //Inicjalizacja pola window na pusty wskaźnik
@@ -12,7 +21,13 @@ void Game::stworzZmienne()
 }
 
 
-
+/**
+ * @brief Tworzy okno gry.
+ *
+ * Metoda tworzy okno gry, tworząc nowy obiekt klasy sf::RenderWindow o określonym rozmiarze i tytule.
+ * Ustawia limit liczby klatek na sekundę na 144.
+ * Wyłącza synchronizację pionową.
+ */
 void Game::stworzOkno() //Metoda do tworzenia okna gry
 {
     this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "Gra Tanki", sf::Style::Close); //Utworzenie nowego obiektu klasy RenderWindow
@@ -22,6 +37,13 @@ void Game::stworzOkno() //Metoda do tworzenia okna gry
     this->window->setVerticalSyncEnabled(false); //wyłączenie synchorizacji pionowej
     
 }
+
+/**
+ * @brief Ładuje tekstury z pliku.
+ *
+ * Metoda wczytuje tekstury z pliku i tworzy obiekty klasy sf::Texture dla poszczególnych tekstur.
+ * Tekstury są przypisywane do odpowiednich kluczy w kontenerze textures.
+ */
 void Game::stworzTekstury() //Metoda do załadowania tekstur z pliku
 {
     this->textures["BULLET"] = new sf::Texture(); //Utowrzenie nowego obiektu klasy Texture
@@ -34,6 +56,13 @@ void Game::stworzTekstury() //Metoda do załadowania tekstur z pliku
     this->textures["ENEMIES"]->loadFromFile("Textures/Tank v4.png");
 
 }
+
+/**
+ * @brief Inicjalizuje czcionkę.
+ *
+ * Metoda wczytuje czcionkę z pliku "Fonts/PixellettersFull.ttf".
+ * Jeśli wystąpił błąd podczas wczytywania, wyświetlany jest odpowiedni komunikat.
+ */
 void Game::initFonts()
 {
     if (!this->font.loadFromFile("Fonts/PixellettersFull.ttf"))
@@ -42,6 +71,11 @@ void Game::initFonts()
     }
 
 }
+/**
+ * @brief Inicjalizuje obiekty klasy sf::Text dla interfejsu graficznego.
+ *
+ * Metoda ustawia odpowiednie właściwości takie jak czcionka, kolor, rozmiar i pozycja dla każdego obiektu tekstu dla obiektów sf::Text, które będą wykorzystywane w interfejsie graficznym.
+ */
 void Game::initGuiText()
 {
     this->guiTextPlayer.setFont(this->font);
@@ -64,6 +98,15 @@ void Game::initGuiText()
     this->guiTextBots.setCharacterSize(24);
     this->guiTextBots.setPosition(0.f, 0.f);
 }
+
+/**
+ * @brief Aktualizuje teksty interfejsu graficznego gracz vs gracz.
+ *
+ * Metoda aktualizuje teksty wyświetlane w interfejsie graficznym na podstawie bieżących danych gry.
+ * Tworzy strumienie stringstream i formatuje odpowiednie informacje o punktach, pancerzu i zdrowiu.
+ * Następnie ustawia te informacje jako ciągi tekstowe dla obiektów sf::Text, które są wykorzystywane w interfejsie.
+ * Dodatkowo ustawia tekst informujący o zakończeniu gry, taki jak "Blue team won!" lub "Green team won!".
+ */
 void Game::updateGui()
 {
     stringstream ssplayer;
@@ -87,8 +130,6 @@ void Game::updateGui()
     this->endGameText.setCharacterSize(60);
     this->endGameText.setPosition(250.f, 300.f);
 
-    //this->endGameText.setString("Blue team won!");
-
     if (enemy->hp == 0)
     {
         this->endGameText.setString("Blue team won!");
@@ -104,6 +145,15 @@ void Game::updateGui()
 
 }
 
+/**
+ * @brief Aktualizuje teksty interfejsu graficznego dla trybu gry z botami.
+ *
+ * Metoda aktualizuje teksty wyświetlane w interfejsie graficznym na podstawie bieżących danych gry w trybie z botami.
+ * Tworzy strumienie stringstream i formatuje odpowiednie informacje o punktach, pancerzu, liczbie przeciwników
+ * i zniszczonych przeciwnikach. Następnie ustawia te informacje jako ciągi tekstowe dla obiektów sf::Text,
+ * które są wykorzystywane w interfejsie. Dodatkowo ustawia tekst informujący o zakończeniu gry, taki jak
+ * "Blue team won!" lub "Yellow team won!", w zależności od tego kto zwycięży.
+ */
 void Game::updateGuiVsBots()
 {
     stringstream ssplayer;
@@ -151,16 +201,14 @@ void Game::updateGuiVsBots()
 
 }
 
-void Game::updatePoints()
-{
-    
-    
-    
-    
-}
-
-
-
+/**
+ * @brief Tworzy obiekt gracza.
+ *
+ * Metoda tworzy obiekt gracza i ustawia jego właściwości. Tworzony jest nowy obiekt klasy Player, a następnie
+ * przypisywane są mu klawisze do poruszania się w lewo, w prawo, w górę, w dół oraz do strzału. Ustawiane są również
+ * wartości początkowe dla pancerza (`hp`) i punktów (`points`) gracza. Na koniec ustawiana jest pozycja początkowa
+ * gracza na ekranie.
+ */
 void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
 {
     this->player = new Player(); //Utworzenie obiektu gracza
@@ -181,6 +229,15 @@ void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
     this->player->setPosition(700.f, 450.f); //Ustawienie pozycji poczatkowej gracza
 
 }
+
+/**
+ * @brief Tworzy obiekt przeciwnika - drugiego gracza.
+ *
+ * Metoda tworzy obiekt przeciwnika i ustawia jego właściwości. Tworzony jest nowy obiekt klasy Player, a następnie
+ * przypisywane są mu klawisze do poruszania się w lewo, w prawo, w górę, w dół oraz do strzału. Ustawiane są również
+ * wartości początkowe dla pancerza (`hp`) i punktów (`points`) gracza. Na koniec ustawiana jest pozycja początkowa
+ * gracza na ekranie.
+ */
 void Game::stworzObiektPrzeciwnik() //Metoda do tworzenia obiektu przeciwnika
 {
     this->enemy = new Player(); //Utworzenie obiektu nowego obiektu (przeciwnik)
@@ -202,6 +259,14 @@ void Game::stworzObiektPrzeciwnik() //Metoda do tworzenia obiektu przeciwnika
     this->enemy->setPosition(175.f, 25.f); //Ustawienie pozycji początkowej drugiego gracza (przeciwnik)
 }
 
+/**
+ * @brief Tworzy obiekty cegieł na planszy.
+ *
+ * Metoda tworzy cegły na planszy gry. Tworzone są cegły w różnych układach i pozycjach. Współrzędne x dla kolumn cegieł
+ * są zdefiniowane w tablicy `xCols`, a początkowa współrzędna y to `yStart`. Następnie w pętli tworzone są cegły dla
+ * kolejnych kolumn i wierszy, a ich pozycje są odpowiednio modyfikowane. Na końcu metody tworzone są specjalne cegły
+ * dla elementu "orzelka", czyli flagi. Wszystkie utworzone obiekty cegieł są dodawane do wektora `bricks`.
+ */
 void Game::stworzCegly()
 {
 
@@ -290,6 +355,13 @@ void Game::stworzCegly()
 
 }
 
+/**
+ * @brief Tworzy obiekt flagi na planszy.
+ *
+ * Metoda tworzy i inicjalizuje obiekt klasy Flag, który reprezentuje flagę na planszy gry. Flagę umieszcza na
+ * konkretnej pozycji na planszy, korzystając z metody setPosition(). Utworzony obiekt flagi przypisywany jest do
+ * zmiennej "orzel".
+ */
 void Game::stworzFlage()
 {
     this->orzel = new Flag();
@@ -300,6 +372,15 @@ void Game::stworzFlage()
 
 
 // Konstuktor 
+
+
+/**
+ * @brief Konstruktor klasy Game.
+ *
+ * Konstruktor inicjalizuje obiekt klasy Game, tworząc wszystkie niezbędne elementy do rozpoczęcia gry. Wywołuje
+ * odpowiednie metody inicjalizujące pola i obiekty gry, takie jak tworzenie zmiennych, okna, tekstur, czcionek,
+ * obiektu gracza, obiektów przeciwników, cegieł oraz flagi
+ */
 Game::Game()
 {
     //Inicjacja wszystkich metod (podstawowe elementy do gry)
@@ -316,6 +397,13 @@ Game::Game()
 }
 
 // Destruktor
+
+/**
+ * @brief Destruktor klasy Game.
+ *
+ * Destruktor usuwa wszystkie zaalokowane zasoby i obiekty gry, takie jak okno, obiekt gracza, obiekt przeciwnika, obiekt flagi,
+ * tekstury, pociski, przeciwników i cegły. Wywołuje odpowiednie operacje usuwania dla każdego zasobu lub obiektu.
+ */
 Game::~Game()
 {
     delete this->window; //Usuwa okno gry
@@ -348,7 +436,14 @@ Game::~Game()
     this->bricks.clear();
 }
 
-
+/**
+ * @brief Główna pętla gry.
+ *
+ * Główna pętla gry, która wykonuje się dopóki okno gry jest otwarte. W każdej iteracji petli wywołuje metody update() i render(),
+ * które aktualizują stan gry i renderują jej zawartość na ekranie.
+ * Jeśli wystąpi żądanie powrotu do menu, resetuje grę i renderuje menu.
+ * Po zakończeniu gry, oczekuje przez 3 sekundy podczas gdy wyświetlana jest informacja o wygranej jednej z drużyn, resetuje grę i przechodzi do menu.
+ */
 void Game::run() //Główna petla gry
 {
     //W każdej iteracji petli podczas uruchomionego okna wywołuje metody update() i render()
@@ -389,17 +484,21 @@ void Game::run() //Główna petla gry
 
 }
 
+/**
+ * @brief Renderuje menu gry.
+ *
+ * Renderuje menu gry na ekranie. Pętla wykonuje się dopóki menu jest aktywne.
+ * Obsługuje zdarzenia dotyczące klawiszy, pozwalając na nawigację po menu i wybór opcji.
+ * Po wybraniu odpowiedniej opcji, ustawia odpowiedni tryb gry (gracz vs komputer lub gracz vs gracz),
+ * lub zamyka okno gry w przypadku wybrania opcji wyjścia.
+ */
 void Game::renderMenu()
 {
     Menu menu(this->window->getSize().x, this->window->getSize().y);
     
-
-    bool menuActive = true;
-    
+    bool menuActive = true;  
     sf::Event event;
-    //menu.pollEvents(*this->window);
 
-    //while (this->window->isOpen() && menuActive)
     while (menuActive)
     {
 
@@ -446,30 +545,25 @@ void Game::renderMenu()
                 break;
             case sf::Event::Closed:
                 this->window->close();
-                break;
-                /*
-                case sf::Keyboard::Escape:
-                    this->window->close();
-                    break;
-                */
-
-
+                break;          
 
             }
         }
 
         this->window->clear();
-
         menu.render(*this->window);
-        
-        
+               
     }
     this->window->display();
     
 }
         
 
-
+/**
+ * @brief Sprawdza, czy gra powinna wrócić do menu głównego.
+ *
+ * @return Wartość logiczna `true`, jeśli gra powinna wrócić do menu, w przeciwnym razie `false`.
+ */
 bool Game::shouldReturnToMenu()
 {
     return returnToMenu;
@@ -481,7 +575,12 @@ bool Game::shouldReturnToMenu()
 //Funkcje
 
 
-
+/**
+ * @brief Pobiera i obsługuje zdarzenia związane z oknem gry.
+ *
+ * Ta funkcja sprawdza i obsługuje różne zdarzenia związane z otwartym oknem gry, takie jak zamykanie gry przyciskiem
+ * lub powrót do menu klawiszem Escape.
+ */
 void Game::pollEvents()
 {
     //Podczas otwartego okna
@@ -504,6 +603,12 @@ void Game::pollEvents()
         }
     }
 }
+/**
+ * @brief Tworzy nowych wrogów w określonym interwale czasowym.
+ *
+ * Ta funkcja tworzy nowych wrogów w określonym interwale czasowym, jeśli jeszcze nie została osiągnięta maksymalna liczba
+ * stworzonych wrogów. Ustawia także ich pozycję początkową.
+ */
 void Game::spawnEnemy()
 {
 
@@ -537,7 +642,14 @@ void Game::spawnEnemy()
      }
 }
     
-
+/**
+ * @brief Aktualizuje wrogów na planszy i obsługuje ich ruchy oraz strzały.
+ *
+ * Ta funkcja aktualizuje wrogów na planszy, poruszając nimi i umożliwiając im strzelanie z określonym opóźnieniem. Ta funkcja również sprawdza, czy wrogowie zostali zniszczeni i wykonuje odpowiednie czynności w przypadku ich zniszczenia.
+ *
+ * @param object Wskaźnik na obiekt gracza, względem którego wykonywane są dane funkcje.
+ *
+ */
 void Game::updateEnemies(Player* object)
 {
    
@@ -598,6 +710,13 @@ void Game::updateEnemies(Player* object)
         
 }
 
+/**
+ * @brief Aktualizuje wszystkich wrogów na planszy.
+ *
+ * Ta funkcja iteruje przez wszystkich obiektów komputera na planszy i aktualizuje ich stan, wykonując odpowiednie działania takie jak
+ * obsługa kolizji, sprawdzanie trafień pociskami oraz wywołanie logiki poruszania się komputera.
+ *
+ */
 void Game::updateAllEnemies()
 {
     for (auto& bot : enemies)
@@ -608,33 +727,28 @@ void Game::updateAllEnemies()
             Playerscollisions(bot, player);
             Playerscollisions(player, bot);
             Playerscollisions(bot, orzel);
-            //Playerscollisions(bot, bot);
             
-            //bulletcollision(player);
-            
-            //bulletcollisionSi(player, bot);
             bulletcollisionSi(player,bot);
             bulletcollisionVsSi(bot, player);
 
-
-            //bulletcollisionVsSi(bot, player); // dodane teraz
-
-
-            //bulletcollisionVsSi(bot, player); // albo player bot
             logic_enemy(bot);
            
-        }
-        else
-        {
-            this->updatePoints();
         }
         
     }
    
 }
 
-
-
+/**
+ * @brief Logika ruchu wroga na planszy.
+ *
+ * Ta funkcja określa logikę ruchu wroga na planszy. Decyzje podejmowane są na podstawie pozycji wroga względem innych obiektów
+ * na planszy, takich jak orzeł (oznaczający miejsce docelowe) oraz gracz. Funkcja podejmuje decyzje dotyczące kierunku ruchu
+ * wroga i wykonuje odpowiednie operacje w zależności od sytuacji.
+ *
+ * @param object Wskaźnik na obiekt wroga.
+ *
+ */
 void Game::logic_enemy(Player* object)
 {
 
@@ -663,90 +777,76 @@ void Game::logic_enemy(Player* object)
              m_down(object);
          }
     }
-    /*if (object->getPos().y < player->getPos().y)
-        m_down(object);
-    else if (object->getPos().y > player->getPos().y)
-        m_up(object);*/
-
-         
-       
-
-        this->Brickscollisions(object);
-    
-  
+ 
+    this->Brickscollisions(object);
 }
 
-
-
-/*
-void Game::logic_enemy(Player* object)
-{
-    sf::FloatRect nextpos;
-
-    
-
-    for (auto& brick : bricks) // Dla każdej cegły w wektorze bricks
-    {
-        sf::FloatRect playerbounds = object->getBounds();
-        sf::FloatRect wallbounds = brick->getBounds();
-        nextpos = playerbounds;
-
-        int randomDirection = 1;
-        
-
-        if (wallbounds.intersects(nextpos))
-        {
-            // Logika poruszania się po kolizji z cegłą
-            randomDirection = rand() % 4; // Losowy wybór kierunku
-            switch (randomDirection)
-            {
-            case 0: // Góra
-                m_up(object);
-                break;
-            case 1: // Dół
-                m_down(object);
-                break;
-            case 2: // Lewo
-                m_left(object);
-                break;
-            case 3: // Prawo
-                m_right(object);
-                break;
-            default:
-                break;
-            }
-        }
-    }
-}
-*/
-
-
+/**
+ * @brief Wykonuje ruch obiektu komputera w lewo.
+ *
+ * Ta funkcja wykonuje ruch obiektu komputera w lewo poprzez przesunięcie obiektu na planszy o określony wektor (-0.5f, 0.f).
+ * Dodatkowo, funkcja obraca obiekt o kąt 270 stopni, aby był obrócony w odpowiednim kierunku.
+ *
+ * @param object Wskaźnik na obiekt komputera.
+ */
 void Game::m_left(Player* object)
 {
     object->move(-0.5f, 0.f); //Kierunek poruszania
-    object->move(-0.5, 0.f); //Kierunek poruszania
     object->rotate_ob(270); //Obrót obiektu
 }
+
+/**
+ * @brief Wykonuje ruch obiektu komputera w prawo.
+ *
+ * Ta funkcja wykonuje ruch obiektu komputera w prawo poprzez przesunięcie obiektu na planszy o określony wektor (0.5f, 0.f).
+ * Dodatkowo, funkcja obraca obiekt o kąt 90 stopni, aby był obrócony w odpowiednim kierunku.
+ *
+ * @param object Wskaźnik na obiekt komputera.
+ */
 void Game::m_right(Player* object)
 {
     object->move(0.5f, 0.f);
-    object->move(0.5, 0.f);
     object->rotate_ob(90);
 }
+
+/**
+ * @brief Wykonuje ruch obiektu komputera w górę.
+ *
+ * Ta funkcja wykonuje ruch obiektu komputera w górę poprzez przesunięcie obiektu na planszy o określony wektor (0.f, -0.5f).
+ * Dodatkowo, funkcja obraca obiekt do pozycji kąta 0 stopni, aby był obrócony w górę.
+ *
+ * @param object Wskaźnik na obiekt komputera.
+ */
 void Game::m_up(Player* object)
 {
     object->move(0.f, -0.5f);
-    object->move(0.f, -0.5);
     object->rotate_ob(0);
 }
+
+/**
+ * @brief Wykonuje ruch obiektu komputera w dół.
+ *
+ * Ta funkcja wykonuje ruch obiektu komputera w dół poprzez przesunięcie obiektu na planszy o określony wektor (-0.5f, 0.f).
+ * Dodatkowo, funkcja obraca obiekt o kąt 180 stopni, aby był obrócony w odpowiednim kierunku.
+ *
+ * @param object Wskaźnik na obiekt komputera.
+ */
 void Game::m_down(Player* object)
 {
     object->move(0.f, 0.5f);
-    object->move(0.f, 0.5);
     object->rotate_ob(180);
 }
 
 
+/**
+ * @brief Aktualizuje obiekt gracza.
+ *
+ * Ta funkcja aktualizuje obiekt gracza na podstawie wciśniętych klawiszy. Odpowiada za poruszanie się gracza
+ * w różnych kierunkach oraz obsługę strzałów gracza. Dodatkowo, sprawdza, czy gracz stracił wszystkie punkty
+ * życia i ustawia flagę `endGame` w przypadku porażki.
+ *
+ * @param player Wskaźnik na obiekt gracza.
+ */
 void Game::updatePlayer(Player* player)
 {
     //Poruszanie obiektu gracza
@@ -887,6 +987,14 @@ void Game::updatePlayer(Player* player)
 
 }
 
+/**
+ * @brief Aktualizuje kolizje z cegłami.
+ *
+ * Ta funkcja sprawdza kolizje pomiędzy pociskami a cegłami. Jeśli wystąpi kolizja, usuwa odpowiednie
+ * pociski i cegły z gry. Dodatkowo, zwiększa punktację gracza za trafienie cegły.
+ *
+ * @param object Wskaźnik na obiekt gracza.
+ */
 void Game::updateBricks(Player* object)
 {
     Brickscollisions(object);
@@ -943,7 +1051,14 @@ void Game::updateBricks(Player* object)
 
 }
 
-
+/**
+ * @brief Sprawdza kolizje z cegłami.
+ *
+ * Ta funkcja sprawdza kolizje pomiędzy obiektem gracza a cegłami. Jeśli wystąpi kolizja,
+ * dostosowuje pozycję gracza, aby uniknąć przenikania przez cegły.
+ *
+ * @param object Wskaźnik na obiekt gracza.
+ */
 void Game::Brickscollisions(Player* object)
 {
 
@@ -988,8 +1103,8 @@ void Game::Brickscollisions(Player* object)
             //Right collision
             if (playerbounds.left < wallbounds.left &&
                 playerbounds.left + 25 < wallbounds.left + 25
-                && playerbounds.top<wallbounds.top + 25
-                && playerbounds.top + 25 >wallbounds.top)
+                && playerbounds.top <= wallbounds.top + wallbounds.height
+                && playerbounds.top + 26 >= wallbounds.top)
             {
                 cout << "lewa kolizja\n";
                 object->setPosition(wallbounds.left - playerbounds.width + 25, playerbounds.top + 25);
@@ -1010,6 +1125,15 @@ void Game::Brickscollisions(Player* object)
 
 }
 
+/**
+ * @brief Sprawdza kolizje między dwoma graczami.
+ *
+ * Ta funkcja sprawdza kolizje pomiędzy dwoma graczami. Jeśli wystąpi kolizja,
+ * dostosowuje pozycje graczy, aby uniknąć przenikania przez siebie.
+ *
+ * @param object Wskaźnik na obiekt pierwszego gracza.
+ * @param object2 Wskaźnik na obiekt drugiego gracza.
+ */
 void Game::Playerscollisions(Player* object, Player* object2)
 
 {
@@ -1078,6 +1202,15 @@ void Game::Playerscollisions(Player* object, Player* object2)
 
 }
 
+/**
+ * @brief Sprawdza kolizje między graczem a flagą.
+ *
+ * Ta funkcja sprawdza kolizje między graczem a flagą. Jeśli wystąpi kolizja,
+ * dostosowuje pozycje gracza, aby uniknąć przenikania przez flagę.
+ *
+ * @param object Wskaźnik na obiekt pierwszego gracza.
+ * @param object2 Wskaźnik na obiekt flagi.
+ */
 void Game::Playerscollisions(Player* object, Flag* object2)
 
 {
@@ -1146,10 +1279,14 @@ void Game::Playerscollisions(Player* object, Flag* object2)
 
 }
 
-void Game::boom_sound()
-{
-
-}
+/**
+ * @brief Sprawdza kolizje między pociskami a graczem.
+ *
+ * Ta funkcja sprawdza kolizje między pociskami a graczem. Jeśli wystąpi kolizja,
+ * usuwa pocisk, dodaje punkty dla gracza i zmniejsza jego punkty życia.
+ *
+ * @param object Wskaźnik na obiekt gracza.
+ */
 void Game::bulletcollision(Player* object)
 {
     sf::FloatRect nextpos;
@@ -1213,8 +1350,8 @@ void Game::bulletcollision(Player* object)
             //Right collision
             else if (playerbounds.left < wallbounds.left &&
                 playerbounds.left + 25 < wallbounds.left + 25
-                && playerbounds.top<wallbounds.top + 25
-                && playerbounds.top + 25 >wallbounds.top)
+                && playerbounds.top <= wallbounds.top + 25
+                && playerbounds.top + 25 >= wallbounds.top)
             {
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
@@ -1229,8 +1366,8 @@ void Game::bulletcollision(Player* object)
             //Left collision
             else if (playerbounds.left > wallbounds.left &&
                 playerbounds.left + 25 > wallbounds.left + wallbounds.width
-                && playerbounds.top<wallbounds.top + wallbounds.height
-                && playerbounds.top + 25 >wallbounds.top)
+                && playerbounds.top <= wallbounds.top + wallbounds.height
+                && playerbounds.top + 25 >= wallbounds.top)
             {
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
@@ -1249,6 +1386,14 @@ void Game::bulletcollision(Player* object)
 
 }
 
+/**
+ * @brief Sprawdza kolizje między pociskami a flagą.
+ *
+ * Ta funkcja sprawdza kolizje między pociskami a flagą. Jeśli wystąpi kolizja,
+ * usuwa pocisk i zmniejsza  punkty życia obiektu flagi.
+ *
+ * @param object Wskaźnik na obiekt flagi.
+ */
 void Game::bulletcollision(Flag* object)
 {
     sf::FloatRect nextpos;
@@ -1322,8 +1467,8 @@ void Game::bulletcollision(Flag* object)
             //Left collision
             else if (playerbounds.left > wallbounds.left &&
                 playerbounds.left + 25 > wallbounds.left + wallbounds.width
-                && playerbounds.top<wallbounds.top + wallbounds.height
-                && playerbounds.top + 25 >wallbounds.top)
+                && playerbounds.top <= wallbounds.top + wallbounds.height
+                && playerbounds.top + 25 >= wallbounds.top)
             {
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
@@ -1348,6 +1493,15 @@ void Game::bulletcollision(Flag* object)
 
 }
 
+/**
+ * @brief Sprawdza kolizje między pociskami a graczem botem.
+ *
+ * Ta funkcja sprawdza kolizje między pociskami a graczem botem. Jeśli wystąpi kolizja,
+ * usuwa pocisk i zmniejsza punkty życia gracza bota.
+ *
+ * @param object Wskaźnik na obiekt gracza.
+ * @param object2 Wskaźnik obiekt drugiego gracza.
+ */
 void Game::bulletcollisionSi(Player* object, Player* object2) // player bot
 {
     sf::FloatRect nextpos;
@@ -1409,8 +1563,8 @@ void Game::bulletcollisionSi(Player* object, Player* object2) // player bot
             //Right collision
             else if (playerbounds.left < wallbounds.left &&
                 playerbounds.left + 25 < wallbounds.left + 25
-                && playerbounds.top<wallbounds.top + 25
-                && playerbounds.top + 25 >wallbounds.top)
+                && playerbounds.top <= wallbounds.top + 25
+                && playerbounds.top + 25 >= wallbounds.top)
             {
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
@@ -1426,8 +1580,8 @@ void Game::bulletcollisionSi(Player* object, Player* object2) // player bot
             //Left collision
             else if (playerbounds.left > wallbounds.left &&
                 playerbounds.left + 25 > wallbounds.left + wallbounds.width
-                && playerbounds.top<wallbounds.top + wallbounds.height
-                && playerbounds.top + 25 >wallbounds.top)
+                && playerbounds.top <= wallbounds.top + wallbounds.height
+                && playerbounds.top + 25 >= wallbounds.top)
             {
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
@@ -1447,6 +1601,16 @@ void Game::bulletcollisionSi(Player* object, Player* object2) // player bot
 
 }
 
+/**
+ * @brief Sprawdza kolizje między pociskami a graczem botem oraz aktualizuje punkty i statystyki gracza przeciwnika.
+ *
+ * Ta funkcja sprawdza kolizje między pociskami a graczem botem. Jeśli wystąpi kolizja,
+ * usuwa pocisk, zmniejsza punkty życia gracza bota, zwiększa punkty i aktualizuje statystyki
+ * gracza przeciwnika (object2).
+ *
+ * @param object Wskaźnik na obiekt gracza (bota).
+ * @param object2 Wskaźnik na drugiego gracza (może być graczem lub graczem botem).
+ */
 void Game::bulletcollisionVsSi(Player* object, Player* object2)
 {
     sf::FloatRect nextpos;
@@ -1507,8 +1671,8 @@ void Game::bulletcollisionVsSi(Player* object, Player* object2)
             //Right collision
             else if (playerbounds.left < wallbounds.left &&
                 playerbounds.left + 25 < wallbounds.left + 25
-                && playerbounds.top<wallbounds.top + 25
-                && playerbounds.top + 25 >wallbounds.top)
+                && playerbounds.top <= wallbounds.top + 25
+                && playerbounds.top + 25 >= wallbounds.top)
             {
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
@@ -1523,8 +1687,8 @@ void Game::bulletcollisionVsSi(Player* object, Player* object2)
             //Left collision
             else if (playerbounds.left > wallbounds.left &&
                 playerbounds.left + 25 > wallbounds.left + wallbounds.width
-                && playerbounds.top<wallbounds.top + wallbounds.height
-                && playerbounds.top + 25 >wallbounds.top)
+                && playerbounds.top <= wallbounds.top + wallbounds.height
+                && playerbounds.top + 25 >= wallbounds.top)
             {
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
@@ -1543,6 +1707,15 @@ void Game::bulletcollisionVsSi(Player* object, Player* object2)
 
 }
 
+/**
+ * @brief Sprawdza kolizje między pociskami a graczem oraz aktualizuje punkty i statystyki gracza przeciwnika.
+ *
+ * Ta funkcja sprawdza kolizje między pociskami a graczem. Jeśli wystąpi kolizja,
+ * usuwa pocisk, zwiększa punkty gracza, zmniejsza punkty życia gracza przeciwnika (object2).
+ *
+ * @param object Wskaźnik na obiekt gracza.
+ * @param object2 Wskaźnik na gracza przeciwnika.
+ */
 void Game::bulletcollisionVsEnemy(Player* object, Player* object2)
 {
     sf::FloatRect nextpos;
@@ -1575,9 +1748,7 @@ void Game::bulletcollisionVsEnemy(Player* object, Player* object2)
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
                 object->points += 10;
 
-                cout << "\nhp: ";
                 object2->hp--;
-                cout << object->hp << endl;
                 licznik--;
 
                 
@@ -1595,9 +1766,7 @@ void Game::bulletcollisionVsEnemy(Player* object, Player* object2)
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
                 object->points += 10;
-                cout << "\nhp: ";
                 object2->hp--;
-                cout << object->hp << endl;
                 licznik--;
 
                 //  delete bullet;
@@ -1607,15 +1776,13 @@ void Game::bulletcollisionVsEnemy(Player* object, Player* object2)
             //Right collision
             else if (playerbounds.left < wallbounds.left &&
                 playerbounds.left + 25 < wallbounds.left + 25
-                && playerbounds.top<wallbounds.top + 25
-                && playerbounds.top + 25 >wallbounds.top)
+                && playerbounds.top <= wallbounds.top + 25
+                && playerbounds.top + 25 >= wallbounds.top)
             {
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
                 object->points += 10;
-                cout << "\nhp: ";
                 object2->hp--;
-                cout << object->hp << endl;
                 licznik--;
 
                 // delete bullet;
@@ -1624,15 +1791,13 @@ void Game::bulletcollisionVsEnemy(Player* object, Player* object2)
             //Left collision
             else if (playerbounds.left > wallbounds.left &&
                 playerbounds.left + 25 > wallbounds.left + wallbounds.width
-                && playerbounds.top<wallbounds.top + wallbounds.height
-                && playerbounds.top + 25 >wallbounds.top)
+                && playerbounds.top <= wallbounds.top + wallbounds.height
+                && playerbounds.top + 25 >= wallbounds.top)
             {
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
                 object->points += 10;
-                cout << "\nhp: ";
                 object2->hp--;
-                cout << object->hp << endl;
                 licznik--;
 
                 //delete bullet;
