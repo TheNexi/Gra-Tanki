@@ -55,7 +55,7 @@ void Game::stworzTekstury() //Metoda do załadowania tekstur z pliku
     this->textures["BULLET"]->loadFromFile("Textures/bullet2.png"); //Ładowanie tekstury pocisku z pliku
 
     this->textures["BRICKS"] = new sf::Texture(); //Utowrzenie nowego obiektu klasy Texture
-    this->textures["BRICKS"]->loadFromFile("Textures/brick50.png"); //Ładowanie tekstury pocisku z pliku
+    this->textures["BRICKS"]->loadFromFile("Textures/cegla.png"); //Ładowanie tekstury pocisku z pliku
 
     this->textures["ENEMIES"] = new sf::Texture();
     this->textures["ENEMIES"]->loadFromFile("Textures/Tank v4.png");
@@ -275,7 +275,7 @@ void Game::stworzObiektPrzeciwnik() //Metoda do tworzenia obiektu przeciwnika
 void Game::stworzCegly()
 {
 
-    float xCols[] = { 100.f, 250.f, 400.f ,550.f }; // Współrzędne x dla kolumn cegieł
+    float xCols[] = { 102.f, 252.f, 402.f ,552.f }; // Współrzędne x dla kolumn cegieł
     float yStart = 60.f; // Początkowa współrzędna y
 
     for (int column = 0; column < 4; column++)
@@ -292,7 +292,7 @@ void Game::stworzCegly()
     }
 
     //Cegły linia pozioma
-    float xStart = 1.f;
+    float xStart = 2.f;
     yStart = 160.f;
 
     for (int column = 0; column < 1; column++)

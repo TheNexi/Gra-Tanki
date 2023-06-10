@@ -106,7 +106,7 @@ public:
 
 	//Zmienna do obs³ugi trybu gry
 	bool playervsbot;
-	float bot_x=10,bot_y=10;
+	float bot_x=25,bot_y=25;
 	int createdEnemies=0;
 	// Funkcje
 	void run();
