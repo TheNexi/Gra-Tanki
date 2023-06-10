@@ -1811,6 +1811,12 @@ void Game::bulletcollisionVsEnemy(Player* object, Player* object2)
 }
 
 
+/**
+ * @brief Metoda aktualizująca pociski w grze.
+ *
+ * Metoda iteruje przez wektor pocisków, aktualizuje ich stan oraz sprawdza, czy znajdują się w granicach okna gry.
+ * Jeśli pocisk opuścił granice ekranu, zostaje usunięty z wektora.
+ */
 void Game::updateBullets() //Metoda do usuwania pociskow
 {
     unsigned int licznik = 0;
@@ -1867,7 +1873,17 @@ void Game::updateBullets() //Metoda do usuwania pociskow
 
 }
 
+/**
+* @brief Metoda aktualizująca stan gry.
 
+Metoda odpowiedzialna za aktualizację stanu gry. Wywołuje inne metody aktualizacyjne, takie jak pollEvents(),
+
+updateBullets(), updateBricks(), updatePlayer(), updateGui(), updatePlayer(enemy), updateGui(enemy), bulletcollisionVsEnemy(),
+
+updateAllEnemies(), itp., w zależności od trybu gry (gracz kontra gracz lub gracz kontra boty). Aktualizuje również stan
+
+gracza i wroga. Metoda jest wywoływana w pętli głównej gry.
+*/
 void Game::update()
 {
     this->pollEvents();
