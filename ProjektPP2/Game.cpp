@@ -617,9 +617,9 @@ void Game::pollEvents()
 void Game::spawnEnemy()
 {
 
-    float pos_x = 50.f;
-    float pos_y = 30.f;
-    int createdEnemies = 0;
+    float *pos_x = &bot_x;
+    float *pos_y = &bot_y;
+    
 
      spawnTime = spawnclock.getElapsedTime();
 
@@ -632,9 +632,9 @@ void Game::spawnEnemy()
          bot->hp = 1;
          bot->bot_texture();
          // Ustawienie pozycji dla każdego obiektu gracza
-         bot->setPosition(pos_x, pos_y);
-         pos_x += 50.f;
-         pos_y += 50.f;
+         bot->setPosition(*pos_x, *pos_y);
+         *pos_x += 150.f;
+
 
 
          enemies.push_back(bot); // Dodanie obiektu gracza do wektora enemies
