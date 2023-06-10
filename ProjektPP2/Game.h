@@ -111,6 +111,8 @@ public:
 	void renderEnemies();
 	void bulletcollision(Player* object);
 	void bulletcollision(Flag* object);
+	void bulletcollisionVsSi(Player* object, Player* object2);
+	void bulletcollisionVsEnemy(Player* object, Player* object2);
 	void update();
 	void renderGui(sf::RenderTarget* target);
 	void renderGuiBots(sf::RenderTarget* target);
