@@ -1,6 +1,6 @@
 ﻿/**
  * @file main.cpp
- * @brief Plik źródłowy główny main
+ * @brief Plik zrodlowy glowny main
  */
 
 #include <iostream>

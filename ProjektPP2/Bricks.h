@@ -1,6 +1,6 @@
 /**
 *@file Bricks.h
-*@brief Plik nag³ówkowy klasy Bricks
+*@brief Plik naglowkowy klasy Bricks
 */
 #pragma once
 #include <iostream>

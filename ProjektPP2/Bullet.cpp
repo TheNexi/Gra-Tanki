@@ -1,7 +1,7 @@
 /**
  * @file Bullet.cpp
  *
- * @brief Plik Ÿród³owy klasy Bullet.
+ * @brief Plik zrodlowy klasy Bullet.
  */
 
 #include "Bullet.h"
@@ -11,12 +11,12 @@
  *
  * Tworzy obiekt pocisku o okreœlonych parametrach.
  *
- * @param texture WskaŸnik do tekstury pocisku.
- * @param pos_x Wspó³rzêdna x pozycji pocisku.
- * @param pos_y Wspó³rzêdna y pozycji pocisku.
+ * @param texture Wskaznik do tekstury pocisku.
+ * @param pos_x Wspolrzêdna x pozycji pocisku.
+ * @param pos_y Wspolrzedna y pozycji pocisku.
  * @param dir_x Kierunek ruchu pocisku w osi x.
  * @param dir_y Kierunek ruchu pocisku w osi y.
- * @param movement_speed Prêdkoœæ poruszania siê pocisku.
+ * @param movement_speed Predkosc poruszania siê pocisku.
  * @param p_name Nazwa gracza przypisanego do danego pocisku.
  */
 Bullet::Bullet(sf::Texture* texture, float pos_x, float pos_y, float dir_x, float dir_y, float movement_speed,std::string p_name) //konstuktor klasy Bullet do tworzenia obiektu pocisku
@@ -39,16 +39,16 @@ Bullet::~Bullet() //Destruktor
 
 }
 /**
-	 * @brief Metoda zwracaj¹ca granice obiektu pocisku.
+	 * @brief Metoda zwracajaca granice obiektu pocisku.
 	 *
-	 * @return Granice obiektu pocisku w postaci prostok¹ta.
+	 * @return Granice obiektu pocisku w postaci prostokata.
 	 */
 const sf::FloatRect Bullet::getBounds() const //Metoda do granic obiektu(prostokatu)
 {
 	return this->shape.getGlobalBounds(); //Zwraca granice obiektu uwzglêdniaj¹c¹ pozycjê pocisku na ekranie
 }
 /**
- * @brief Metoda aktualizuj¹ca pozycjê pocisku na ekranie.
+ * @brief Metoda aktualizujaca pozycje pocisku na ekranie.
  */
 void Bullet::update()
 {
@@ -59,7 +59,7 @@ void Bullet::update()
 /**
 	 * @brief Metoda do rysowania pocisku na ekranie.
 	 *
-	 * @param target WskaŸnik na obiekt RenderTarget, na którym ma byæ narysowany pocisk.
+	 * @param target Wskaznik na obiekt RenderTarget, na którym ma byc narysowany pocisk.
 	 */
 void Bullet::render(sf::RenderTarget* target) //Metoda do rysowania pocisku na ekranie
 {

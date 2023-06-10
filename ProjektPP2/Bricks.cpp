@@ -1,6 +1,6 @@
 /**
  * @file Bricks.cpp
- * @brief Plik Ÿród³owy klasy Bricks
+ * @brief Plik zrodlowy klasy Bricks
  */
 #include "Bricks.h"
 #include <iostream>
@@ -9,10 +9,10 @@ using namespace std;
 #include <SFML/Graphics.hpp>
 /**
  * @brief Konstruktor klasy Bricks.
- * Inicjalizuje obiekt ceg³y z przekazanymi parametrami.
+ * Inicjalizuje obiekt cegly z przekazanymi parametrami.
  *
- * @param texture WskaŸnik do tekstury ceg³y.
- * @param pos_x Wspó³rzêdna x pozycji ceg³y.
+ * @param texture Wskaznik do tekstury ceg³y.
+ * @param pos_x Wspolrzedna x pozycji ceg³y.
  * @param pos_y Wspó³rzêdna y pozycji ceg³y.
  * @param destructionHp Punkty zniszczenia ceg³y.
  */

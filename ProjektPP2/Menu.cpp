@@ -1,6 +1,6 @@
 /**
  * @file Menu.cpp
- * @brief Plik Ÿród³owy klasy Menu
+ * @brief Plik zrodlowy klasy Menu
  */
 
 #include "Menu.h"

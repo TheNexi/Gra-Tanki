@@ -3,7 +3,7 @@
 /**
 *
 *@file Game.h
-*@brief Plik nag³ówkowy klasy Game
+*@brief Plik naglowkowy klasy Game
 */
 
 #include "Player.h"

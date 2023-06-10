@@ -1,3 +1,8 @@
+/**
+ * @file Player.cpp
+ * @brief Plik zrodlowy klasy Player
+ */
+
 #include "Player.h"
 
 using namespace std;

@@ -1,7 +1,7 @@
 /**
 *
 *@file Flag.h
-*@brief Plik nag³ówkowy klasy Flag
+*@brief Plik naglowkowy klasy Flag
 */
 #pragma once
 
@@ -18,7 +18,7 @@ using namespace std;
 *
 *@class Flag
 *
-*@brief Klasa reprezentuj¹ca flagê w grze.
+*@brief Klasa reprezentujaca flage w grze.
 */
 class Flag
 {

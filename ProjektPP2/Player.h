@@ -1,6 +1,6 @@
 /**
  * @file Player.h
- * @brief Plik nag³ówkowy klasy Player
+ * @brief Plik naglowkowy klasy Player
  */
 
 #pragma once

@@ -3,7 +3,7 @@
 
 /**
  * @file Game.cpp
- * @brief Plik źródłowy klasy Game
+ * @brief Plik zrodlowy klasy Game
  */
 
 using namespace std;

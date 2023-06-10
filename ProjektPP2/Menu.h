@@ -1,7 +1,7 @@
 /**
 *
 *@file Menu.h
-*@brief Plik nag³ówkowy klasy Menu
+*@brief Plik naglowkowy klasy Menu
 */
 
 #pragma once

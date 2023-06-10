@@ -1,7 +1,7 @@
 /**
 
 *@file Bullet.h
-*@brief Plik nag³ówkowy klasy Bullet
+*@brief Plik naglowkowy klasy Bullet
 */
 #pragma once
 
@@ -11,7 +11,7 @@
 
 /**
 *@class Bullet
-*@brief Klasa reprezentuj¹ca pociski w grze.
+*@brief Klasa reprezentujaca pociski w grze.
 */
 class Bullet
 {

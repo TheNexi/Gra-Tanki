@@ -1,7 +1,7 @@
 /**
  * @file Flag.cpp
  *
- * @brief Plik Ÿród³owy klasy Flag.
+ * @brief Plik zrodlowy klasy Flag.
  */
 
 #include "Flag.h"
