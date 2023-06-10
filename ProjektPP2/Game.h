@@ -24,11 +24,11 @@ using namespace std;
 
 /**
  * @class Game
- * @brief G³ówna klasa reprezentuj¹ca logikê gry.
+ * @brief Glowna klasa reprezentujaca logike gry.
  *
- * Klasa Game zawiera wszystkie niezbêdne metody i pola, aby zarz¹dzaæ logik¹ gry.
- * Odpowiada za inicjalizacjê, aktualizacjê i renderowanie elementów gry.
- * Wykorzystuje klasy Player, Bullet, Bricks, Flag, Menu oraz zewnêtrzne biblioteki takie jak SFML.
+ * Klasa Game zawiera wszystkie niezbedne metody i pola, aby zarzadzac logika gry.
+ * Odpowiada za inicjalizacje, aktualizacje i renderowanie elementow gry.
+ * Wykorzystuje klasy Player, Bullet, Bricks, Flag, Menu oraz zewnetrzne biblioteki takie jak SFML.
  */
 
 class Game

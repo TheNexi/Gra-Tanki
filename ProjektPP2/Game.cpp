@@ -1936,6 +1936,15 @@ void Game::update()
     
 }
 
+/**
+ * @brief Renderuje interfejs graficzny (GUI) gry na określonym celu.
+ *
+ * Ta funkcja rysuje elementy interfejsu GUI, w tym tekst gracza, tekst przeciwnika i tekst flagi,
+ * na podanym celu renderowania.
+ *
+ * @param target Wskaźnik na cel renderowania SFML, na którym ma być renderowany interfejs GUI.
+ */
+
 void Game::renderGui(sf::RenderTarget* target)
 {
     target->draw(this->guiTextPlayer);
@@ -1944,12 +1953,30 @@ void Game::renderGui(sf::RenderTarget* target)
 
 }
 
+/**
+ * @brief Renderuje interfejs graficzny (GUI) związany z botami gry na określonym celu.
+ *
+ * Ta funkcja rysuje elementy interfejsu GUI związane z botami, takie jak tekst gracza, tekst botów i tekst flagi,
+ * na podanym celu renderowania.
+ *
+ * @param target Wskaźnik na cel renderowania SFML, na którym ma być renderowany interfejs GUI związany z botami.
+ */
+
 void Game::renderGuiBots(sf::RenderTarget* target)
 {
     target->draw(this->guiTextPlayer);
     target->draw(this->guiTextBots);
     target->draw(this->guiTextFlag);
 }
+
+/**
+ * @brief Renderuje komputerów na ekranie gry.
+ *
+ * Ta funkcja renderuje wszystkich wrogów znajdujących się w wektorze `enemies`
+ * poprzez wywołanie metody `render` na każdym z nich i przekazanie wskaźnika na obiekt `window`
+ * jako parametr.
+ *
+ */
 
 void Game::renderEnemies()
 {
@@ -1959,6 +1986,15 @@ void Game::renderEnemies()
     }
 
 }
+
+/**
+ * @brief Renderuje wszystkie obiekty i interfejs gry na ekranie.
+ *
+ * Ta funkcja odpowiedzialna jest za renderowanie wszystkich obiektów gry, takich jak cegły, pociski, orzeł, gracz,
+ * obiekty przeciwników oraz interfejs użytkownika. Wykonuje ona również czyszczenie okna gry i wyświetlanie informacji
+ * o zakończeniu rozgrywki w przypadku ustawionej flagi `endGame`.
+ *
+ */
 
 void Game::render()
 {
@@ -2009,6 +2045,14 @@ void Game::render()
 
 }
 
+/**
+ * @brief Resetuje stan gry do ustawień początkowych.
+ *
+ * Ta funkcja przywraca ustawienia początkowe dla przeciwnika, flagi, gracza oraz innych elementów gry.
+ * Przywraca pozycje, punkty, i punkty życia dla przeciwnika, gracza oraz botów.
+ * Usuwa cegły, pociski i boty z gry. Przywraca pozycję flagi.
+ * Resetuje flagę oznaczającą zakończenie gry.
+ */
 void Game::resetGame()
 {
     //Przywrocenie ustawien poczatkowych przeciwnika
