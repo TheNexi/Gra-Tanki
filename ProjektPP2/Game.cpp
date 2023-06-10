@@ -9,6 +9,8 @@ void Game::stworzZmienne()
     this->window = nullptr; //Inicjalizacja pola window na pusty wskaźnik
     this->endGame = false;
     this->menuRendered = false;
+    this->numberOfEnemies = 5;
+    this->destroyedEnemies = 0;
 }
 
 
@@ -53,6 +55,11 @@ void Game::initGuiText()
     this->guiTextEnemy.setFillColor(sf::Color::Green);
     this->guiTextEnemy.setCharacterSize(24);
     this->guiTextEnemy.setPosition(0.f, 0.f);
+
+    this->guiTextBots.setFont(this->font);
+    this->guiTextBots.setFillColor(sf::Color::Yellow);
+    this->guiTextBots.setCharacterSize(24);
+    this->guiTextBots.setPosition(0.f, 0.f);
 }
 void Game::updateGui()
 {
@@ -91,6 +98,64 @@ void Game::updateGui()
     }
 
 }
+
+void Game::updateGuiVsBots()
+{
+    stringstream ssplayer;
+    stringstream ssbots;
+
+    
+    
+    
+    ssplayer << "Points: " << player->points;
+
+    ssplayer << "\nHp: " << player->hp;
+
+    ssbots << "Liczba przeciwnikow: " << numberOfEnemies;
+    ssbots << "\nZniszczeni przeciwnicy: " << destroyedEnemies;
+
+
+    this->guiTextPlayer.setString(ssplayer.str());
+    this->guiTextBots.setString(ssbots.str());
+
+
+    //Tekst zakonczenia gry
+    this->endGameText.setFont(this->font);
+    this->endGameText.setFillColor(sf::Color::Red);
+    this->endGameText.setCharacterSize(60);
+    this->endGameText.setPosition(250.f, 300.f);
+
+    if (player->points == 50)
+    {
+        this->endGameText.setString("Green team won!");
+    }
+    else if (player->hp == 0)
+    {
+        this->endGameText.setString("Yellow team won!");
+    }
+    else if (orzel->destructionHp == 0)
+    {
+        this->endGameText.setString("Yellow team won!");
+    }
+
+
+
+}
+
+void Game::updatePoints()
+{
+    
+    
+    
+    if (destroyedEnemies > 0)
+    {
+        numberOfEnemies -= destroyedEnemies;
+        destroyedEnemies = 0;
+    }
+}
+
+
+
 void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
 {
     this->player = new Player(); //Utworzenie obiektu gracza
@@ -437,29 +502,13 @@ void Game::pollEvents()
 void Game::spawnEnemy()
 {
 
-    // ==================================================================================
-
-
-
-    //DO POPRAWIENIA DODAWANIE BOTOW DO WEKTORA
-
-
-
-
-    // ===================================================================================
-
-
-
-
     float pos_x = 50.f;
     float pos_y = 30.f;
+    int createdEnemies = 0;
 
-
-    
-    
      spawnTime = spawnclock.getElapsedTime();
 
-     if (spawnTime.asSeconds() > 8)
+     if (spawnTime.asSeconds() > 8 && createdEnemies < 5)
      {
 
 
@@ -475,18 +524,14 @@ void Game::spawnEnemy()
 
          enemies.push_back(bot); // Dodanie obiektu gracza do wektora enemies
          printf("\n\n\nnowy bot\n");
+         
+         
          spawnclock.restart();
 
-         
-
+         createdEnemies++;
      }
 }
     
-
-
-    
-
-
 
 void Game::updateEnemies(Player* object)
 {
@@ -544,8 +589,9 @@ void Game::updateEnemies(Player* object)
            {
                object->bot_destroyed = true;
                object->destroyed_tank_bot();
-           }
-       
+               destroyedEnemies++;
+               
+           }   
         
 }
 
@@ -559,12 +605,15 @@ void Game::updateAllEnemies()
             Playerscollisions(bot, player);
             Playerscollisions(player, bot);
             Playerscollisions(bot, orzel);
+            Playerscollisions(bot, bot);
             bulletcollision(bot);
             logic_enemy(bot);
            
         }
-
-
+        else
+        {
+            this->updatePoints();
+        }
         
     }
    
@@ -1356,6 +1405,7 @@ void Game::update()
 
     if (!playervsbot)
     {  
+        this->updateGui();
         this->updatePlayer(enemy);
          this->spawnEnemy();
         this->Playerscollisions(enemy, player);
@@ -1376,12 +1426,13 @@ void Game::update()
     }
     else
     { 
+        this->updateGuiVsBots();
         this->updateAllEnemies();
        
     }
 
-    this->updateGui();
-
+    
+    
        
     
 }
@@ -1391,6 +1442,12 @@ void Game::renderGui(sf::RenderTarget* target)
     target->draw(this->guiTextPlayer);
     target->draw(this->guiTextEnemy);
 
+}
+
+void Game::renderGuiBots(sf::RenderTarget* target)
+{
+    target->draw(this->guiTextPlayer);
+    target->draw(this->guiTextBots);
 }
 
 void Game::renderEnemies()
@@ -1405,7 +1462,7 @@ void Game::renderEnemies()
 void Game::render()
 {
     this->window->clear(); //czysci okno gry
-    this->renderGui(this->window);
+    
    
    
 
@@ -1423,12 +1480,13 @@ void Game::render()
 
     if (!playervsbot)
     {
-        
+        this->renderGui(this->window);
         this->enemy->render(*this->window); //Wyswietlenie obiektu przeciwnika
         enemy->color_change(); //Zmiana koloru obiektu przeciwnika
     }
     else
     {   
+        this->renderGuiBots(this->window);
         this->renderEnemies();
         
     }

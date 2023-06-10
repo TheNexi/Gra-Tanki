@@ -37,6 +37,7 @@ private:
 
 	sf::Text guiTextPlayer;
 	sf::Text guiTextEnemy;
+	sf::Text guiTextBots;
 	sf::Text endGameText;
 
 	//Obiekt cegly
@@ -66,6 +67,8 @@ private:
 	void initFonts();
 	void initGuiText();
 	void updateGui();
+	void updateGuiVsBots();
+	void updatePoints();
 	void m_left(Player* object);
 	void m_right(Player* object);
 	void m_up(Player* object);
@@ -87,7 +90,8 @@ public:
 	Game();
 	virtual ~Game();
 
-	
+	int numberOfEnemies;
+	int destroyedEnemies;
 	bool playervsbot;
 
 	//Funkcje
@@ -109,6 +113,7 @@ public:
 	void bulletcollision(Flag* object);
 	void update();
 	void renderGui(sf::RenderTarget* target);
+	void renderGuiBots(sf::RenderTarget* target);
 	void render();
 	void resetGame();
 	
