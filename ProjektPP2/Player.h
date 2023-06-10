@@ -65,6 +65,6 @@ public:
 	void destroyed_tank_bot();
 
 	float ob_rotation();
-
+	void resetTexture();
 };
 

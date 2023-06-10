@@ -91,11 +91,11 @@ void Game::updateGui()
 
     if (enemy->hp == 0)
     {
-        this->endGameText.setString("Green team won!");
+        this->endGameText.setString("Blue team won!");
     }
     else if (player->hp == 0)
     {
-        this->endGameText.setString("Blue team won!");
+        this->endGameText.setString("Green team won!");
     }
     else if (orzel->destructionHp == 0)
     {
@@ -1891,4 +1891,5 @@ void Game::resetGame()
     this->player->numberOfEnemies = 5;
     this->player->destroyedEnemies = 0;
     this->guiTextPlayer.setPosition(0.f, 0.f);
+    player->resetTexture();
 }

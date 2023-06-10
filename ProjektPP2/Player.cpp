@@ -170,3 +170,13 @@ void Player::destroyed_tank_bot()
 		cout << "ERROR::PLAYER::Blad przy wczytywaniu grafiki bota zniszczone" << endl;
 	}
 }
+
+void Player::resetTexture()
+{
+	//Wczytanie tekstury z pliku
+	if (!this->texture.loadFromFile("Textures/Tank v2.png"))
+	{
+		cout << "ERROR::PLAYER::Blad przy wczytywaniu grafiki obiektu gracza" << endl;
+	}
+
+}
