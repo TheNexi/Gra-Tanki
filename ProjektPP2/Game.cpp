@@ -199,7 +199,7 @@ void Game::stworzObiektPrzeciwnik() //Metoda do tworzenia obiektu przeciwnika
     this->enemy->hp = 10;
     this->enemy->points = 0;
 
-    this->enemy->setPosition(175.f, 50.f); //Ustawienie pozycji początkowej drugiego gracza (przeciwnik)
+    this->enemy->setPosition(175.f, 25.f); //Ustawienie pozycji początkowej drugiego gracza (przeciwnik)
 }
 
 void Game::stworzCegly()
@@ -819,7 +819,7 @@ void Game::updatePlayer(Player* player)
             }
             case(90):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x + 26, this->player->getPos().y, 1.f, 0.f, 2.f, "player"));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x + 25, this->player->getPos().y, 1.f, 0.f, 2.f, "player"));
                 clock.restart();
                 break;
             }
@@ -831,7 +831,7 @@ void Game::updatePlayer(Player* player)
             }
             case(270):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x - 33, this->player->getPos().y, -1.f, 0.f, 2.f, "player"));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x - 35, this->player->getPos().y, -1.f, 0.f, 2.f, "player"));
                 clock.restart();
                 break;
             }
@@ -858,7 +858,7 @@ void Game::updatePlayer(Player* player)
             }
             case(90):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x + 26, this->enemy->getPos().y, 1.f, 0.f, 2.f, "enemy"));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x + 25, this->enemy->getPos().y, 1.f, 0.f, 2.f, "enemy"));
                 clock.restart();
                 break;
             }
@@ -870,7 +870,7 @@ void Game::updatePlayer(Player* player)
             }
             case(270):
             {
-                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x - 37, this->enemy->getPos().y, -1.f, 0.f, 2.f, "enemy"));
+                this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x - 35, this->enemy->getPos().y, -1.f, 0.f, 2.f, "enemy"));
                 clock.restart();
                 break;
             }
@@ -988,8 +988,8 @@ void Game::Brickscollisions(Player* object)
             //Right collision
             if (playerbounds.left < wallbounds.left &&
                 playerbounds.left + 25 < wallbounds.left + 25
-                && playerbounds.top<=wallbounds.top + wallbounds.height
-                && playerbounds.top +26  >=wallbounds.top)
+                && playerbounds.top<wallbounds.top + 25
+                && playerbounds.top + 25 >wallbounds.top)
             {
                 cout << "lewa kolizja\n";
                 object->setPosition(wallbounds.left - playerbounds.width + 25, playerbounds.top + 25);
@@ -997,8 +997,8 @@ void Game::Brickscollisions(Player* object)
             }
             if (playerbounds.left > wallbounds.left &&
                 playerbounds.left + 25 > wallbounds.left + wallbounds.width
-                && playerbounds.top<=wallbounds.top + wallbounds.height
-                && playerbounds.top + 25 >=wallbounds.top)
+                && playerbounds.top<wallbounds.top + wallbounds.height
+                && playerbounds.top + 25 >wallbounds.top)
             {
                 cout << "prawa kolizja\n";
                 object->setPosition(wallbounds.left + wallbounds.width + 25, playerbounds.top + 25);
@@ -1213,8 +1213,8 @@ void Game::bulletcollision(Player* object)
             //Right collision
             else if (playerbounds.left < wallbounds.left &&
                 playerbounds.left + 25 < wallbounds.left + 25
-                && playerbounds.top<=wallbounds.top + 25
-                && playerbounds.top + 25 >=wallbounds.top)
+                && playerbounds.top<wallbounds.top + 25
+                && playerbounds.top + 25 >wallbounds.top)
             {
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
@@ -1229,8 +1229,8 @@ void Game::bulletcollision(Player* object)
             //Left collision
             else if (playerbounds.left > wallbounds.left &&
                 playerbounds.left + 25 > wallbounds.left + wallbounds.width
-                && playerbounds.top<=wallbounds.top + wallbounds.height
-                && playerbounds.top + 25 >=wallbounds.top)
+                && playerbounds.top<wallbounds.top + wallbounds.height
+                && playerbounds.top + 25 >wallbounds.top)
             {
                 delete this->bullets.at(licznik); //Usuwa dynamicznie zaalokowaną pamięć pocisku o indeksie licznik w wektorze bullets
                 this->bullets.erase(this->bullets.begin() + licznik); // usuwanie pocisku z wektora
