@@ -36,21 +36,11 @@ Menu::Menu(float width, float height)
 	menu[1].setFont(font); // Ustawienie czcionki dla drugiego elementu menu.
 	menu[1].setCharacterSize(52); // Ustawienie rozmiaru znaków dla drugiego elementu menu.
 	menu[1].setFillColor(sf::Color::White); // Ustawienie koloru wype³nienia dla drugiego elementu menu.
-	menu[1].setString("Gracz vs Gracz"); // Ustawienie tekstu dla drugiego elementu menu.
+	menu[1].setString("Wyjdz"); // Ustawienie tekstu dla drugiego elementu menu.
 	menu[1].setPosition(sf::Vector2f(width / 2, height / (MAX_NUMBER_OF_OPTIONS + 1) * 2)); // Ustawienie pozycji dla drugiego elementu menu.
 	menu[1].setOrigin(menu[1].getLocalBounds().width / 2, menu[1].getLocalBounds().height / 2); // Ustawienie punktu odniesienia (origin) dla drugiego elementu menu.
 	menu[1].setOutlineColor(sf::Color::Black); // Ustawienie koloru obrysu dla drugiego elementu menu.
 	menu[1].setOutlineThickness(2.5f); // Ustawienie gruboœci obrysu dla drugiego elementu menu.
-
-
-	menu[2].setFont(font); // Ustawienie czcionki dla trzeciego elementu menu.
-	menu[2].setCharacterSize(52); // Ustawienie rozmiaru znaków dla trzeciego elementu menu.
-	menu[2].setFillColor(sf::Color::White); // Ustawienie koloru wype³nienia dla trzeciego elementu menu.
-	menu[2].setString("Wyjdz"); // Ustawienie tekstu dla trzeciego elementu menu.
-	menu[2].setPosition(sf::Vector2f(width / 2, height / (MAX_NUMBER_OF_OPTIONS + 1) * 3)); // Ustawienie pozycji dla trzeciego elementu menu.
-	menu[2].setOrigin(menu[2].getLocalBounds().width / 2, menu[2].getLocalBounds().height / 2); // Ustawienie punktu odniesienia (origin) dla trzeciego elementu menu.
-	menu[2].setOutlineColor(sf::Color::Black); // Ustawienie koloru obrysu dla trzeciego elementu menu.
-	menu[2].setOutlineThickness(2.5f); // Ustawienie gruboœci obrysu dla trzeciego elementu menu.
 
 	selectedOptionIndex = 0;
 }
@@ -69,7 +59,7 @@ Menu::~Menu()
  * @brief Inicjalizuje tlo menu.
  *
  * Funkcja ustawia rozmiar tla na szerokosc 800 pikseli i wysokosc 600 pikseli.
- * Nastepnie wczytuje teksture tla z pliku "Textures/tlo2.png" i przypisuje ja do tla.
+ * Nastepnie wczytuje teksture tla z pliku "Textures/tanki_tlo.png" i przypisuje ja do tla.
  * W przypadku niepowodzenia wczytania tekstury, wyswietla komunikat o bledzie na standardowym wyjsciu.
  * Na koñcu ustawia teksture t³a za pomoc¹ funkcji setTexture()
  */
@@ -77,7 +67,7 @@ void Menu::initBackground()
 {
 	background.setSize(sf::Vector2f(800.f, 600.f));
 	
-	if (!background_texture.loadFromFile("Textures/tlo2.png"))
+	if (!background_texture.loadFromFile("Textures/tanki_tlo.png"))
 	{
 		std::cout << "Blad zaladowania tekstury tla!\n";
 	}

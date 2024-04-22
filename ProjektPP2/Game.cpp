@@ -531,15 +531,11 @@ void Game::renderMenu()
                         menuActive = false;
                         break;
                     case 1:
-                        cout << "Wcisnieto gracz vs gracz" << endl;
-                        playervsbot = false;
-                        menuActive = false;
-                        break;
-                    case 2:
                         cout << "Wcisnieto wyjdz" << endl;
                         this->window->close();
                         menuActive = false;
                         break;
+                    
                     }
 
                     break;

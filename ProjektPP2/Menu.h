@@ -15,7 +15,7 @@
 #include <SFML/Audio.hpp>
 using namespace std;
 
-#define MAX_NUMBER_OF_OPTIONS 3
+#define MAX_NUMBER_OF_OPTIONS 2
 
 /**
  * @class Menu
