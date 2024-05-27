@@ -104,6 +104,30 @@ void Game::initGuiText()
     this->guiTextBots.setPosition(0.f, 0.f);
 }
 
+void Game::initShaders()
+{
+    
+    if (!this->core_shader.loadFromFile("Shaders/vertex_shader.vert", "Shaders/fragment_shader.frag"))
+    {
+        cout << "Blad w Game::initShaders()";
+    }
+}
+
+void Game::initSound()
+{
+    shotSound.setBuffer(shotSoundBuffer);
+    if (!backgroundMusic.openFromFile("tanki_soundtrack.mp3"))
+    {
+        cout << "Nie mozna otworzyc pliku dzwiekowego" << endl;
+    }
+    else
+    {
+        backgroundMusic.play();
+    }
+ 
+}
+
+
 /**
  * @brief Aktualizuje teksty interfejsu graficznego gracz vs gracz.
  *
@@ -394,6 +418,8 @@ Game::Game()
     this->stworzTekstury();
     this->initFonts();
     this->initGuiText();
+    this->initShaders();
+    this->initSound();
     this->stworzObiektGracz();
     this->stworzObiektPrzeciwnik();
     this->spawnEnemy();
@@ -415,6 +441,13 @@ Game::~Game()
     delete this->player; //Usuwa obiekt gracza
     delete this->enemy; // Usuwa obiekt przeciwnika
     delete this->orzel; //Usuwa obiekt flagi
+
+    // Zwolnienie zasobów dźwięku
+    //delete shotSoundBuffer; // Usuwa bufor dźwięku
+    //delete shotSound; // Usuwa obiekt dźwięku
+
+    // Zwalnianie zasobów dźwięku
+    shotSound.stop(); // Zatrzymuje odtwarzanie dźwięku (jeśli jest odtwarzany)
 
     //usuwanie tekstur (mapa)
     for (auto& i : this->textures) //Iteracja po wszystkich teksturach z mapy "textures"
@@ -903,6 +936,19 @@ void Game::updatePlayer(Player* player)
         music.setVolume(50);
         music.play();
         */
+
+        // Zaimportuj plik dźwiękowy
+        
+        if (!shotSoundBuffer.loadFromFile("sounds/boom2.wav"))
+        {
+            cout << "Blad podczas wczytywania dzwieku" << endl;
+        }
+
+        shotSound.setVolume(5);
+        
+
+        // Odtwórz dźwięk strzału
+        shotSound.play();
 
         time = clock.getElapsedTime();
         //opoznienie miedzy strzalami
@@ -2014,7 +2060,7 @@ void Game::render()
     
          
     this->orzel->render(*this->window);
-    this->player->render(*this->window); //Rysuje obiekt gracza na ekranie
+    this->player->render(*this->window, &this->core_shader); //Rysuje obiekt gracza na ekranie
 
 
     //Wyswietlenie informacji o zakonczeniu rozgrywki

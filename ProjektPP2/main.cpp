@@ -24,7 +24,7 @@ int main()
     //Inicjacja Gry
 
     Game game;
-
+    
     //Petla gry
     game.renderMenu();
     

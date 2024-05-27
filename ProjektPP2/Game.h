@@ -77,6 +77,13 @@ private:
 	//Obiekt flagi
 	Flag* orzel;
 
+	//Obiekt cieni
+	sf::Shader core_shader;
+
+	//elementy dzwiekowe
+	sf::SoundBuffer shotSoundBuffer;
+	sf::Sound shotSound;
+	sf::Music backgroundMusic;
 
 	//Prywatne funkcje
 	void stworzZmienne();
@@ -84,6 +91,8 @@ private:
 	void stworzTekstury();
 	void initFonts();
 	void initGuiText();
+	void initShaders();
+	void initSound();
 	void updateGui();
 	void updateGuiVsBots();
 	void m_left(Player* object);

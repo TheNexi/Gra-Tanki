@@ -88,6 +88,15 @@ const sf::Vector2f& Player::getPos() const//funkcja zwracajaca pozycje obiektu
 {
 	return this->sprite.getPosition();
 }
+const sf::Vector2f Player::getCenter() const
+{
+	return this->sprite.getPosition() + 
+		sf::Vector2f
+		(
+			this->sprite.getGlobalBounds().width / 2.f,
+			this->sprite.getGlobalBounds().height / 2.f
+		); //œrodek obiektu
+}
 /** 
  * @brief funkcja zwracajaca krawedzie
  * 
@@ -190,14 +199,27 @@ void Player::update()
 
 /**
  * @brief funkcja renderuj¹ca obiekt.
- * 
+ *
  * @param target okno w którym ma sie renderowaæ
  */
 void Player::render(sf::RenderTarget& target)//funkcja renderujaca obiekt 
 {
-	
 	target.draw(this->sprite);
 
+}
+
+/**
+ * @brief przeci¹¿ona funkcja renderuj¹ca obiekt.
+ * 
+ * @param target okno w którym ma sie renderowaæ
+ * @param shader 
+ */
+void Player::render(sf::RenderTarget& target, sf::Shader* shader)//funkcja renderujaca obiekt 
+{
+	shader->setUniform("hasTexture", true);
+	shader->setUniform("lightPos", this->getCenter());
+
+	target.draw(this->sprite, shader);
 }
 
 /**

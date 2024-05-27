@@ -59,6 +59,7 @@ public:
 
 	//Metody do okreslania pozycji obiektu
 	const sf::Vector2f& getPos() const;
+	const sf::Vector2f getCenter() const;
 	const sf::FloatRect getBounds() const;
 
 	//Modyfikatory do kolizji
@@ -74,6 +75,7 @@ public:
 	void rotate_ob(float angle);
 	void update();
 	void render(sf::RenderTarget& target);
+	void render(sf::RenderTarget& target, sf::Shader* shader);
 	void color_change();
 	void bot_texture();
 	void destroyed_tank_bot();

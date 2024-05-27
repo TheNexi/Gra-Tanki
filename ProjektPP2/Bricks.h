@@ -43,7 +43,7 @@ public:
  * @brief Metoda zwracaj¹ca granice klocka.
  * @return Obiekt klasy sf::FloatRect reprezentuj¹cy granice klocka.
  */
-	float destructionHp = 2;
+	float destructionHp = 1;
 	/**
  * @brief Metoda aktualizuj¹ca pozycjê klocka na ekranie.
  */
