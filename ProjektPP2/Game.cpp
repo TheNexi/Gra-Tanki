@@ -410,9 +410,8 @@ void Game::stworzFlage()
  * odpowiednie metody inicjalizujące pola i obiekty gry, takie jak tworzenie zmiennych, okna, tekstur, czcionek,
  * obiektu gracza, obiektów przeciwników, cegieł oraz flagi
  */
-Game::Game()
-{
-    //Inicjacja wszystkich metod (podstawowe elementy do gry)
+Game::Game() {
+    // Inicjalizacja gry
     this->stworzZmienne();
     this->stworzOkno();
     this->stworzTekstury();
@@ -425,7 +424,51 @@ Game::Game()
     this->spawnEnemy();
     this->stworzCegly();
     this->stworzFlage();
+    this->initFogOfWar(); // Inicjalizacja "mgły wojny"
 }
+
+void Game::initFogOfWar() {
+    // Inicjalizacja render texture
+    if (!fogTexture.create(this->window->getSize().x, this->window->getSize().y)) {
+        // Error handling
+    }
+
+    // Ładowanie i inicjalizacja shadera
+    if (!fogShader.loadFromFile("fog_of_war.frag", sf::Shader::Fragment)) {
+        // Error handling
+    }
+
+    // Inicjalizacja okręgu widzenia
+    visionCircle.setRadius(100.f); // Promień widzenia
+    visionCircle.setFillColor(sf::Color(255, 255, 255, 0)); // Przezroczystość wewnątrz okręgu
+    visionCircle.setOutlineThickness(200.f); // Grubość krawędzi "mgły wojny"
+    visionCircle.setOutlineColor(sf::Color(0, 0, 0, 255)); // Kolor krawędzi "mgły wojny"
+    visionCircle.setOrigin(visionCircle.getRadius(), visionCircle.getRadius());
+}
+
+void Game::updateFogOfWar() {
+    // Czyszczenie render texture
+    fogTexture.clear(sf::Color(0, 0, 0, 255)); // Czarna "mgła wojny"
+
+    // Aktualizacja pozycji okręgu widzenia
+    visionCircle.setPosition(this->player->getPos());
+
+    // Rysowanie okręgu widzenia na render texture
+    fogTexture.draw(visionCircle);
+    fogTexture.display();
+
+    // Konwersja pozycji z układu współrzędnych SFML na układ shadera
+    sf::Vector2f playerPos = this->player->getPos();
+    playerPos.y = this->window->getSize().y - playerPos.y; // Odwrócenie osi Y
+
+    // Korekta pozycji o 200 pikseli w dół
+
+    // Ustawianie pozycji okręgu w shaderze
+    fogShader.setUniform("circlePosition", sf::Glsl::Vec2(playerPos));
+    fogShader.setUniform("circleRadius", visionCircle.getRadius());
+}
+
+
 
 // Destruktor
 
@@ -1935,7 +1978,10 @@ void Game::update()
     this->updateBullets();
     
     this->player->update();
+  
     this->bulletcollision(orzel);
+    this->updateFogOfWar();
+
 
     
     this->updateBricks(player);
@@ -1973,8 +2019,6 @@ void Game::update()
     }
 
     
-    
-       
     
 }
 
@@ -2041,9 +2085,7 @@ void Game::renderEnemies()
 void Game::render()
 {
     this->window->clear(); //czysci okno gry
-    
-   
-   
+ 
 
     for (auto* bricks : this->bricks) //Dla każdego obiektu w wektorze
     {
@@ -2054,14 +2096,11 @@ void Game::render()
     {
         bullet->render(this->window); //Wyswietla każdy obiekt na ekranie
     }
-
-
-
-    
-         
+        sf::Sprite fogSprite(fogTexture.getTexture());
+   
     this->orzel->render(*this->window);
     this->player->render(*this->window, &this->core_shader); //Rysuje obiekt gracza na ekranie
-
+    
 
     //Wyswietlenie informacji o zakonczeniu rozgrywki
     if (this->endGame == true)
@@ -2082,6 +2121,10 @@ void Game::render()
         this->renderEnemies();
 
     }
+
+   
+
+    this->window->draw(fogSprite, &fogShader);
 
     this->window->display(); //Wyswietla na ekranie obecnie narysowane obiekty
 

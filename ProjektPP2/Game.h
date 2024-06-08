@@ -107,12 +107,21 @@ private:
 	void stworzCegly();
 	void stworzFlage();
 
+		// Inne zmienne prywatne
+		sf::RenderTexture fogTexture;
+		sf::Sprite fogSprite;
+		sf::CircleShape visionCircle;
+		void initFogOfWar();
+		sf::Shader fogShader;
+	
+
+
 public:
 	// Konstruktor
 	Game();
 	// Destruktor
 	virtual ~Game();
-
+	void updateFogOfWar();
 	//Zmienna do obs³ugi trybu gry
 	bool playervsbot;
 	float bot_x=25,bot_y=25;
