@@ -2101,6 +2101,7 @@ void Game::render()
     this->orzel->render(*this->window);
     this->player->render(*this->window, &this->core_shader); //Rysuje obiekt gracza na ekranie
     
+    this->window->draw(fogSprite, &fogShader);
 
     //Wyswietlenie informacji o zakonczeniu rozgrywki
     if (this->endGame == true)
@@ -2113,18 +2114,23 @@ void Game::render()
         this->renderGui(this->window);
         this->enemy->render(*this->window); //Wyswietlenie obiektu przeciwnika
         enemy->color_change(); //Zmiana koloru obiektu przeciwnika
+        this->window->draw(fogSprite, &fogShader);
+
+
+
     }
     else
     {
         player->color_change();
-        this->renderGuiBots(this->window);
         this->renderEnemies();
+        this->window->draw(fogSprite, &fogShader);
+        this->renderGuiBots(this->window);
+
 
     }
 
    
 
-    this->window->draw(fogSprite, &fogShader);
 
     this->window->display(); //Wyswietla na ekranie obecnie narysowane obiekty
 
