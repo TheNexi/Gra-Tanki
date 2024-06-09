@@ -63,9 +63,11 @@ private:
 	vector <Bricks*> bricks;
 
 	//Obiekty do obs³ugi czasu
-	sf::Time time;
+	sf::Time playerTime;
+	sf::Time enemyTime;
 	sf::Time spawnTime;
 	sf::Clock clock;
+	sf::Clock enemyClock;
 	sf::Clock spawnclock;
 
 

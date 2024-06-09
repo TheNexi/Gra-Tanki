@@ -45,7 +45,7 @@ public:
 	Player();
 	virtual ~Player();
 	float movementSpeed = 5.0;
-	int hp=10;
+	int hp=5;
 	int points=0;
 	bool bot_destroyed;
 	int destroyedEnemies = 0;

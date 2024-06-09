@@ -125,7 +125,7 @@ void Game::initSound()
     {
         cout << "Blad podczas wczytywania dzwieku" << endl;
     }
-    shotSound.setVolume(5);
+    shotSound.setVolume(3);
 
     backgroundMusic.setLoop(true);
     backgroundMusic.setVolume(10);
@@ -257,7 +257,7 @@ void Game::stworzObiektGracz() //Metoda do tworzenia obiektu gracza
     this->player->up = upMoveKey;
     this->player->down = downMoveKey;
     this->player->shot = shotKey;
-    this->player->hp = 10;
+    this->player->hp = 5;
     this->player->points = 0;
 
     this->player->setPosition(700.f, 450.f); //Ustawienie pozycji poczatkowej gracza
@@ -287,7 +287,7 @@ void Game::stworzObiektPrzeciwnik() //Metoda do tworzenia obiektu przeciwnika
     this->enemy->up = upMoveKey;
     this->enemy->down = downMoveKey;
     this->enemy->shot = shotKey;
-    this->enemy->hp = 10;
+    this->enemy->hp = 5;
     this->enemy->points = 0;
 
     this->enemy->setPosition(175.f, 25.f); //Ustawienie pozycji początkowej drugiego gracza (przeciwnik)
@@ -519,12 +519,9 @@ Game::~Game()
     delete this->enemy; // Usuwa obiekt przeciwnika
     delete this->orzel; //Usuwa obiekt flagi
 
-    // Zwolnienie zasobów dźwięku
-    //delete shotSoundBuffer; // Usuwa bufor dźwięku
-    //delete shotSound; // Usuwa obiekt dźwięku
-
     // Zwalnianie zasobów dźwięku
     shotSound.stop(); // Zatrzymuje odtwarzanie dźwięku (jeśli jest odtwarzany)
+    backgroundMusic.stop();
 
     //usuwanie tekstur (mapa)
     for (auto& i : this->textures) //Iteracja po wszystkich teksturach z mapy "textures"
@@ -766,13 +763,13 @@ void Game::updateEnemies(Player* object)
    
     //Poruszanie obiektu gracza koniec
 
-        time = clock.getElapsedTime();
+        enemyTime = enemyClock.getElapsedTime();
         //opoznienie miedzy strzalami
         if (object->bot_destroyed == false)
         {
 
     
-        if (time.asSeconds() > 1)
+        if (enemyTime.asSeconds() > 1)
         {
             int angle = (int)object->ob_rotation();
             switch (angle)//ustawianie kierunku strzału
@@ -780,26 +777,32 @@ void Game::updateEnemies(Player* object)
             case(0):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], object->getPos().x, object->getPos().y - 35, 0.f, -1.f, 4.f, "player"));
-                clock.restart(); //Resetowanie zegara po wystrzeleniu pocisku
+                enemyClock.restart(); //Resetowanie zegara po wystrzeleniu pocisku
 
                 break;
             }
             case(90):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], object->getPos().x + 35, object->getPos().y, 1.f, 0.f, 4.f, "player"));
-                clock.restart();
+                // Odtwórz dźwięk strzału
+                shotSound.play();
+                enemyClock.restart();
                 break;
             }
             case(180):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], object->getPos().x, object->getPos().y + 35, 0.f, 1.f, 4.f, "player"));
-                clock.restart();
+                // Odtwórz dźwięk strzału
+                shotSound.play();
+                enemyClock.restart();
                 break;
             }
             case(270):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], object->getPos().x - 35, object->getPos().y, -1.f, 0.f, 4.f, "player"));
-                clock.restart();
+                // Odtwórz dźwięk strzału
+                shotSound.play();
+                enemyClock.restart();
                 break;
             }
 
@@ -988,12 +991,11 @@ void Game::updatePlayer(Player* player)
 
     if (sf::Keyboard::isKeyPressed(this->player->shot))
     {
-        // Odtwórz dźwięk strzału
-        shotSound.play();
+        
 
-        time = clock.getElapsedTime();
+        playerTime = clock.getElapsedTime();
         //opoznienie miedzy strzalami
-        if (time.asSeconds() > 0.5)
+        if (playerTime.asSeconds() > 0.5)
         {
             int angle = (int)this->player->ob_rotation();
             switch (angle)//ustawianie kierunku strzału
@@ -1001,6 +1003,8 @@ void Game::updatePlayer(Player* player)
             case(0):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y - 35, 0.f, -1.f, 2.f, "player"));
+                // Odtwórz dźwięk strzału
+                shotSound.play();
                 clock.restart(); //Resetowanie zegara po wystrzeleniu pocisku
 
                 break;
@@ -1008,18 +1012,24 @@ void Game::updatePlayer(Player* player)
             case(90):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x + 25, this->player->getPos().y, 1.f, 0.f, 2.f, "player"));
+                // Odtwórz dźwięk strzału
+                shotSound.play();
                 clock.restart();
                 break;
             }
             case(180):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x, this->player->getPos().y + 25, 0.f, 1.f, 2.f, "player"));
+                // Odtwórz dźwięk strzału
+                shotSound.play();
                 clock.restart();
                 break;
             }
             case(270):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], this->player->getPos().x - 35, this->player->getPos().y, -1.f, 0.f, 2.f, "player"));
+                // Odtwórz dźwięk strzału
+                shotSound.play();
                 clock.restart();
                 break;
             }
@@ -1031,9 +1041,9 @@ void Game::updatePlayer(Player* player)
     if (sf::Keyboard::isKeyPressed(this->enemy->shot))
     {
 
-        time = clock.getElapsedTime();
+        enemyTime = enemyClock.getElapsedTime();
         //opoznienie miedzy strzalami
-        if (time.asSeconds() > 0.5)
+        if (enemyTime.asSeconds() > 0.5)
         {
             int angle = (int)this->enemy->ob_rotation();
             switch (angle)//ustawianie kierunku strzału
@@ -1041,25 +1051,33 @@ void Game::updatePlayer(Player* player)
             case(0):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x, this->enemy->getPos().y - 36, 0.f, -1.f, 2.f, "enemy"));
-                clock.restart(); //Resetowanie zegara po wystrzeleniu pocisku
+                // Odtwórz dźwięk strzału
+                shotSound.play();
+                enemyClock.restart(); //Resetowanie zegara po wystrzeleniu pocisku
                 break;
             }
             case(90):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x + 25, this->enemy->getPos().y, 1.f, 0.f, 2.f, "enemy"));
-                clock.restart();
+                // Odtwórz dźwięk strzału
+                shotSound.play();
+                enemyClock.restart();
                 break;
             }
             case(180):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x, this->enemy->getPos().y + 26, 0.f, 1.f, 2.f, "enemy"));
-                clock.restart();
+                // Odtwórz dźwięk strzału
+                shotSound.play();
+                enemyClock.restart();
                 break;
             }
             case(270):
             {
                 this->bullets.push_back(new Bullet(this->textures["BULLET"], this->enemy->getPos().x - 35, this->enemy->getPos().y, -1.f, 0.f, 2.f, "enemy"));
-                clock.restart();
+                // Odtwórz dźwięk strzału
+                shotSound.play();
+                enemyClock.restart();
                 break;
             }
 
@@ -2156,7 +2174,7 @@ void Game::resetGame()
     //Przywrocenie ustawien poczatkowych przeciwnika
     this->enemy->setPosition(175.f, 25.f);
     this->enemy->points = 0;
-    this->enemy->hp = 10;
+    this->enemy->hp = 5;
 
     //Przywrocenie ustawien poczatkowych
     createdEnemies = 0;
@@ -2169,7 +2187,7 @@ void Game::resetGame()
     //Przywrocenie ustawien poczatkowych gracza
     this->player->setPosition(700.f, 450.f);
     this->player->points = 0;
-    this->player->hp = 10;
+    this->player->hp = 5;
 
 
     float pos_x = 50.f;
@@ -2212,10 +2230,6 @@ void Game::resetGame()
     // Zresetuj tekst końca gry
     this->endGame = false;
 
-    player->points = 0;
-    player->hp = 10;
-    enemy->points = 0;
-    enemy->hp = 10;
     this->player->numberOfEnemies = 5;
     this->player->destroyedEnemies = 0;
     this->guiTextPlayer.setPosition(0.f, 0.f);
