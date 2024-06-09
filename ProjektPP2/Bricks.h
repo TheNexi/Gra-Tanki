@@ -13,6 +13,10 @@
 #include <SFML/Network.hpp>
 using namespace std;
 
+/**
+*@class Bullet
+*@brief Klasa reprezentujaca obiekty ceg³y na planszy.
+*/
 class Bricks
 {
 private:
@@ -21,6 +25,8 @@ private:
 	sf::Vector2f coord;//obiekt klasy Vector2f z biblioteki sfml /< Obiekt klasy sf::Vector2f przechowuj¹cy wspó³rzêdne klocka. */ /**< Liczba punktów zdrowia okreœlaj¹ca, ile razy klocek mo¿e zostaæ trafiony przed zniszczeniem. */
 
 	
+	
+public:
 	/**
 * @brief Konstruktor klasy Bricks.
 * @param texture WskaŸnik na obiekt klasy sf::Texture przechowuj¹cy teksturê klocka.
@@ -28,7 +34,6 @@ private:
 * @param pos_y Wspó³rzêdna y po³o¿enia klocka na ekranie.
 * @param destructionHp Liczba punktów zdrowia klocka (domyœlnie: 2).
 */
-public:
 	Bricks(sf::Texture* texture, float pos_x, float pos_y, float destructionHp);
 	/**
  * @brief Destruktor klasy Bricks.
@@ -39,10 +44,7 @@ public:
  * @return Obiekt klasy sf::FloatRect reprezentuj¹cy granice klocka.
  */
 	const sf::FloatRect getBounds() const; ////Metoda do granic obiektu(prostokatu)
-	/**
- * @brief Metoda zwracaj¹ca granice klocka.
- * @return Obiekt klasy sf::FloatRect reprezentuj¹cy granice klocka.
- */
+	
 	float destructionHp = 1;
 	/**
  * @brief Metoda aktualizuj¹ca pozycjê klocka na ekranie.

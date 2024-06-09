@@ -104,27 +104,32 @@ void Game::initGuiText()
     this->guiTextBots.setPosition(0.f, 0.f);
 }
 
-void Game::initShaders()
-{
-    
-    if (!this->core_shader.loadFromFile("Shaders/vertex_shader.vert", "Shaders/fragment_shader.frag"))
-    {
-        cout << "Blad w Game::initShaders()";
-    }
-}
 
+/**
+ * @brief Inicjalizuje dźwięki gry.
+ *
+ * Ta funkcja ustawia bufory dźwiękowe dla efektu strzału oraz muzyki w tle.
+ * Ładuje pliki muzyczne oraz ustawia pętlę oraz głośność muzyki w tle i rozpoczyna jej odtwarzanie.
+ * W przypadku niepowodzenia ładowania pliku muzycznego, wyświetla komunikat o błędzie.
+ */
 void Game::initSound()
 {
     shotSound.setBuffer(shotSoundBuffer);
-    if (!backgroundMusic.openFromFile("tanki_soundtrack.mp3"))
+    backgroundMusic.setBuffer(backgroundBuffer);
+    if (!backgroundBuffer.loadFromFile("sounds/music.wav"))
     {
         cout << "Nie mozna otworzyc pliku dzwiekowego" << endl;
     }
-    else
+
+    if (!shotSoundBuffer.loadFromFile("sounds/boom2.wav"))
     {
-        backgroundMusic.play();
+        cout << "Blad podczas wczytywania dzwieku" << endl;
     }
- 
+    shotSound.setVolume(5);
+
+    backgroundMusic.setLoop(true);
+    backgroundMusic.setVolume(10);
+    backgroundMusic.play();
 }
 
 
@@ -416,8 +421,8 @@ Game::Game() {
     this->stworzOkno();
     this->stworzTekstury();
     this->initFonts();
+    this->initBackgroundImage();
     this->initGuiText();
-    this->initShaders();
     this->initSound();
     this->stworzObiektGracz();
     this->stworzObiektPrzeciwnik();
@@ -427,6 +432,13 @@ Game::Game() {
     this->initFogOfWar(); // Inicjalizacja "mgły wojny"
 }
 
+/**
+ * @brief Inicjalizuje efekt "mgły wojny" w grze.
+ *
+ * Ta funkcja tworzy teksturę renderowania o rozmiarze okna gry, ładuje shader odpowiedzialny za efekt "mgły wojny"
+ * oraz ustawia okrąg widzenia, który symuluje pole widzenia gracza.
+ * W przypadku niepowodzenia tworzenia tekstury lub ładowania shadera, wywołuje odpowiednie procedury obsługi błędów.
+ */
 void Game::initFogOfWar() {
     // Inicjalizacja render texture
     if (!fogTexture.create(this->window->getSize().x, this->window->getSize().y)) {
@@ -445,7 +457,29 @@ void Game::initFogOfWar() {
     visionCircle.setOutlineColor(sf::Color(0, 0, 0, 255)); // Kolor krawędzi "mgły wojny"
     visionCircle.setOrigin(visionCircle.getRadius(), visionCircle.getRadius());
 }
+/**
+ * @brief Inicjalizuje obraz tła gry.
+ *
+ * Ta funkcja ładuje teksturę tła z pliku i ustawia ją jako teksturę obrazu tła.
+ * W przypadku niepowodzenia ładowania tekstury, wyświetla komunikat o błędzie.
+ */
+void Game::initBackgroundImage()
+{
+    if (!this->backgroundTexture.loadFromFile("Textures/grass.png"))
+    {
+        cout << "Blad podczas ladowania tekstury tla";
+    }
+    this->backgroundImage.setTexture(this->backgroundTexture);
 
+}
+/**
+ * @brief Aktualizuje efekt "mgły wojny" w grze.
+ *
+ * Ta funkcja czyści teksturę renderowania na czarno, aktualizuje pozycję okręgu widzenia
+ * na podstawie pozycji gracza, rysuje okrąg widzenia na teksturze renderowania i
+ * przekształca pozycję gracza z układu współrzędnych SFML na układ shadera.
+ * Następnie ustawia pozycję i promień okręgu w shaderze odpowiedzialnym za efekt "mgły wojny".
+ */
 void Game::updateFogOfWar() {
     // Czyszczenie render texture
     fogTexture.clear(sf::Color(0, 0, 0, 255)); // Czarna "mgła wojny"
@@ -831,7 +865,7 @@ void Game::logic_enemy(Player* object)
 
      if (object->getPos().y >= orzel->getBounds().top+24 && object->getPos().y <= orzel->getBounds().top+26 )
     {
-         printf("prawo/lewo\n");
+         //printf("prawo/lewo\n");
         if (object->getPos().x < orzel->getBounds().left)
             m_right(object);
         if (object->getPos().x > orzel->getBounds().left)
@@ -850,7 +884,7 @@ void Game::logic_enemy(Player* object)
          }
          else
          {
-             printf("down\n");
+             //printf("down\n");
              m_down(object);
          }
     }
@@ -954,42 +988,6 @@ void Game::updatePlayer(Player* player)
 
     if (sf::Keyboard::isKeyPressed(this->player->shot))
     {
-        /*
-        sf::SoundBuffer buff;
-
-        if (!buff.loadFromFile("boom2.wav"))
-        {
-            cout << "\n-----------------blad-----------\n";
-
-        }
-
-        sf::Sound sound;
-        sound.setBuffer(buff);
-        cout << "\n\n dzwiek\n\n";
-
-        if (sound.getStatus() != sf::Sound::Playing)
-        {
-            sound.play();
-            cout << "gra muzyka\n";
-        }
-        */
-        /*
-        sf::Music music;
-        music.openFromFile("boom2.wav");
-        music.setVolume(50);
-        music.play();
-        */
-
-        // Zaimportuj plik dźwiękowy
-        
-        if (!shotSoundBuffer.loadFromFile("sounds/boom2.wav"))
-        {
-            cout << "Blad podczas wczytywania dzwieku" << endl;
-        }
-
-        shotSound.setVolume(5);
-        
-
         // Odtwórz dźwięk strzału
         shotSound.play();
 
@@ -2085,7 +2083,8 @@ void Game::renderEnemies()
 void Game::render()
 {
     this->window->clear(); //czysci okno gry
- 
+    
+    this->renderBackground();
 
     for (auto* bricks : this->bricks) //Dla każdego obiektu w wektorze
     {
@@ -2099,15 +2098,11 @@ void Game::render()
         sf::Sprite fogSprite(fogTexture.getTexture());
    
     this->orzel->render(*this->window);
-    this->player->render(*this->window, &this->core_shader); //Rysuje obiekt gracza na ekranie
+    this->player->render(*this->window); //Rysuje obiekt gracza na ekranie
     
     this->window->draw(fogSprite, &fogShader);
 
-    //Wyswietlenie informacji o zakonczeniu rozgrywki
-    if (this->endGame == true)
-    {
-        this->window->draw(this->endGameText);
-    }
+    
 
     if (!playervsbot)
     {
@@ -2116,24 +2111,36 @@ void Game::render()
         enemy->color_change(); //Zmiana koloru obiektu przeciwnika
         this->window->draw(fogSprite, &fogShader);
 
-
-
     }
     else
     {
         player->color_change();
         this->renderEnemies();
+        this->player->render(*this->window); //Rysuje obiekt gracza na ekranie
         this->window->draw(fogSprite, &fogShader);
         this->renderGuiBots(this->window);
 
 
     }
 
-   
+    //Wyswietlenie informacji o zakonczeniu rozgrywki
+    if (this->endGame == true)
+    {
+        this->window->draw(this->endGameText);
+    }
 
 
     this->window->display(); //Wyswietla na ekranie obecnie narysowane obiekty
 
+}
+/**
+ * @brief Renderuje tło gry.
+ *
+ * Ta funkcja rysuje obraz tła na głównym oknie gry.
+ */
+void Game::renderBackground()
+{
+    this->window->draw(this->backgroundImage);
 }
 
 /**
@@ -2151,6 +2158,8 @@ void Game::resetGame()
     this->enemy->points = 0;
     this->enemy->hp = 10;
 
+    //Przywrocenie ustawien poczatkowych
+    createdEnemies = 0;
 
     //Przywrocenie ustawien poczatkowych flagi
     this->orzel->destructionHp = 5;

@@ -228,7 +228,7 @@ void Player::render(sf::RenderTarget& target, sf::Shader* shader)//funkcja rende
  */
 void Player::color_change()//funkcja do ustawienia tekstury obiektu
 {
-	if (!this->texture.loadFromFile("Textures/tank v3.png"))
+	if (!this->texture.loadFromFile("Textures/tank v2.png"))
 	{
 		cout << "ERROR::PLAYER::Blad przy wczytywaniu grafiki obiektu gracza" << endl;
 	}

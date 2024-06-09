@@ -77,13 +77,11 @@ private:
 	//Obiekt flagi
 	Flag* orzel;
 
-	//Obiekt cieni
-	sf::Shader core_shader;
-
 	//elementy dzwiekowe
 	sf::SoundBuffer shotSoundBuffer;
 	sf::Sound shotSound;
-	sf::Music backgroundMusic;
+	sf::SoundBuffer backgroundBuffer;
+	sf::Sound backgroundMusic;
 
 	//Prywatne funkcje
 	void stworzZmienne();
@@ -91,7 +89,6 @@ private:
 	void stworzTekstury();
 	void initFonts();
 	void initGuiText();
-	void initShaders();
 	void initSound();
 	void updateGui();
 	void updateGuiVsBots();
@@ -114,6 +111,9 @@ private:
 		void initFogOfWar();
 		sf::Shader fogShader;
 	
+		sf::Texture backgroundTexture;
+		sf::Sprite backgroundImage;
+		void initBackgroundImage();
 
 
 public:
@@ -148,6 +148,7 @@ public:
 	void renderGui(sf::RenderTarget* target);
 	void renderGuiBots(sf::RenderTarget* target);
 	void render();
+	void renderBackground();
 	void resetGame();
 	
 };

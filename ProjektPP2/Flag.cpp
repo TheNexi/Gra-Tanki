@@ -13,7 +13,7 @@
 	  */
 void Flag::initTexture()
 {
-	if (!this->texture.loadFromFile("Textures/flag1.jpg"))
+	if (!this->texture.loadFromFile("Textures/flag1.png"))
 	{
 		cout << "ERROR::PLAYER::Blad przy wczytywaniu grafiki flagi" << endl;
 	}
